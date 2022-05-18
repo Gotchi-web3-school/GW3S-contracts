@@ -1,48 +1,44 @@
 /* global ethers */
 /* eslint prefer-const: "off" */
 
-const { getSelectors, FacetCutAction } = require('./libraries/diamond.js')
+const { readFile } = require("fs").promises
+const { getSelectors, FacetCutAction } = require('../libraries/diamond.js')
+const { deployed } = require("../deploy/deployed.js")
+const hardhat = require("hardhat")
+const FILE_PATH = './deployed.json';
 
 async function deployDiamond () {
   const accounts = await ethers.getSigners()
   const contractOwner = accounts[0]
 
-  // deploy DiamondCutFacet
-  const DiamondCutFacet = await ethers.getContractFactory('DiamondCutFacet')
-  const diamondCutFacet = await DiamondCutFacet.deploy()
-  await diamondCutFacet.deployed()
-  console.log('DiamondCutFacet deployed:', diamondCutFacet.address)
-
-  // deploy Diamond
-  const Diamond = await ethers.getContractFactory('Diamond')
-  const diamond = await Diamond.deploy(contractOwner.address, diamondCutFacet.address)
-  await diamond.deployed()
-  console.log('Diamond deployed:', diamond.address)
+  try {
+    contracts = JSON.parse(await readFile(FILE_PATH, "utf-8"))
+  } catch (e) {
+    console.log(e)
+  }
 
   // deploy DiamondInit
   // DiamondInit provides a function that is called when the diamond is upgraded to initialize state variables
   // Read about how the diamondCut function works here: https://eips.ethereum.org/EIPS/eip-2535#addingreplacingremoving-functions
-  const DiamondInit = await ethers.getContractFactory('DiamondInit')
-  const diamondInit = await DiamondInit.deploy()
-  await diamondInit.deployed()
-  console.log('DiamondInit deployed:', diamondInit.address)
+  console.log("attach InitLevel1...")
+  const initLevel1 = await ethers.getContractAt('InitLevel1', contracts.InitLevel1.mumbai.address)
 
   // deploy facets
-  console.log('')
-  console.log('Deploying facets')
   const FacetNames = [
-    'DiamondLoupeFacet',
-    'OwnershipFacet'
+    'Level1Facet',
   ]
   const cut = []
   for (const FacetName of FacetNames) {
+    console.log(`Deploying ${FacetName}...`)
     const Facet = await ethers.getContractFactory(FacetName)
     const facet = await Facet.deploy()
     await facet.deployed()
-    console.log(`${FacetName} deployed: ${facet.address}`)
+    
+    deployed("Level1Facet", hardhat.network.name, facet.address)
+
     cut.push({
       facetAddress: facet.address,
-      action: FacetCutAction.Add,
+      action: FacetCutAction.Replace,
       functionSelectors: getSelectors(facet)
     })
   }
@@ -50,19 +46,19 @@ async function deployDiamond () {
   // upgrade diamond with facets
   console.log('')
   console.log('Diamond Cut:', cut)
-  const diamondCut = await ethers.getContractAt('IDiamondCut', diamond.address)
+  const diamondCut = await ethers.getContractAt('IDiamondCut', contracts.Diamond.mumbai.address)
   let tx
   let receipt
   // call to init function
-  let functionCall = diamondInit.interface.encodeFunctionData('init')
-  tx = await diamondCut.diamondCut(cut, diamondInit.address, functionCall)
+  let functionCall = initLevel1.interface.encodeFunctionData('init', [cut[0].facetAddress])
+  tx = await diamondCut.diamondCut(cut, initLevel1.address, functionCall)
   console.log('Diamond cut tx: ', tx.hash)
   receipt = await tx.wait()
   if (!receipt.status) {
     throw Error(`Diamond upgrade failed: ${tx.hash}`)
   }
   console.log('Completed diamond cut')
-  return diamond.address
+  return contracts.Diamond.mumbai.address
 }
 
 // We recommend this pattern to be able to use async/await everywhere

@@ -14,7 +14,10 @@ task('accounts', 'Prints the list of accounts', async () => {
 
 require('dotenv').config();
 const ALCHEMY_PROJECT_ID = process.env.ALCHEMY_PROJECT_ID;
+const INFURA_PROJECT_ID = process.env.INFURA_PROJECT_ID;
 const DEPLOYER_PRIVATE_KEY = process.env.DEPLOYER_PRIVATE_KEY;
+const DEPLOYER2_PRIVATE_KEY = process.env.DEPLOYER2_PRIVATE_KEY;
+const DEPLOYER3_PRIVATE_KEY = process.env.DEPLOYER3_PRIVATE_KEY;
 
 // You need to export an object to set up your config
 // Go to https://hardhat.org/config/ to learn more
@@ -23,7 +26,7 @@ const DEPLOYER_PRIVATE_KEY = process.env.DEPLOYER_PRIVATE_KEY;
  * @type import('hardhat/config').HardhatUserConfig
  */
 module.exports = {
-  solidity: '0.8.6',
+  solidity: '0.8.1',
   settings: {
     optimizer: {
       enabled: true,
@@ -53,8 +56,9 @@ module.exports = {
       accounts: [`0x${DEPLOYER_PRIVATE_KEY}`],
     },
     mumbai: {
-      url: `https://polygon-mumbai.g.alchemy.com/v2/${ALCHEMY_PROJECT_ID}`,
-      accounts: [`0x${DEPLOYER_PRIVATE_KEY}`],
+     // url: `https://polygon-mumbai.g.alchemy.com/v2/${ALCHEMY_PROJECT_ID}`,
+      url: `https://polygon-mumbai.infura.io/v3/${INFURA_PROJECT_ID}`,
+      accounts: [`0x${DEPLOYER3_PRIVATE_KEY}`],
     },
   },
 }

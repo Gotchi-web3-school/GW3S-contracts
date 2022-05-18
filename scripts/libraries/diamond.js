@@ -11,13 +11,9 @@ function getSelectors (contract) {
     }
     return acc
   }, [])
-  console.log(selectors)
-  console.log('')
   selectors.contract = contract
   selectors.remove = remove
   selectors.get = get
-  console.log(selectors)
-  console.log('')
   return selectors
 }
 
