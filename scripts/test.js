@@ -23,6 +23,7 @@ async function deployDiamond () {
 
   const tx = await contractOwner.sendTransaction({to: "0xf7D3081BDb689661f7714660EB26917b19Aba320", value: ethers.utils.parseEther('0.4')})
   await tx.wait()
+  
 
 }
 
