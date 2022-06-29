@@ -1,6 +1,7 @@
 
 /* global ethers task */
 require('@nomiclabs/hardhat-waffle')
+require("@nomiclabs/hardhat-etherscan");
 
 // This is a sample Hardhat task. To learn how to create your own go to
 // https://hardhat.org/guides/create-task.html
@@ -18,6 +19,7 @@ const INFURA_PROJECT_ID = process.env.INFURA_PROJECT_ID;
 const DEPLOYER_PRIVATE_KEY = process.env.DEPLOYER_PRIVATE_KEY;
 const DEPLOYER2_PRIVATE_KEY = process.env.DEPLOYER2_PRIVATE_KEY;
 const DEPLOYER3_PRIVATE_KEY = process.env.DEPLOYER3_PRIVATE_KEY;
+const ETHERSCAN_API_KEY = process.env.ETHERSCAN_API_KEY;
 
 // You need to export an object to set up your config
 // Go to https://hardhat.org/config/ to learn more
@@ -25,13 +27,23 @@ const DEPLOYER3_PRIVATE_KEY = process.env.DEPLOYER3_PRIVATE_KEY;
 /**
  * @type import('hardhat/config').HardhatUserConfig
  */
+
+
 module.exports = {
-  solidity: '0.8.1',
+
   settings: {
     optimizer: {
       enabled: true,
       runs: 200
     }
+  },
+  solidity: {
+    compilers: [
+      {version: "0.8.14"},
+      {version: "0.8.1"},
+      {version: "0.8.0"},
+      {version: "0.5.16"},
+    ],
   },
   networks: {
     hardhat: {
@@ -58,7 +70,12 @@ module.exports = {
     mumbai: {
      // url: `https://polygon-mumbai.g.alchemy.com/v2/${ALCHEMY_PROJECT_ID}`,
       url: `https://polygon-mumbai.infura.io/v3/${INFURA_PROJECT_ID}`,
-      accounts: [`0x${DEPLOYER3_PRIVATE_KEY}`],
+      accounts: [`0x${DEPLOYER_PRIVATE_KEY}`],
     },
+  },
+  etherscan: {
+    // Your API key for Etherscan
+    // Obtain one at https://etherscan.io/
+    apiKey: ETHERSCAN_API_KEY
   },
 }
