@@ -1,10 +1,12 @@
 // SPDX-License-Identifier: MIT
-pragma solidity 0.5.16;
 
-import '../../uniswap/contracts/UniswapV2Pair.sol';
-import '../../uniswap/contracts/interfaces/IUniswapV2Pair.sol';
+pragma solidity =0.5.16;
 
-contract UniswapV2FactoryFacet is IUniswapV2Factory {
+import '../../uniswap/v2-core/contracts/interfaces/IUniswapV2Factory.sol';
+import '../../uniswap/v2-core/contracts/UniswapV2Pair.sol';
+
+contract UniswapV2Factory is IUniswapV2Factory {
+    bytes32 public constant INIT_CODE_HASH = keccak256(abi.encodePacked(type(UniswapV2Pair).creationCode));
     address public feeTo;
     address public feeToSetter;
 
