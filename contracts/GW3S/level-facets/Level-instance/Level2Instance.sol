@@ -14,11 +14,11 @@ contract Token is ERC20, Ownable {
 }
 
 contract Level2Instance {
-    address player;
-    address[4] tokens;
-    bool shipped;
-    string[] TOKENS_SYMBOL = ["KEK", "ALPHA", "FOMO", "FUD"];
-    string[] TOKENS_NAME = ["level2 KEK", "level2 ALPHA", "level2 FOMO", "level2 FUD"];
+    address public player;
+    address[4] public tokens;
+    bool public shipped;
+    string[] public TOKENS_SYMBOL = ["KEK", "ALPHA", "FOMO", "FUD"];
+    string[] public TOKENS_NAME = ["level2 KEK", "level2 ALPHA", "level2 FOMO", "level2 FUD"];
 
     constructor(address player_) {
         for (uint i = 0; i < tokens.length; i++) {
@@ -41,9 +41,4 @@ contract Level2Instance {
         }
         shipped = true;
     }
-
-    function isShipped() external view returns (bool) {
-        return shipped;
-    }
-    
 } 

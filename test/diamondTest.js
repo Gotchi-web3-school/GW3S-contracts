@@ -1,4 +1,4 @@
-/* global describe it before ethers */
+/* global describe it before ethers 
 
 const {
   getSelectors,
@@ -247,3 +247,4 @@ describe('DiamondTest', async function () {
     assert.sameMembers(facets[findAddressPositionInFacets(addresses[4], facets)][1], getSelectors(Test2Facet))
   })
 })
+*/

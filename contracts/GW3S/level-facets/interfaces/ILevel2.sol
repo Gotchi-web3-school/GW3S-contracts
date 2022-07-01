@@ -3,6 +3,7 @@
 pragma solidity 0.8.1;
 
 interface ILevel {
-    function complete() external;
+    function initLevel() external returns(address);
+    function complete() external returns (bool);
     function claim() external;
 }

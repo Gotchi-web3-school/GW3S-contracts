@@ -27,4 +27,12 @@ contract LevelLoupeFacet {
     function hasClaimedLevel(address account, uint256 levelId) external view returns (bool result) {
         result = s.level_reward[account][levelId];
     }
+
+    function getRunningLevel(address account) external view returns (uint256 result) {
+        result = s.level_running[account];
+    }
+
+    function getLevelInstanceAddress(address account, uint256 levelId) external view returns (address result) {
+        result = s.level_instance[account][levelId];
+    }
 }
