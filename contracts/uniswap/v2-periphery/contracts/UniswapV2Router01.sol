@@ -1,24 +1,23 @@
 // SPDX-License-Identifier: MIT
-pragma solidity =0.6.12;
+pragma solidity ^0.8.15;
 
 import '@uniswap/lib/contracts/libraries/TransferHelper.sol';
 
 import '../../v2-core/contracts/interfaces/IUniswapV2Factory.sol';
 import './libraries/UniswapV2Library.sol';
-import './interfaces/IUniswapV2Router01.sol';
 import './interfaces/IERC20.sol';
 import './interfaces/IWETH.sol';
 
-contract UniswapV2Router01 is IUniswapV2Router01 {
-    address public immutable override factory;
-    address public immutable override WETH;
+contract UniswapV2Router01 {
+    address factory;
+    address WETH;
 
     modifier ensure(uint deadline) {
         require(deadline >= block.timestamp, 'UniswapV2Router: EXPIRED');
         _;
     }
 
-    constructor(address _factory, address _WETH) public {
+    constructor(address _factory, address _WETH) {
         factory = _factory;
         WETH = _WETH;
     }
@@ -65,7 +64,7 @@ contract UniswapV2Router01 is IUniswapV2Router01 {
         uint amountBMin,
         address to,
         uint deadline
-    ) external override ensure(deadline) returns (uint amountA, uint amountB, uint liquidity) {
+    ) external ensure(deadline) returns (uint amountA, uint amountB, uint liquidity) {
         (amountA, amountB) = _addLiquidity(tokenA, tokenB, amountADesired, amountBDesired, amountAMin, amountBMin);
         address pair = UniswapV2Library.pairFor(factory, tokenA, tokenB);
         TransferHelper.safeTransferFrom(tokenA, msg.sender, pair, amountA);
@@ -79,7 +78,7 @@ contract UniswapV2Router01 is IUniswapV2Router01 {
         uint amountETHMin,
         address to,
         uint deadline
-    ) external override payable ensure(deadline) returns (uint amountToken, uint amountETH, uint liquidity) {
+    ) external payable ensure(deadline) returns (uint amountToken, uint amountETH, uint liquidity) {
         (amountToken, amountETH) = _addLiquidity(
             token,
             WETH,
@@ -105,7 +104,7 @@ contract UniswapV2Router01 is IUniswapV2Router01 {
         uint amountBMin,
         address to,
         uint deadline
-    ) public override ensure(deadline) returns (uint amountA, uint amountB) {
+    ) public  ensure(deadline) returns (uint amountA, uint amountB) {
         address pair = UniswapV2Library.pairFor(factory, tokenA, tokenB);
         IUniswapV2Pair(pair).transferFrom(msg.sender, pair, liquidity); // send liquidity to pair
         (uint amount0, uint amount1) = IUniswapV2Pair(pair).burn(to);
@@ -121,7 +120,7 @@ contract UniswapV2Router01 is IUniswapV2Router01 {
         uint amountETHMin,
         address to,
         uint deadline
-    ) public override ensure(deadline) returns (uint amountToken, uint amountETH) {
+    ) public  ensure(deadline) returns (uint amountToken, uint amountETH) {
         (amountToken, amountETH) = removeLiquidity(
             token,
             WETH,
@@ -144,9 +143,9 @@ contract UniswapV2Router01 is IUniswapV2Router01 {
         address to,
         uint deadline,
         bool approveMax, uint8 v, bytes32 r, bytes32 s
-    ) external override returns (uint amountA, uint amountB) {
+    ) external  returns (uint amountA, uint amountB) {
         address pair = UniswapV2Library.pairFor(factory, tokenA, tokenB);
-        uint value = approveMax ? uint(-1) : liquidity;
+        uint value = approveMax ? type(uint256).max : liquidity;
         IUniswapV2Pair(pair).permit(msg.sender, address(this), value, deadline, v, r, s);
         (amountA, amountB) = removeLiquidity(tokenA, tokenB, liquidity, amountAMin, amountBMin, to, deadline);
     }
@@ -158,9 +157,9 @@ contract UniswapV2Router01 is IUniswapV2Router01 {
         address to,
         uint deadline,
         bool approveMax, uint8 v, bytes32 r, bytes32 s
-    ) external override returns (uint amountToken, uint amountETH) {
+    ) external  returns (uint amountToken, uint amountETH) {
         address pair = UniswapV2Library.pairFor(factory, token, WETH);
-        uint value = approveMax ? uint(-1) : liquidity;
+        uint value = approveMax ? type(uint).max : liquidity;
         IUniswapV2Pair(pair).permit(msg.sender, address(this), value, deadline, v, r, s);
         (amountToken, amountETH) = removeLiquidityETH(token, liquidity, amountTokenMin, amountETHMin, to, deadline);
     }
@@ -183,7 +182,7 @@ contract UniswapV2Router01 is IUniswapV2Router01 {
         address[] calldata path,
         address to,
         uint deadline
-    ) external override ensure(deadline) returns (uint[] memory amounts) {
+    ) external  ensure(deadline) returns (uint[] memory amounts) {
         amounts = UniswapV2Library.getAmountsOut(factory, amountIn, path);
         require(amounts[amounts.length - 1] >= amountOutMin, 'UniswapV2Router: INSUFFICIENT_OUTPUT_AMOUNT');
         TransferHelper.safeTransferFrom(path[0], msg.sender, UniswapV2Library.pairFor(factory, path[0], path[1]), amounts[0]);
@@ -195,7 +194,7 @@ contract UniswapV2Router01 is IUniswapV2Router01 {
         address[] calldata path,
         address to,
         uint deadline
-    ) external override ensure(deadline) returns (uint[] memory amounts) {
+    ) external  ensure(deadline) returns (uint[] memory amounts) {
         amounts = UniswapV2Library.getAmountsIn(factory, amountOut, path);
         require(amounts[0] <= amountInMax, 'UniswapV2Router: EXCESSIVE_INPUT_AMOUNT');
         TransferHelper.safeTransferFrom(path[0], msg.sender, UniswapV2Library.pairFor(factory, path[0], path[1]), amounts[0]);
@@ -203,7 +202,7 @@ contract UniswapV2Router01 is IUniswapV2Router01 {
     }
     function swapExactETHForTokens(uint amountOutMin, address[] calldata path, address to, uint deadline)
         external
-        override
+        
         payable
         ensure(deadline)
         returns (uint[] memory amounts)
@@ -217,7 +216,7 @@ contract UniswapV2Router01 is IUniswapV2Router01 {
     }
     function swapTokensForExactETH(uint amountOut, uint amountInMax, address[] calldata path, address to, uint deadline)
         external
-        override
+        
         ensure(deadline)
         returns (uint[] memory amounts)
     {
@@ -231,7 +230,7 @@ contract UniswapV2Router01 is IUniswapV2Router01 {
     }
     function swapExactTokensForETH(uint amountIn, uint amountOutMin, address[] calldata path, address to, uint deadline)
         external
-        override
+        
         ensure(deadline)
         returns (uint[] memory amounts)
     {
@@ -245,7 +244,7 @@ contract UniswapV2Router01 is IUniswapV2Router01 {
     }
     function swapETHForExactTokens(uint amountOut, address[] calldata path, address to, uint deadline)
         external
-        override
+        
         payable
         ensure(deadline)
         returns (uint[] memory amounts)
@@ -259,23 +258,23 @@ contract UniswapV2Router01 is IUniswapV2Router01 {
         if (msg.value > amounts[0]) TransferHelper.safeTransferETH(msg.sender, msg.value - amounts[0]); // refund dust eth, if any
     }
 
-    function quote(uint amountA, uint reserveA, uint reserveB) public pure override returns (uint amountB) {
+    function quote(uint amountA, uint reserveA, uint reserveB) public pure  returns (uint amountB) {
         return UniswapV2Library.quote(amountA, reserveA, reserveB);
     }
 
-    function getAmountOut(uint amountIn, uint reserveIn, uint reserveOut) public pure override returns (uint amountOut) {
+    function getAmountOut(uint amountIn, uint reserveIn, uint reserveOut) public pure  returns (uint amountOut) {
         return UniswapV2Library.getAmountOut(amountIn, reserveIn, reserveOut);
     }
 
-    function getAmountIn(uint amountOut, uint reserveIn, uint reserveOut) public pure override returns (uint amountIn) {
+    function getAmountIn(uint amountOut, uint reserveIn, uint reserveOut) public pure  returns (uint amountIn) {
         return UniswapV2Library.getAmountOut(amountOut, reserveIn, reserveOut);
     }
 
-    function getAmountsOut(uint amountIn, address[] memory path) public view override returns (uint[] memory amounts) {
+    function getAmountsOut(uint amountIn, address[] memory path) public view  returns (uint[] memory amounts) {
         return UniswapV2Library.getAmountsOut(factory, amountIn, path);
     }
 
-    function getAmountsIn(uint amountOut, address[] memory path) public view override returns (uint[] memory amounts) {
+    function getAmountsIn(uint amountOut, address[] memory path) public view  returns (uint[] memory amounts) {
         return UniswapV2Library.getAmountsIn(factory, amountOut, path);
     }
 }

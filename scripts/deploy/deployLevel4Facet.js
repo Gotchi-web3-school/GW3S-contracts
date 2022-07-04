@@ -7,7 +7,7 @@ const { deployed } = require("./deployed.js")
 const hardhat = require("hardhat")
 const FILE_PATH = './deployed.json';
 
-async function deployLevel2 (diamondAddress) {
+async function deployLevel4 (diamondAddress) {
   const accounts = await ethers.getSigners()
   const contractOwner = accounts[0]
 
@@ -19,17 +19,17 @@ async function deployLevel2 (diamondAddress) {
 
   // deploy DiamondInit
   // DiamondInit provides a function that is called when the diamond is upgraded to initialize state variables
-  // Read about how the diamondCut function works here: https://eips.ethereum.org/EIPS/eip-2535#addingreplacingremoving-functions
-  console.log("Deploying InitLevel2...")
-  const InitLevel2 = await ethers.getContractFactory('InitLevel2')
-  const initLevel2 = await InitLevel2.deploy()
-  await initLevel2.deployed()
+  // Read about how the diamondCut function works here: https://eips.ethereum.org/EIPS/eip-2545#addingreplacingremoving-functions
+  console.log("Deploying InitLevel4...")
+  const InitLevel4 = await ethers.getContractFactory('InitLevel4')
+  const initLevel4 = await InitLevel4.deploy()
+  await initLevel4.deployed()
 
-  deployed("InitLevel2", hardhat.network.name, initLevel2.address)
+  deployed("InitLevel4", hardhat.network.name, initLevel4.address)
   
   // deploy facets
   const FacetNames = [
-    'Level2Facet',
+    'Level4Facet',
   ]
   const cut = []
   for (const FacetName of FacetNames) {
@@ -42,7 +42,7 @@ async function deployLevel2 (diamondAddress) {
 
     cut.push({
       facetAddress: facet.address,
-      action: FacetCutAction.Add,
+      action: FacetCutAction.Replace,
       functionSelectors: getSelectors(facet)
     })
   }
@@ -53,9 +53,8 @@ async function deployLevel2 (diamondAddress) {
   let tx
   let receipt
   // call to init function
-  let functionCall = initLevel2.interface.encodeFunctionData('init', [cut[0].facetAddress])
-  console.log(functionCall)
-  tx = await diamondCut.diamondCut(cut, initLevel2.address, functionCall)
+  let functionCall = initLevel4.interface.encodeFunctionData('init', [cut[0].facetAddress])
+  tx = await diamondCut.diamondCut(cut, initLevel4.address, functionCall)
   console.log('Diamond cut tx: ', tx.hash)
   receipt = await tx.wait()
   if (!receipt.status) {
@@ -68,7 +67,8 @@ async function deployLevel2 (diamondAddress) {
 // We recommend this pattern to be able to use async/await everywhere
 // and properly handle errors.
 if (require.main === module) {
-  deployLevel2("0xd99Da3f4a684d1735baF4d691a3687Cd7429d601")
+    const diamondAddress = "0x0CCB703023710Ee12Ad03be71A9C24c92998C505"
+    deployLevel4(diamondAddress)
     .then(() => process.exit(0))
     .catch(error => {
       console.error(error)
@@ -76,4 +76,4 @@ if (require.main === module) {
     })
 }
 
-exports.deployLevel2 = deployLevel2
+exports.deployLevel4 = deployLevel4

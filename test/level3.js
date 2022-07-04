@@ -1,4 +1,4 @@
-/* global describe it before ethers 
+/* global describe it before ethers */
 
 const {
     getSelectors,
@@ -10,75 +10,62 @@ const {
   const {formatEther, parseEther} = ethers.utils
   
   const { deployDiamond } = require('../scripts/deploy/deployDiamond.js')
-  const { deployLevel2 } = require('../scripts/deploy/deployLevel2Facet.js')
   const { deployLevelLoupeFacet } = require('../scripts/deploy/deployLevelLoupeFacet.js')
+  const { deployFactoryFacets } = require('../scripts/deploy/deployFactoryFacets.js')
+  const { deployRouterFacet, deployRouter } = require('../scripts/deploy/deployRouter.js')
+  const { deployLevel3 } = require('../scripts/deploy/deployLevel3Facet.js')
   const { expect } = require('chai')
   
-describe("Level 2", () => {
-    let diamondAddress
-    let level2Address
-    let levelLoupeAddress
-    let diamondCutFacet
-    let diamondLoupeFacet
-    let ownershipFacet
-    let level2Facet
-    let levelLoupeFacet
-    let tx
-    let receipt
-    let result
-    const addresses = []
+describe("Level 3", () => {
+    let diamondAddress, level3Address, factoryFacetsAddress, instanceAddress, routerAddress
+    let diamondCutFacet, diamondLoupeFacet, ownershipFacet, level3Facet, levelLoupeFacet
     let player1, player2, player3
+    let tx, receipt
+    let IGHST, IDAI, IERC20, IROUTER, IFACTORY, ILevel3Instance
+    let player;
+    let levelId;
+    let tokens = []
+    let Loupe
     
     before(async function () {
+        
         [player1, player2, player3] = await ethers.getSigners()
         diamondAddress = await deployDiamond()
+        routerAddress = await deployRouter()
         levelLoupeAddress = await deployLevelLoupeFacet(diamondAddress)
-        level2Address = await deployLevel2(diamondAddress)
+        factoryFacetsAddress = await deployFactoryFacets(routerAddress, diamondAddress)
+        level3Address = await deployLevel3(diamondAddress)
         
         diamondCutFacet = await ethers.getContractAt('DiamondCutFacet', diamondAddress)
         diamondLoupeFacet = await ethers.getContractAt('DiamondLoupeFacet', diamondAddress)
         ownershipFacet = await ethers.getContractAt('OwnershipFacet', diamondAddress)
         levelLoupeFacet = await ethers.getContractAt('LevelLoupeFacet', diamondAddress)
-        level2Facet = await ethers.getContractAt('Level2Facet', diamondAddress)
+        level3Facet = await ethers.getContractAt('Level3Facet', diamondAddress)
     })
     
     describe("init", () => {
-        
-        it('should have four facets -- call to facetAddresses function', async () => {
-            for (const address of await diamondLoupeFacet.facetAddresses()) {
-                addresses.push(address)
-            }
-            expect(addresses.length).to.equal(5)
-        })
-        it('should return the address of level2Facet', async () => {
-            const address = await levelLoupeFacet.getAddress(2)
-            
-            expect(address).to.equal(level2Address)
+        it('should return the address of level3Facet', async () => {
+            const address = await levelLoupeFacet.getAddress(3)
+            expect(address).to.equal(level3Address)
         })
         it('should return false on "Completed & reward"', async () => {
-            const isCompleted = await levelLoupeFacet.hasCompletedLevel(player1.address, 2)
-            const isClaimedLevel = await levelLoupeFacet.hasClaimedLevel(player1.address, 2)
+            const isCompleted = await levelLoupeFacet.hasCompletedLevel(player1.address, 3)
+            const isClaimedLevel = await levelLoupeFacet.hasClaimedLevel(player1.address, 3)
             
             expect(isCompleted).to.equal(false, "isCompleted failed")
             expect(isClaimedLevel).to.equal(false, "isClaimedLevel failed")
         })
-        it('should instanciate a new level 2', async () => {
-            await expect(level2Facet.initLevel())
-            .to.emit(level2Facet, "DeployedInstance")
-            .withArgs(2, player1.address, await levelLoupeFacet.getLevelInstanceAddress(player1.address, 2));
+        it('should instanciate a new level 3', async () => {
+        
+            await level3Facet.initLevel()
+           // await levelLoupeFacet.getLevelInstanceAddress(player1.address, 3)
         })
     })
     
     describe("play", () => {
-        let instanceAddress;
-        let ILevel2Instance;
-        let player;
-        let levelId;
-        let tokens = []
-        let IERC20;
         
         before(async function () {
-            tx = await level2Facet.initLevel()
+            tx = await level3Facet.initLevel()
             receipt = await tx.wait()
             deployedInstance = receipt.events.forEach(element =>{ 
                 if (element.event === "DeployedInstance") {
@@ -87,32 +74,36 @@ describe("Level 2", () => {
                     levelId = element.args.level
                 }
             })
-            ILevel2Instance = await ethers.getContractAt("ILevel2Instance", instanceAddress)
-            for(let i = 0; i < 4; i++) {
-                tokens.push(await ILevel2Instance.tokens(i))
+            ILevel3Instance = await ethers.getContractAt("ILevel3Instance", instanceAddress)
+            for(let i = 0; i < 2; i++) {
+                tokens.push(await ILevel3Instance.tokens(i))
             }
         })
   
         it('should return the address of the player', async () => {
-            expect(await ILevel2Instance.player()).to.equal(player)
+            expect(await ILevel3Instance.player()).to.equal(player)
         })
-        it('should return the id of the level (2)', async () => {
-            expect(await levelId).to.equal(2)
+        it('should return the id of the level (3)', async () => {
+            expect(await levelId).to.equal(3)
         })
         it('should return the tokens SYMBOL', async () => {
-            let tokens = ["KEK", "ALPHA", "FOMO", "FUD"]
-            for(let i = 0; i < 4; i++) {
-                expect(await ILevel2Instance.TOKENS_SYMBOL(i)).to.equal(tokens[i])
+            let tokens = ["DAI", "GHST"]
+            for(let i = 0; i < 2; i++) {
+                expect(await ILevel3Instance.TOKENS_SYMBOL(i)).to.equal(tokens[i])
             }
         })
-        it('should start game with shipped at false', async () => {
-            expect(await ILevel2Instance.shipped()).to.equal(false)
-        })
-        it('should start with 10 tokens of each', async () => {
-            for(let i = 0; i < 4; i++) {
-                IERC20 = await ethers.getContractAt("@openzeppelin/contracts/token/ERC20/IERC20.sol:IERC20", tokens[i])
-                expect(parseInt(formatEther(await IERC20.balanceOf(player1.address)))).to.equal(10)
+        it('should start game with player having 10 DAI & 0 GHST', async () => {
+            for(let i = 0; i < 2; i++) {
+                tokens.push(await ILevel3Instance.tokens(i))
             }
+            IDAI = await ethers.getContractAt("@openzeppelin/contracts/token/ERC20/IERC20.sol:IERC20", tokens[0])
+            IGHST = await ethers.getContractAt("@openzeppelin/contracts/token/ERC20/IERC20.sol:IERC20", tokens[1])
+            expect(parseInt(formatEther(await IDAI.balanceOf(player1.address)))).to.equal(10)
+            expect(parseInt(formatEther(await IGHST.balanceOf(player1.address)))).to.equal(10)
+        })
+        it('an AMM with one pool active', async () => {
+            FACTORY = await ethers.getContractFactory("UniswapV2Factory", await ILevel3Instance.factory())
+            expect(parseInt(formatEther(await FACTORY.allPairsLength()))).to.equal(1)
         })
         it('should approve tokens to instance and ship to them', async () => {
             for(let i = 0; i < 4; i++) {
@@ -135,7 +126,7 @@ describe("Level 2", () => {
             expect(await ILevel2Instance.shipped()).to.equal(true)
         })
     })
-
+    /*
     describe("Complete and claim reward", () => {
         let instanceAddress;
         let ILevel2Instance;
@@ -219,6 +210,7 @@ describe("Level 2", () => {
             expect(await levelLoupeFacet.hasCompletedLevel(player1.address, 2)).to.equal(false)
         })
     })
+    */
   
 })
-  */
+  

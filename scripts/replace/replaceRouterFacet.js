@@ -3,11 +3,12 @@
 
 const { readFile } = require("fs").promises
 const { getSelectors, FacetCutAction } = require('../libraries/diamond.js')
-const { deployed } = require("./deployed.js")
+const { deployed } = require("../deploy/deployed.js")
 const hardhat = require("hardhat")
 const FILE_PATH = './deployed.json';
+const WETH_MUMBAI_ADDRESS = "0xA6FA4fB5f76172d178d61B04b0ecd319C5d1C0aa"
 
-async function deployLevel2 (diamondAddress) {
+async function deployDiamond () {
   const accounts = await ethers.getSigners()
   const contractOwner = accounts[0]
 
@@ -20,16 +21,15 @@ async function deployLevel2 (diamondAddress) {
   // deploy DiamondInit
   // DiamondInit provides a function that is called when the diamond is upgraded to initialize state variables
   // Read about how the diamondCut function works here: https://eips.ethereum.org/EIPS/eip-2535#addingreplacingremoving-functions
-  console.log("Deploying InitLevel2...")
-  const InitLevel2 = await ethers.getContractFactory('InitLevel2')
-  const initLevel2 = await InitLevel2.deploy()
-  await initLevel2.deployed()
+  console.log("Deploy InitAMMFacet...")
+  const InitAMMFacet = await ethers.getContractFactory('InitAMMFacet')
+  const initAMMFacet = await InitAMMFacet.deploy()
+  await initAMMFacet.deployed()
+  console.log("InitAMMFacet deployed !")
 
-  deployed("InitLevel2", hardhat.network.name, initLevel2.address)
-  
   // deploy facets
   const FacetNames = [
-    'Level2Facet',
+    'RouterFacet',
   ]
   const cut = []
   for (const FacetName of FacetNames) {
@@ -38,37 +38,38 @@ async function deployLevel2 (diamondAddress) {
     const facet = await Facet.deploy()
     await facet.deployed()
     
-    deployed(FacetName, hardhat.network.name, facet.address)
+    deployed("RouterFacet", hardhat.network.name, facet.address)
 
     cut.push({
       facetAddress: facet.address,
-      action: FacetCutAction.Add,
+      action: FacetCutAction.Replace,
       functionSelectors: getSelectors(facet)
     })
   }
 
   // upgrade diamond with facets
   console.log('')
-  const diamondCut = await ethers.getContractAt('IDiamondCut', diamondAddress)
+  console.log('Diamond Cut:', cut)
+  const diamondCut = await ethers.getContractAt('IDiamondCut', contracts.Diamond.mumbai.address)
   let tx
   let receipt
   // call to init function
-  let functionCall = initLevel2.interface.encodeFunctionData('init', [cut[0].facetAddress])
+  let functionCall = initAMMFacet.interface.encodeFunctionData('init', [WETH_MUMBAI_ADDRESS, cut[0].facetAddress])
   console.log(functionCall)
-  tx = await diamondCut.diamondCut(cut, initLevel2.address, functionCall)
+  tx = await diamondCut.diamondCut(cut, initAMMFacet.address, functionCall)
   console.log('Diamond cut tx: ', tx.hash)
   receipt = await tx.wait()
   if (!receipt.status) {
     throw Error(`Diamond upgrade failed: ${tx.hash}`)
   }
   console.log('Completed diamond cut')
-  return cut[0].facetAddress
+  return contracts.Diamond.mumbai.address
 }
 
 // We recommend this pattern to be able to use async/await everywhere
 // and properly handle errors.
 if (require.main === module) {
-  deployLevel2("0xd99Da3f4a684d1735baF4d691a3687Cd7429d601")
+  deployDiamond()
     .then(() => process.exit(0))
     .catch(error => {
       console.error(error)
@@ -76,4 +77,4 @@ if (require.main === module) {
     })
 }
 
-exports.deployLevel2 = deployLevel2
+exports.deployDiamond = deployDiamond

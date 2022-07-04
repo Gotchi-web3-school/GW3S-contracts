@@ -7,7 +7,7 @@ const { deployed } = require("./deployed.js")
 const hardhat = require("hardhat")
 const FILE_PATH = './deployed.json';
 
-async function deployLevelLoupeFacet (diamondAddress) {
+async function deployFactoryFacets (routerAddress, diamondAddress) {
   const accounts = await ethers.getSigners()
   const contractOwner = accounts[0]
 
@@ -17,24 +17,33 @@ async function deployLevelLoupeFacet (diamondAddress) {
     console.log(e)
   }
 
+  // Deploying initializer
+  //--------------------------------------------------------------
+  console.log(`Deploying FactoryFacet...`)
+  const InitRouter = await ethers.getContractFactory("InitRouter")
+  const initRouter = await InitRouter.deploy()
+  await initRouter.deployed()
+  
+  deployed("InitRouter", hardhat.network.name, initRouter.address)
+  //--------------------------------------------------------------
+
   const cut = []
 
-  // Deploying LevelLoupeFacet
+  // Deploying factory facet
   //--------------------------------------------------------------
-  console.log(`Deploying LevelLoupeFacet...`)
-  const Facet = await ethers.getContractFactory("LevelLoupeFacet")
-  const facet = await Facet.deploy()
-  await facet.deployed()
+  console.log(`Deploying FactoryFacet...`)
+  const FactoryFacet = await ethers.getContractFactory("FactoryFacet")
+  const factoryFacet = await FactoryFacet.deploy()
+  await factoryFacet.deployed()
   
-  deployed("LevelLoupeFacet", hardhat.network.name, facet.address)
+  deployed("FactoryFacet", hardhat.network.name, factoryFacet.address)
   
   cut.push({
-      facetAddress: facet.address,
+      facetAddress: factoryFacet.address,
       action: FacetCutAction.Add,
-      functionSelectors: getSelectors(facet)
+      functionSelectors: getSelectors(factoryFacet)
     })
   //--------------------------------------------------------------
-
 
   // upgrade diamond with facets
   console.log('')
@@ -42,8 +51,8 @@ async function deployLevelLoupeFacet (diamondAddress) {
   let tx
   let receipt
   // call to init function
-  tx = await diamondCut.diamondCut(cut, "0x0000000000000000000000000000000000000000", [])
-  console.log('Diamond cut tx: ', tx.hash)
+  let functionCall = initRouter.interface.encodeFunctionData('init', [routerAddress])
+  tx = await diamondCut.diamondCut(cut, initRouter.address, functionCall)
   receipt = await tx.wait()
   if (!receipt.status) {
     throw Error(`Diamond upgrade failed: ${tx.hash}`)
@@ -55,8 +64,10 @@ async function deployLevelLoupeFacet (diamondAddress) {
 // We recommend this pattern to be able to use async/await everywhere
 // and properly handle errors.
 if (require.main === module) {
-  const diamondAddress = "0x0CCB703023710Ee12Ad03be71A9C24c92998C505"
-  deployLevelLoupeFacet(diamondAddress)
+   
+    const diamondAddress = "0x0CCB703023710Ee12Ad03be71A9C24c92998C505"
+    const routerAddress = "0xD13B33a064A420d7ddeA152589C43193256208B0"
+    deployFactoryFacets(routerAddress, diamondAddress)
     .then(() => process.exit(0))
     .catch(error => {
       console.error(error)
@@ -64,4 +75,4 @@ if (require.main === module) {
     })
 }
 
-exports.deployLevelLoupeFacet = deployLevelLoupeFacet
+exports.deployFactoryFacets = deployFactoryFacets
