@@ -17,6 +17,7 @@ contract Level4Facet is Modifiers {
 
     function initLevel4() external returns(address) {
         Level4Instance instance = new Level4Instance(msg.sender, s.router);
+        
         s.level_completed[msg.sender][4] = false;
         s.level_running[msg.sender] = 4;
         s.level_instance[msg.sender][4] = address(instance);
