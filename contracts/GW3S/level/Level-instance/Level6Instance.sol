@@ -33,8 +33,8 @@ contract Level6Instance {
             Token(tokens[i]).mint(address(this), MAX);
             Token(tokens[i]).approve(router, MAX);
         }
-        Token(tokens[0]).mint(player_, 10000000000000000);
-        Token(tokens[1]).mint(player_, 10000000000000000);
+        Token(tokens[0]).mint(player_, 10000000000000000000);
+        Token(tokens[1]).mint(player_, 1000000000000000);
 
         address factory = FactoryFacet(msg.sender).deployFactory(player);
         IRouter(router).addLiquidity(tokens[0], tokens[1], MAX, MAX, MAX, MAX, address(this), block.timestamp, factory);

@@ -19,7 +19,7 @@ async function deployFactoryFacets (routerAddress, diamondAddress) {
 
   // Deploying initializer
   //--------------------------------------------------------------
-  console.log(`Deploying FactoryFacet...`)
+  console.log(`Deploying Init router...`)
   const InitRouter = await ethers.getContractFactory("InitRouter")
   const initRouter = await InitRouter.deploy()
   await initRouter.deployed()
@@ -40,7 +40,7 @@ async function deployFactoryFacets (routerAddress, diamondAddress) {
   
   cut.push({
       facetAddress: factoryFacet.address,
-      action: FacetCutAction.Add,
+      action: FacetCutAction.Replace,
       functionSelectors: getSelectors(factoryFacet)
     })
   //--------------------------------------------------------------
@@ -66,7 +66,7 @@ async function deployFactoryFacets (routerAddress, diamondAddress) {
 if (require.main === module) {
    
     const diamondAddress = "0x0CCB703023710Ee12Ad03be71A9C24c92998C505"
-    const routerAddress = "0xD13B33a064A420d7ddeA152589C43193256208B0"
+    const routerAddress = "0x4224eA765d001533b3A55A2d98A694841964eA88"
     deployFactoryFacets(routerAddress, diamondAddress)
     .then(() => process.exit(0))
     .catch(error => {

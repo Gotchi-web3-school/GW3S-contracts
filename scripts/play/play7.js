@@ -2,7 +2,7 @@
 /* eslint prefer-const: "off" */
 
 const hardhat = require("hardhat")
-const { readFile, writeFile } = require('fs').promises;
+const { readFile } = require('fs').promises;
 const { ethers } = require('hardhat')
 const FILE_PATH = './deployed.json';
 
@@ -12,7 +12,7 @@ async function level7 () {
   const player = accounts[0]
   let tx, receipt
 
-  console.log(player.address)
+  console.log("Player: ", player.address)
 
   try {
     contracts = JSON.parse(await readFile(FILE_PATH, "utf-8"))
@@ -24,13 +24,18 @@ async function level7 () {
 
   const levelLoupeFacet = await ethers.getContractAt("LevelLoupeFacet", contracts.Diamond.mumbai.address)
   const routerAddress = await levelLoupeFacet.getRouter()
-
-  console.log("router: ", routerAddress)
-  console.log("factory of anon:", await levelLoupeFacet.getFactoryByPlayer(player.address))
-  console.log("Instance of anon:", await levelLoupeFacet.getLevelInstanceByAddress(player.address, 7))
-  
   const IRouter = await ethers.getContractAt("IRouter", routerAddress)  
   const ILevel7Facet = await ethers.getContractAt("Level7Facet", contracts.Diamond.mumbai.address)
+  
+  
+  // STEP 0 Init
+  console.log("Init level...")
+  tx = await ILevel7Facet.initLevel7()
+  receipt = await tx.wait()
+  console.log("level deployed at :", await levelLoupeFacet.getLevelInstanceByAddress(player.address, 7))
+  
+ console.log("\nLevel start !\n")
+ 
  const Ilevel7Instance = await ethers.getContractAt('ILevel7Instance', await levelLoupeFacet.getLevelInstanceByAddress(player.address, 7))
  const IGHST = await ethers.getContractAt('@openzeppelin/contracts/token/ERC20/IERC20.sol:IERC20', await Ilevel7Instance.tokens(0))
  const IDAI = await ethers.getContractAt('@openzeppelin/contracts/token/ERC20/IERC20.sol:IERC20', await Ilevel7Instance.tokens(1))
@@ -57,15 +62,15 @@ async function level7 () {
   receipt = await tx.wait()
   console.log("Liquidity added !")
   
-  
   console.log("Completing level...")
   // STEP 3 complete level
-  tx = await ILevel7Facet.complete()
+  tx = await ILevel7Facet.complete_l7()
   receipt = await tx.wait()
   console.log("Level completed !")
   console.log("")
   
-  console.log("Completed ? ", await levelLoupeFacet.hasCompletedLevel())
+  
+  console.log("Completed ? ", await levelLoupeFacet.hasCompletedLevel(player.address, 7))
   
   console.log("")
   console.log("balance: ", ethers.utils.formatEther(await player.getBalance()), "MATIC")

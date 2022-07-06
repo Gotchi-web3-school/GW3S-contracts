@@ -30,7 +30,7 @@ contract Level6Facet is Modifiers {
         address ghst = ILevel6Instance(s.level_instance[msg.sender][6]).tokens(0);
         uint balance = IERC20(ghst).balanceOf(msg.sender);
 
-        require(balance == 10010000000000000000, "level not completed yet");
+        require(balance == 10001000000000000000, "level not completed yet");
         s.level_completed[msg.sender][6] = true;
         emit Completed(0, msg.sender);
     }

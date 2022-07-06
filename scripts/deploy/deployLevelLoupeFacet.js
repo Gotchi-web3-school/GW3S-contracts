@@ -10,6 +10,7 @@ const FILE_PATH = './deployed.json';
 async function deployLevelLoupeFacet (diamondAddress) {
   const accounts = await ethers.getSigners()
   const contractOwner = accounts[0]
+  const routerAddress = "0x2dc82984e9DaBA3Cb9a97887cCFa0311937cF9D6"
 
   try {
     contracts = JSON.parse(await readFile(FILE_PATH, "utf-8"))
@@ -18,7 +19,13 @@ async function deployLevelLoupeFacet (diamondAddress) {
   }
 
   const cut = []
-
+  
+  console.log(`Deploying InitRouter...`)
+  const Router = await ethers.getContractFactory("InitRouter")
+  const initRouter = await Router.deploy()
+  await initRouter.deployed()
+  console.log("init router deployed")
+  
   // Deploying LevelLoupeFacet
   //--------------------------------------------------------------
   console.log(`Deploying LevelLoupeFacet...`)
@@ -30,7 +37,7 @@ async function deployLevelLoupeFacet (diamondAddress) {
   
   cut.push({
       facetAddress: facet.address,
-      action: FacetCutAction.Add,
+      action: FacetCutAction.Replace,
       functionSelectors: getSelectors(facet)
     })
   //--------------------------------------------------------------
@@ -42,7 +49,8 @@ async function deployLevelLoupeFacet (diamondAddress) {
   let tx
   let receipt
   // call to init function
-  tx = await diamondCut.diamondCut(cut, "0x0000000000000000000000000000000000000000", [])
+  let functionCall = initRouter.interface.encodeFunctionData('init', [routerAddress])
+  tx = await diamondCut.diamondCut(cut, initRouter.address, functionCall)
   console.log('Diamond cut tx: ', tx.hash)
   receipt = await tx.wait()
   if (!receipt.status) {
