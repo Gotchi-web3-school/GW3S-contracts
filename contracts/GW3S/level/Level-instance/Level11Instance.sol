@@ -11,7 +11,7 @@ import "../../AMM/interfaces/IPair.sol";
 import '../../../uniswap/v2-core/contracts/libraries/UniswapV2Library.sol';
 
 address constant WETH = 0xA6FA4fB5f76172d178d61B04b0ecd319C5d1C0aa;
-uint256 constant MAX = 1000000000 * 10 ** 18;
+uint256 constant MAX = 1000000000;
 
 contract Token is ERC20, Ownable {
     constructor (string memory name, string memory symbol) ERC20(name, symbol) {}
@@ -40,7 +40,7 @@ contract Level11Instance {
         for (uint8 i = 0; i < TOKENS_NAME.length; i++) {
             tokens[i] = address(new Token(TOKENS_NAME[i], TOKENS_SYMBOL[i]));
             Token(tokens[i]).mint(player_, MAX);
-            Token(tokens[i]).mint(address(this), 1e18);
+            Token(tokens[i]).mint(address(this), 1);
             Token(tokens[i]).approve(router_, 1e18);
         }
         factory = IFactory(msg.sender).deployFactory(player_);

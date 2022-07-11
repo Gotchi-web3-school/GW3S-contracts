@@ -31,8 +31,8 @@ contract Level8Instance {
 
         for (uint8 i = 0; i < TOKENS_NAME.length; i++) {
             tokens[i] = address(new Token(TOKENS_NAME[i], TOKENS_SYMBOL[i]));
-            Token(tokens[i]).mint(player_, MAX * 10);
-            Token(tokens[i]).mint(address(this), MAX);
+            Token(tokens[i]).mint(player_, 100);
+            Token(tokens[i]).mint(address(this), 10);
             Token(tokens[i]).approve(router, MAX);
         }
         factory = IFactory(msg.sender).deployFactory(player_);
