@@ -72,8 +72,11 @@ contract Level11Instance {
         // get new quote
         uint256 currQuote = getQuote();
 
-        // compare new quote
-        if (currQuote.mul(10000) / prevQuote >= 9900 && currQuote.mul(10000) / prevQuote <= 10100) {
+        // compare new quote && check if the level has been succeeded
+        if (currQuote.mul(10000) / prevQuote >= 9900 &&
+            currQuote.mul(10000) / prevQuote <= 10100 && 
+            amountIn >= 10000 * 1e18) 
+        {
             success = true;
         }
         return success;
