@@ -28,9 +28,6 @@ contract Level7Facet is Modifiers {
     }
 
     function complete_l7() external hasCompleted(7) isRunning(7) {
-        bytes32 tmp;
-        address token0 = ILevel7Instance(s.level_instance[msg.sender][7]).tokens(0);
-        address token1 = ILevel7Instance(s.level_instance[msg.sender][7]).tokens(1);
         address pair = ILevel7Instance(s.level_instance[msg.sender][7]).getPair();
 
         uint balance = IERC20(pair).balanceOf(msg.sender);
