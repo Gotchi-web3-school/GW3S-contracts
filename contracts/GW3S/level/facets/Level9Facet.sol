@@ -18,7 +18,7 @@ contract Level9Facet is Modifiers {
     event DeployedInstance(uint256 indexed level, address indexed player, address instance);
 
     function initLevel9() external returns(address) {
-        Level9Instance instance = new Level9Instance(msg.sender, s.router);
+        Level9Instance instance = new Level9Instance(msg.sender);
 
         s.level_completed[msg.sender][9] = false;
         s.level_running[msg.sender] = 9;
