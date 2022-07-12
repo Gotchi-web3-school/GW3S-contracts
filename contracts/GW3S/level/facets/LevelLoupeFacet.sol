@@ -36,10 +36,6 @@ contract LevelLoupeFacet {
         result = s.level_instance[account][levelId];
     }
 
-    function getFactoryByPlayer(address account) external view returns (address result) {
-        result = s.factory[account];
-    }
-
     function getRouter() external view returns (address result) {
         result = s.router;
     }
