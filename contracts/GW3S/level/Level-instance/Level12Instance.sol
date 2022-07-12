@@ -24,8 +24,8 @@ contract Level12Instance {
     address[2] tokens;
     string[] public TOKENS_NAME = ["level12 USDC", "level12 GHST"];
     string[] public TOKENS_SYMBOL = ["DAI", "GHST"];
-    address router;
-    address[2] factories;
+    address public router;
+    address[2] public factories;
 
     constructor(address player_, address router_) {
         player = player_;
