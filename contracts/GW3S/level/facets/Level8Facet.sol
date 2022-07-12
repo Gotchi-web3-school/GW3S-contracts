@@ -31,7 +31,7 @@ contract Level8Facet is Modifiers {
     function complete_l8() external hasCompleted(8) isRunning(8) {
         address DAI = ILevel8Instance(s.level_instance[msg.sender][8]).tokens(1);
         uint256 daiBalance = IERC20(DAI).balanceOf(msg.sender);
-        require(balance >= 79 * 10 ** 18 && balance <= 81 * 10 ** 18, "The price quote is higher or lower than expected");
+        require(daiBalance >= 79 * 10 ** 18 && daiBalance <= 81 * 10 ** 18, "The price quote is higher or lower than expected");
 
         s.level_completed[msg.sender][8] = true;
         emit Completed(0, msg.sender);
