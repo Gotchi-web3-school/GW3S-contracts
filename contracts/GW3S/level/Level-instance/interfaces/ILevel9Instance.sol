@@ -11,6 +11,7 @@ interface ILevel9Instance {
     function TOKENS_SYMBOL(uint) external view returns (string memory);
     function TOKENS_NAME(uint) external view returns (string memory);
     function getTokenAddress(uint256 index) external view returns(address);
-    function getPair() public returns(address pair);
-    function deployToken(string memory name, string memory ticker, uint256 totalSupply) public
+
+    function getPair() external returns(address pair);
+    function deployToken(string memory name, string memory ticker, uint256 totalSupply) external;
 }

@@ -10,5 +10,5 @@ interface ILevel7Instance {
     function TOKENS_NAME(uint) external view returns (string memory);
     function getTokenAddress(uint256 index) external view returns(address);
 
-    function getPair() public returns(address pair)
+    function getPair() external returns(address pair);
 }
