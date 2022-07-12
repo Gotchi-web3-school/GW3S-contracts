@@ -20,6 +20,7 @@ contract Token is ERC20, Ownable {
 contract Level7Instance {
     address[2] public tokens;
     address public player;
+    address public factory;
     string[] public TOKENS_NAME = ["level7 GHST", "level7 DAI"];
     string[] public TOKENS_SYMBOL = ["GHST", "DAI"];
 
@@ -30,6 +31,21 @@ contract Level7Instance {
             tokens[i] = address(new Token(TOKENS_NAME[i], TOKENS_SYMBOL[i]));
             Token(tokens[i]).mint(player_, 100);
         }
-        IFactory(msg.sender).deployFactory(player_);
+        factory = IFactory(msg.sender).deployFactory(player_);
+    }
+
+    function getPair() public returns(address pair) {
+        bytes32 tmp;
+        address token0 = tokens[0] < tokens[1] ? tokens[0] : tokens[1];
+        address token1 = tokens[0] > tokens[1] ? tokens[0] : tokens[1];
+
+        tmp = keccak256(abi.encodePacked(
+            hex'ff',
+            factory,
+            keccak256(abi.encodePacked(token0, token1)),
+            IFactory(factory).INIT_CODE_HASH()
+        ));
+
+        pair = address(uint160(uint256(tmp)));
     }
 }

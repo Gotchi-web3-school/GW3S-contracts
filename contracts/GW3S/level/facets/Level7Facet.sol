@@ -31,15 +31,8 @@ contract Level7Facet is Modifiers {
         bytes32 tmp;
         address token0 = ILevel7Instance(s.level_instance[msg.sender][7]).tokens(0);
         address token1 = ILevel7Instance(s.level_instance[msg.sender][7]).tokens(1);
+        address pair = ILevel7Instance(s.level_instance[msg.sender][7]).getPair();
 
-        tmp = keccak256(abi.encodePacked(
-            hex'ff',
-            s.factory[msg.sender],
-            keccak256(abi.encodePacked(token0, token1)),
-            IFactory(s.factory[msg.sender]).INIT_CODE_HASH()
-        ));
-    
-        address pair = address(uint160(uint256(tmp)));
         uint balance = IERC20(pair).balanceOf(msg.sender);
         require(balance > 0, "level not completed yet");
 

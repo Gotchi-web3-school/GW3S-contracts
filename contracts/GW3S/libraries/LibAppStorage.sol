@@ -12,7 +12,6 @@ struct AppStorage {
     mapping(address => mapping(uint256 => bool)) level_reward;          // Store level reward by address and Id of the level
     mapping(address => uint256) level_running;                          // The current level that player try to solve
     mapping(address => mapping(uint256 => address)) level_instance;     // The current instance of player deployed by the a specific level 
-    mapping(address => address) factory;                                // The address of factory deployed by player
 
     // AMM state
     address router;                                 // The address of the router facet
