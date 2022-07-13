@@ -16,9 +16,9 @@ contract TokenFacet {
 
     event Deployed(string indexed name, string indexed ticker, uint256 indexed supply);
 
-    function deployToken(string memory name, string memory ticker, uint256 totalSupply) public returns(address) {
+    function deployToken(string memory name, string memory ticker, uint256 totalSupply, address player) public returns(address) {
         Token token = new Token(name, ticker);
-        token.mint(msg.sender, totalSupply);
+        token.mint(player, totalSupply);
         emit Deployed(name, ticker, totalSupply);
 
         return address(token);
