@@ -5,7 +5,7 @@ const { getSelectors, FacetCutAction } = require('../libraries/diamond.js')
 const { deployed } = require("./deployed.js")
 const hardhat = require("hardhat")
 
-async function deployLevel7 (diamondAddress) {
+async function deployLevel7Facet () {
     const accounts = await ethers.getSigners()
   const contractOwner = accounts[0]
 
@@ -34,14 +34,14 @@ async function deployLevel7 (diamondAddress) {
 
     cut.push({
       facetAddress: facet.address,
-      action: FacetCutAction.Replace,
+      action: FacetCutAction.Add,
       functionSelectors: getSelectors(facet)
     })
   }
 
   // upgrade diamond with facets
   console.log('')
-  const diamondCut = await ethers.getContractAt('IDiamondCut', diamondAddress)
+  const diamondCut = await ethers.getContractAt('IDiamondCut', contracts.Diamond.mumbai.address)
   let tx
   let receipt
   // call to init function
@@ -59,8 +59,7 @@ async function deployLevel7 (diamondAddress) {
 // We recommend this pattern to be able to use async/await everywhere
 // and properly handle errors.
 if (require.main === module) {
-  const diamondAddress = "0x0CCB703023710Ee12Ad03be71A9C24c92998C505"
-    deployLevel7(diamondAddress)
+    deployLevel7Facet()
     .then(() => process.exit(0))
     .catch(error => {
       console.error(error)
@@ -68,4 +67,4 @@ if (require.main === module) {
     })
 }
 
-exports.deployLevel7 = deployLevel7
+exports.deployLevel7Facet = deployLevel7Facet

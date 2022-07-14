@@ -7,9 +7,8 @@ const { deployed } = require("./deployed.js")
 const hardhat = require("hardhat")
 const FILE_PATH = './deployed.json';
 
-async function deployFactoryFacets (routerAddress, diamondAddress) {
+async function deployFactoryFacet () {
   const accounts = await ethers.getSigners()
-  const contractOwner = accounts[0]
 
   try {
     contracts = JSON.parse(await readFile(FILE_PATH, "utf-8"))
@@ -40,18 +39,18 @@ async function deployFactoryFacets (routerAddress, diamondAddress) {
   
   cut.push({
       facetAddress: factoryFacet.address,
-      action: FacetCutAction.Replace,
+      action: FacetCutAction.Add,
       functionSelectors: getSelectors(factoryFacet)
     })
   //--------------------------------------------------------------
 
   // upgrade diamond with facets
   console.log('')
-  const diamondCut = await ethers.getContractAt('IDiamondCut', diamondAddress)
+  const diamondCut = await ethers.getContractAt('IDiamondCut', contracts.Diamond.mumbai.address)
   let tx
   let receipt
   // call to init function
-  let functionCall = initRouter.interface.encodeFunctionData('init', [routerAddress])
+  let functionCall = initRouter.interface.encodeFunctionData('init', [contracts.Router.mumbai.address])
   tx = await diamondCut.diamondCut(cut, initRouter.address, functionCall)
   receipt = await tx.wait()
   if (!receipt.status) {
@@ -64,10 +63,7 @@ async function deployFactoryFacets (routerAddress, diamondAddress) {
 // We recommend this pattern to be able to use async/await everywhere
 // and properly handle errors.
 if (require.main === module) {
-   
-    const diamondAddress = "0x0CCB703023710Ee12Ad03be71A9C24c92998C505"
-    const routerAddress = "0x4224eA765d001533b3A55A2d98A694841964eA88"
-    deployFactoryFacets(routerAddress, diamondAddress)
+    deployFactoryFacet()
     .then(() => process.exit(0))
     .catch(error => {
       console.error(error)
@@ -75,4 +71,4 @@ if (require.main === module) {
     })
 }
 
-exports.deployFactoryFacets = deployFactoryFacets
+exports.deployFactoryFacet = deployFactoryFacet

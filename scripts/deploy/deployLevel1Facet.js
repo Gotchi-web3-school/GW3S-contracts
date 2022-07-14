@@ -7,7 +7,7 @@ const { deployed } = require("./deployed.js")
 const hardhat = require("hardhat")
 const FILE_PATH = './deployed.json';
 
-async function deployDiamond () {
+async function deployLevel1Facet () {
   const accounts = await ethers.getSigners()
   const contractOwner = accounts[0]
 
@@ -69,7 +69,7 @@ async function deployDiamond () {
 // We recommend this pattern to be able to use async/await everywhere
 // and properly handle errors.
 if (require.main === module) {
-  deployDiamond()
+  deployLevel1Facet()
     .then(() => process.exit(0))
     .catch(error => {
       console.error(error)
@@ -77,4 +77,4 @@ if (require.main === module) {
     })
 }
 
-exports.deployDiamond = deployDiamond
+exports.deployLevel1Facet = deployLevel1Facet

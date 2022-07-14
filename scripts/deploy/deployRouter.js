@@ -7,8 +7,7 @@ const FILE_PATH = './deployed.json';
 const WETH_MUMBAI_ADDRESS = "0xA6FA4fB5f76172d178d61B04b0ecd319C5d1C0aa"
 
 async function deployRouter () {
-  const accounts = await ethers.getSigners()
-  const contractOwner = accounts[0]
+  const cut = [];
 
   console.log("Deploying router...")
   const Router = await ethers.getContractFactory("Router")
@@ -17,6 +16,12 @@ async function deployRouter () {
   console.log("Deployed !")
 
   deployed("Router", hardhat.network.name, router.address)
+
+  cut.push({
+    facetAddress: facet.address,
+    action: FacetCutAction.Add,
+    functionSelectors: getSelectors(facet)
+  })
 
   return router.address
 }
