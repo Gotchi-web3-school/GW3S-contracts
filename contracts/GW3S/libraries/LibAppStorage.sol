@@ -22,8 +22,14 @@ struct SvgStorage {
     mapping(uint => mapping(uint => address)) svgLevelReward;            // Store svgs by (levelId => type => svgContract)
 }
 
+struct RewardStorage {
+    // type = enum{LEVEL, HIDDEN, HACKER}
+    mapping(uint => mapping(uint => address)) levelReward;            // Store svgs by (levelId => type => svgContract)
+}
+
 library LibAppStorage {
     bytes32 constant DIAMOND_SVG_STORAGE_POSITION = keccak256("diamond.standard.diamond.svgStorage");
+    bytes32 constant DIAMOND_REWARD_STORAGE_POSITION = keccak256("diamond.standard.diamond.rewardStorage");
 
     function diamondStorage() internal pure returns (AppStorage storage ds) {
         assembly {
@@ -33,6 +39,14 @@ library LibAppStorage {
 
     function svgDiamondStorage() internal pure returns (SvgStorage storage ds) {
         bytes32 position = DIAMOND_SVG_STORAGE_POSITION;
+
+        assembly {
+            ds.slot := position
+        }
+    }
+
+    function rewardDiamondStorage() internal pure returns (RewardStorage storage ds) {
+        bytes32 position = DIAMOND_REWARD_STORAGE_POSITION;
 
         assembly {
             ds.slot := position
