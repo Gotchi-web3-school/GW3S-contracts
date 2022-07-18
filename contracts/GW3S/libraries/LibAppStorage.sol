@@ -17,10 +17,25 @@ struct AppStorage {
     address router;                                 // The address of the router facet
 }
 
+struct SvgStorage {
+    // type = enum{LEVEL, HIDDEN, HACKER}
+    mapping(uint => mapping(uint => address)) svgLevelReward;            // Store svgs by (levelId => type => svgContract)
+}
+
 library LibAppStorage {
+    bytes32 constant DIAMOND_SVG_STORAGE_POSITION = keccak256("diamond.standard.diamond.svgStorage");
+
     function diamondStorage() internal pure returns (AppStorage storage ds) {
         assembly {
             ds.slot := 0
+        }
+    }
+
+    function svgDiamondStorage() internal pure returns (SvgStorage storage ds) {
+        bytes32 position = DIAMOND_SVG_STORAGE_POSITION;
+
+        assembly {
+            ds.slot := position
         }
     }
 }
