@@ -24,7 +24,7 @@ struct SvgStorage {
 
 struct RewardStorage {
     // type = enum{LEVEL, HIDDEN, HACKER}
-    mapping(uint => mapping(uint => address)) levelReward;            // Store svgs by (levelId => type => svgContract)
+    mapping(uint => mapping(uint => address)) Erc721LevelReward;            // Store svgs by (levelId => type => svgContract)
 }
 
 library LibAppStorage {

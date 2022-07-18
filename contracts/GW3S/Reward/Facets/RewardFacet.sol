@@ -3,16 +3,10 @@ pragma solidity 0.8.15;
 
 import {LibAppStorage, RewardStorage} from "../../libraries/LibAppStorage.sol";
 import {Modifiers} from "../../libraries/LibLevel.sol";
-//import {RewardAddress} from "../../libraries/LibReward.sol";
+import {ERC721RewardLevel} from "../ERC721RewardLevel.sol";
 
 contract RewardFacet is Modifiers {
     event RewardAddress(address indexed reward, uint256 levelId, uint256 _type);
-
-    /***********************************|
-   |             Read Functions         |
-   |__________________________________*/
-
-   
 
     /***********************************|
    |             Write Functions        |
@@ -21,9 +15,9 @@ contract RewardFacet is Modifiers {
    function setRewardAddress(address reward, uint256 levelId, uint256 _type) external onlyOwner {
     require(reward != address(0), "setRewardAddress: address can't be 0");
     RewardStorage storage r = LibAppStorage.rewardDiamondStorage();
-    require(r.levelReward[levelId][_type] != address(0), "setRewardAddress: address can't be 0");
+    require(r.Erc721LevelReward[levelId][_type] != address(0), "setRewardAddress: address can't be 0");
 
-    r.levelReward[levelId][_type] = reward;
+    r.Erc721LevelReward[levelId][_type] = reward;
     emit RewardAddress(reward, levelId, _type);
    }
 
@@ -31,7 +25,7 @@ contract RewardFacet is Modifiers {
     require(reward != address(0), "setRewardAddress: address can't be 0");
     RewardStorage storage r = LibAppStorage.rewardDiamondStorage();
 
-    r.levelReward[levelId][_type] = reward;
+    r.Erc721LevelReward[levelId][_type] = reward;
     emit RewardAddress(reward, levelId, _type);
    }
 }

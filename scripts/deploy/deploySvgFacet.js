@@ -40,7 +40,7 @@ async function deploySvgFacet () {
   let tx
   let receipt
   // call to init function
-  tx = await diamondCut.diamondCut(cut, "0x", [])
+  tx = await diamondCut.diamondCut(cut, "0x0000000000000000000000000000000000000000", [])
   console.log('Diamond cut tx: ', tx.hash)
   receipt = await tx.wait()
   if (!receipt.status) {
