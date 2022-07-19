@@ -6,7 +6,7 @@ import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "../../Reward/Interfaces/IERC721RewardLevel.sol";
 import "../Level-instance/Level5Instance.sol";
-import {AppStorage, RewardStorage, LibAppStorage} from "../../libraries/LibAppStorage.sol";
+import {AppStorage, LibAppStorage} from "../../libraries/LibAppStorage.sol";
 import {Modifiers} from "../../libraries/LibLevel.sol";
 
 contract Level5Facet is Modifiers {
@@ -20,7 +20,7 @@ contract Level5Facet is Modifiers {
         
         s.level_completed[msg.sender][5] = false;
         s.level_running[msg.sender] = 5;
-        s.level_instance[msg.sender][5] = address(this);
+        s.level_instance[msg.sender][5] = address(instance);
 
         emit DeployedInstance(5, msg.sender, address(this));
         return address(this);
@@ -28,7 +28,7 @@ contract Level5Facet is Modifiers {
 
     function complete_l5(address who) external hasCompleted(5) isRunning(5) {
         address instance = s.level_instance[msg.sender][5];
-        require(who == address(this) || who == Level5Instance(instance).token(), "Wrong address !");
+        require(who == address(this) || who == Level5Instance(instance).token_(), "Wrong address !");
 
         if (who == address(this)) {
             Level5Instance(instance).setCompleted(1);

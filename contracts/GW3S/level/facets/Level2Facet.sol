@@ -5,7 +5,7 @@ pragma solidity ^0.8.1;
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "../Level-instance/Level2Instance.sol";
 import "../../Reward/Interfaces/IERC721RewardLevel.sol";
-import {AppStorage, RewardStorage, LibAppStorage} from "../../libraries/LibAppStorage.sol";
+import {AppStorage, LibAppStorage} from "../../libraries/LibAppStorage.sol";
 import {Modifiers} from "../../libraries/LibLevel.sol";
 
 

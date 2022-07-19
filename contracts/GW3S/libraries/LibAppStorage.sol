@@ -29,7 +29,6 @@ struct SvgStorage {
 
 library LibAppStorage {
     bytes32 constant DIAMOND_SVG_STORAGE_POSITION = keccak256("diamond.standard.diamond.svgStorage");
-    bytes32 constant DIAMOND_REWARD_STORAGE_POSITION = keccak256("diamond.standard.diamond.rewardStorage");
 
     function diamondStorage() internal pure returns (AppStorage storage ds) {
         assembly {

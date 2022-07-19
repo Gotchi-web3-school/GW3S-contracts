@@ -9,7 +9,7 @@ import "../../AMM/interfaces/IFactory.sol";
 import "../../AMM/interfaces/IRouter.sol";
 import "../../AMM/interfaces/IPair.sol";
 import "../../Reward/Interfaces/IERC721RewardLevel.sol";
-import {AppStorage, RewardStorage, LibAppStorage} from "../../libraries/LibAppStorage.sol";
+import {AppStorage, LibAppStorage} from "../../libraries/LibAppStorage.sol";
 import {Modifiers} from "../../libraries/LibLevel.sol";
 
 contract Level12Facet is Modifiers {
@@ -40,9 +40,9 @@ contract Level12Facet is Modifiers {
     /// @notice Claim reward.
     function claim_l12() external {
         require(s.level_completed[msg.sender][12] == true, "Claim_l12: You need to complete the level first");
-        address[] pairs = ILevel12Instance(s.level_instance[msg.sender][12]).getPairs();
-        (reserve00, reserve10,) = IPair(pairs[0]).getReserves();
-        (reserve01, reserve11,) = IPair(pairs[1]).getReserves();
+        address[] memory pairs = ILevel12Instance(s.level_instance[msg.sender][12]).getPairs();
+        (uint112 reserve00, uint112 reserve10,) = IPair(pairs[0]).getReserves();
+        (uint112 reserve01, uint112 reserve11,) = IPair(pairs[1]).getReserves();
         uint quote0 = IRouter(s.router).quote(1e18, reserve00, reserve10);
         uint quote1 = IRouter(s.router).quote(1e18, reserve01, reserve11);
 

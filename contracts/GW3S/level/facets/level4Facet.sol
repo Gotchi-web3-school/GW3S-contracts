@@ -6,7 +6,7 @@ import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "../Level-instance/Level4Instance.sol";
 import "../Level-instance/interfaces/ILevel4Instance.sol";
 import "../../Reward/Interfaces/IERC721RewardLevel.sol";
-import {AppStorage, RewardStorage, LibAppStorage} from "../../libraries/LibAppStorage.sol";
+import {AppStorage, LibAppStorage} from "../../libraries/LibAppStorage.sol";
 import {Modifiers} from "../../libraries/LibLevel.sol";
 
 

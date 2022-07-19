@@ -7,7 +7,7 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 import "../Level-instance/interfaces/ILevel6Instance.sol";
 import "../Level-instance/Level6Instance.sol";
 import "../../Reward/Interfaces/IERC721RewardLevel.sol";
-import {AppStorage, RewardStorage, LibAppStorage} from "../../libraries/LibAppStorage.sol";
+import {AppStorage, LibAppStorage} from "../../libraries/LibAppStorage.sol";
 import {Modifiers} from "../../libraries/LibLevel.sol";
 
 contract Level6Facet is Modifiers {

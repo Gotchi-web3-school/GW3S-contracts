@@ -2,7 +2,7 @@
 
 pragma solidity ^0.8.1;
 
-import {AppStorage, RewardStorage, LibAppStorage} from "../../libraries/LibAppStorage.sol";
+import {AppStorage, LibAppStorage} from "../../libraries/LibAppStorage.sol";
 import {Modifiers} from "../../libraries/LibLevel.sol";
 import "../../Reward/Interfaces/IERC721RewardLevel.sol";
 
