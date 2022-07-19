@@ -2,8 +2,9 @@
 
 pragma solidity ^0.8.1;
 
-import {AppStorage, LibAppStorage} from "../../libraries/LibAppStorage.sol";
+import {AppStorage, RewardStorage, LibAppStorage} from "../../libraries/LibAppStorage.sol";
 import {Modifiers} from "../../libraries/LibLevel.sol";
+import "../../Reward/Interfaces/IERC721RewardLevel.sol";
 
 contract Level1Facet is Modifiers {
 
@@ -23,7 +24,9 @@ contract Level1Facet is Modifiers {
     /// @notice Claim reward.
     function claim_l1() external hasClaimed(1) {
         require(s.level_completed[msg.sender][1] == true, "Claim_l1: You need to complete the level first");
+
         s.level_reward[msg.sender][1] = true;
+        IErc721RewardLevel(s.Erc721LevelReward[1][0]).safeMint(msg.sender);
         emit ClaimReward(0, msg.sender);
     }
 }

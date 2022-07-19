@@ -7,7 +7,8 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 import "../Level-instance/Level7Instance.sol";
 import "../Level-instance/interfaces/ILevel7Instance.sol";
 import "../../AMM/interfaces/IFactory.sol";
-import {AppStorage, LibAppStorage} from "../../libraries/LibAppStorage.sol";
+import "../../Reward/Interfaces/IERC721RewardLevel.sol";
+import {AppStorage, RewardStorage, LibAppStorage} from "../../libraries/LibAppStorage.sol";
 import {Modifiers} from "../../libraries/LibLevel.sol";
 
 contract Level7Facet is Modifiers {
@@ -40,7 +41,10 @@ contract Level7Facet is Modifiers {
     /// @notice Claim reward.
     function claim_l7() external hasClaimed(7) {
         require(s.level_completed[msg.sender][7] == true, "Claim_l7: You need to complete the level first");
+
         s.level_reward[msg.sender][7] = true;
+        IErc721RewardLevel(s.Erc721LevelReward[7][0]).safeMint(msg.sender);
+
         emit ClaimReward(0, msg.sender);
     }
 

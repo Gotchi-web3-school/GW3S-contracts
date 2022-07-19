@@ -5,7 +5,8 @@ pragma solidity ^0.8.1;
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "../Level-instance/Level4Instance.sol";
 import "../Level-instance/interfaces/ILevel4Instance.sol";
-import {AppStorage, LibAppStorage} from "../../libraries/LibAppStorage.sol";
+import "../../Reward/Interfaces/IERC721RewardLevel.sol";
+import {AppStorage, RewardStorage, LibAppStorage} from "../../libraries/LibAppStorage.sol";
 import {Modifiers} from "../../libraries/LibLevel.sol";
 
 
@@ -42,6 +43,8 @@ contract Level4Facet is Modifiers {
         require(s.level_completed[msg.sender][4] == true, "Claim_l4: You need to complete the level first");
 
         s.level_reward[msg.sender][4] = true;
+        IErc721RewardLevel(s.Erc721LevelReward[4][0]).safeMint(msg.sender);
+
         emit ClaimReward(4, msg.sender);
     }
 }

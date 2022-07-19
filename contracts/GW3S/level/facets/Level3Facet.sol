@@ -5,7 +5,8 @@ pragma solidity ^0.8.15;
 import "../Level-instance/Level3Instance.sol";
 import "../Level-instance/interfaces/ILevel3Instance.sol";
 import '../../../uniswap/v2-core/contracts/UniswapV2Factory.sol';
-import {AppStorage, LibAppStorage} from "../../libraries/LibAppStorage.sol";
+import "../../Reward/Interfaces/IERC721RewardLevel.sol";
+import {AppStorage, RewardStorage, LibAppStorage} from "../../libraries/LibAppStorage.sol";
 import {Modifiers} from "../../libraries/LibLevel.sol";
 
 
@@ -43,6 +44,8 @@ contract Level3Facet is Modifiers {
         require(s.level_completed[msg.sender][3] == true, "Claim_l3: You need to complete the level first");
 
         s.level_reward[msg.sender][3] = true;
+        IErc721RewardLevel(s.Erc721LevelReward[3][0]).safeMint(msg.sender);
+
         emit ClaimReward(3, msg.sender);
     }
 }

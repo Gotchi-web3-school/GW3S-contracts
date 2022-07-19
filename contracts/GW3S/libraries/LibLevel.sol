@@ -2,7 +2,7 @@
 
 pragma solidity ^0.8.15;
 
-import {LibAppStorage, AppStorage} from "./LibAppStorage.sol";
+import {LibAppStorage, AppStorage, RewardStorage, SvgStorage} from "./LibAppStorage.sol";
 import {LibDiamond} from "../../shared/libraries/LibDiamond.sol";
 
 enum Difficulty{EASY, MEDIUM, HARD, VERY_HARD, VITALIK}

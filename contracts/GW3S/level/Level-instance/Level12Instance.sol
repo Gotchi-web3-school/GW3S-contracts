@@ -5,6 +5,7 @@ pragma solidity ^0.8.15;
 import "@openzeppelin/contracts/access/Ownable.sol";
 import '@openzeppelin/contracts/token/ERC20/ERC20.sol';
 import "../../AMM/interfaces/IRouter.sol";
+import "../../AMM/interfaces/IFactory.sol";
 import "../../AMM/facets/FactoryFacet.sol";
 import '../../../uniswap/v2-core/contracts/libraries/UniswapV2Library.sol';
 
@@ -45,5 +46,29 @@ contract Level12Instance {
 
         IRouter(router_).addLiquidity(tokens[0], tokens[1], 1000000 * 1e18, 2000000 * 1e18, 1000000 * 1e18, 2000000 * 1e18, address(this), block.timestamp, factories[0]);
         IRouter(router_).addLiquidity(tokens[0], tokens[1], 1000000 * 1e18, 1000000 * 1e18, 1000000 * 1e18, 1000000 * 1e18, address(this), block.timestamp, factories[1]);
+    }
+
+    function getPairs() public returns(address[] memory pair) {
+        bytes32 pair0;
+        bytes32 pair1;
+        address token0 = tokens[0] < tokens[1] ? tokens[0] : tokens[1];
+        address token1 = tokens[0] > tokens[1] ? tokens[0] : tokens[1];
+
+        pair0 = keccak256(abi.encodePacked(
+            hex'ff',
+            factories[0],
+            keccak256(abi.encodePacked(token0, token1)),
+            IFactory(factories[0]).INIT_CODE_HASH()
+        ));
+        
+        pair1 = keccak256(abi.encodePacked(
+            hex'ff',
+            factories[1],
+            keccak256(abi.encodePacked(token0, token1)),
+            IFactory(factories[1]).INIT_CODE_HASH()
+        ));
+
+        pair[0] = address(uint160(uint256(pair0)));
+        pair[1] = address(uint160(uint256(pair1)));
     }
 } 

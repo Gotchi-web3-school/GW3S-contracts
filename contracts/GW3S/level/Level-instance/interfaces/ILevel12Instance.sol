@@ -12,4 +12,5 @@ interface ILevel12Instance {
     function TOKENS_NAME(uint) external view returns (string memory);
     function router() external view returns (address);
     function factories(uint) external view returns (address);
+    function getPairs() external returns(address[] memory pair);
 }

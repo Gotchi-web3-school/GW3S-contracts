@@ -8,7 +8,8 @@ import "../Level-instance/interfaces/ILevel9Instance.sol";
 import "../../AMM/interfaces/IFactory.sol";
 import "../../AMM/interfaces/IRouter.sol";
 import "../../AMM/interfaces/IPair.sol";
-import {AppStorage, LibAppStorage} from "../../libraries/LibAppStorage.sol";
+import "../../Reward/Interfaces/IERC721RewardLevel.sol";
+import {AppStorage, RewardStorage, LibAppStorage} from "../../libraries/LibAppStorage.sol";
 import {Modifiers} from "../../libraries/LibLevel.sol";
 
 contract Level9Facet is Modifiers {
@@ -50,7 +51,10 @@ contract Level9Facet is Modifiers {
     /// @notice Claim reward.
     function claim_l9() external hasClaimed(9) {
         require(s.level_completed[msg.sender][9] == true, "Claim_l9: You need to complete the level first");
+
         s.level_reward[msg.sender][9] = true;
+        IErc721RewardLevel(s.Erc721LevelReward[9][0]).safeMint(msg.sender);
+
         emit ClaimReward(0, msg.sender);
     }
 

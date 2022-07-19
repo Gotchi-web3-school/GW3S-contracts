@@ -9,7 +9,8 @@ import "../Level-instance/interfaces/ILevel13Instance.sol";
 import "../../AMM/interfaces/IFactory.sol";
 import "../../AMM/interfaces/IRouter.sol";
 import "../../AMM/interfaces/IPair.sol";
-import {AppStorage, LibAppStorage} from "../../libraries/LibAppStorage.sol";
+import "../../Reward/Interfaces/IERC721RewardLevel.sol";
+import {AppStorage, RewardStorage, LibAppStorage} from "../../libraries/LibAppStorage.sol";
 import {Modifiers} from "../../libraries/LibLevel.sol";
 
 contract Level13Facet is Modifiers {
@@ -53,7 +54,10 @@ contract Level13Facet is Modifiers {
     /// @notice Claim reward.
     function claim_l13() external hasClaimed(13) {
         require(s.level_completed[msg.sender][13] == true, "Claim_l13: You need to complete the level first");
+
         s.level_reward[msg.sender][13] = true;
+        IErc721RewardLevel(s.Erc721LevelReward[13][0]).safeMint(msg.sender);
+
         emit ClaimReward(0, msg.sender);
     }
 
