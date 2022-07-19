@@ -4,7 +4,7 @@ pragma solidity ^0.8.15;
 import '@uniswap/lib/contracts/libraries/TransferHelper.sol';
 
 import '../../../uniswap/v2-core/contracts/interfaces/IUniswapV2Factory.sol';
-import '../../../uniswap/v2-core/contracts/interfaces/IERC20Router.sol';
+import '../../../uniswap/v2-periphery/contracts/interfaces/IERC20Router.sol';
 import '../../../uniswap/v2-core/contracts/interfaces/IWETH.sol';
 import '../../../uniswap/v2-core/contracts/libraries/SafeMath.sol';
 import '../../../uniswap/v2-core/contracts/libraries/UniswapV2Library.sol';
