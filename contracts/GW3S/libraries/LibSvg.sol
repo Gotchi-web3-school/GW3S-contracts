@@ -43,10 +43,11 @@ library LibSvg {
         }
     }
 
-    function storeSvg(string calldata _svg, uint256 levelId, uint256 _type) internal {
+    function storeSvg(string calldata _svg, uint256 levelId, uint256 _type) internal returns(address) {
         SvgStorage storage s = LibAppStorage.svgDiamondStorage();
         emit StoreSvg(levelId, _type);
         address svgContract = storeSvgInContract(_svg);
         s.svgLevelReward[levelId][_type] = svgContract;
+        return svgContract;
     }   
 }
