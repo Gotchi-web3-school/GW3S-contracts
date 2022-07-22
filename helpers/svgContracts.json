@@ -1,0 +1,26 @@
+{
+    "common" : {
+        "level0": { "mumbai": "0xFa4Cff65B7266722d120658e95F7B37Be508b96a" },
+        "level1": { "mumbai": "0x023CdAFD254707e619f1f1C5746F3d270d321595" },
+        "level2": { "mumbai": "0xc568D4d1C1b7733cb880abfAE5e2925140010346" },
+        "level3": { "mumbai": "0x700eF28675e33CAA098d6CBD1aCc5Fee6f725B51" },
+        "level4": { "mumbai": "0x334962E0D75594E653cFfF7C106799Fe7AA83E80" },
+        "level5": { "mumbai": "0xD138C6137f9b1fC2ebc552279f25F39e40b3d74b" },
+        "level6": { "mumbai": "0x41B82bFB6ca501Bc6be3d7a4B81158143E63b463" },
+        "level7": { "mumbai": "0xe849460329A9669F532d80da1203C0EfCd367e6B" },
+        "level8": { "mumbai": "0x276B0a599Caf5284164F4Fc8C6711386168B2AeF" },
+        "level9": { "mumbai": "0x8CAC0cbeEe8aB87ee0CD99C5A98B4eb73782D04E" },
+        "level10": { "mumbai": "0xf9E2248E889009a1da8522973570C2897ddc4F7e" },
+        "level11": { "mumbai": "0x26E09d50c84a0185c47Fc36d9b958831Bc4Db557" },
+        "level12": { "mumbai": "0x63A74ed478Ae8dBCb660E61BB66cf4EAcfABe090" },
+        "level13": { "mumbai": "0x5A46d849091B5AD232ab3bfc8B49E2D83605EAFB" }
+    },
+    "secret": {
+        "secretLevel2": { "mumbai": "0xbDed86cf2F797fc0FFe08113B557B87B9fd6996f" },
+        "secretLevel5": { "mumbai": "0x03AE82527c64d670110140fec03CC53B89f865AD" },
+        "secretLevel12": { "mumbai": "0x52CB8Fe649964a4c81ECb36C135268aD3352bcaF" }
+    },
+    "hacker": {
+        "hackerLevel5": { "mumbai": "0xB84B23B87cCb3687FE7Da7a2EBd37eeFc88E30f8" }
+    }
+}

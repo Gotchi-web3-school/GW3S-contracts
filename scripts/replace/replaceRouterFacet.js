@@ -2,10 +2,10 @@
 /* eslint prefer-const: "off" */
 
 const { readFile } = require("fs").promises
-const { getSelectors, FacetCutAction } = require('../libraries/diamond.js')
+const { getSelectors, FacetCutAction } = require('../../libraries/diamond.js')
 const { deployed } = require("../deploy/deployed.js")
 const hardhat = require("hardhat")
-const FILE_PATH = './deployed.json';
+const FILE_PATH = './helpers/facetsContracts.json';
 const WETH_MUMBAI_ADDRESS = "0xA6FA4fB5f76172d178d61B04b0ecd319C5d1C0aa"
 
 async function deployDiamond () {

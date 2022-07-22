@@ -1,12 +1,12 @@
 /* global ethers */
 /* eslint prefer-const: "off" */
 
-const { getSelectors, FacetCutAction } = require('../libraries/diamond.js')
-const { deployed } = require("./deployed.js")
+const { getSelectors, FacetCutAction } = require('../../libraries/diamond.js')
+const { deployed } = require("../../libraries/deployed.js")
 const hardhat = require("hardhat")
 
 async function deployLevel8Facet () {
-    const accounts = await ethers.getSigners()
+  const accounts = await ethers.getSigners()
   const contractOwner = accounts[0]
 
   // deploy DiamondInit

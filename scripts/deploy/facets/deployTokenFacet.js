@@ -1,9 +1,9 @@
 /* global ethers */
 /* eslint prefer-const: "off" */
 const { readFile } = require("fs").promises
-const { deployed } = require("./deployed.js")
+const { deployed } = require("../../libraries/deployed.js")
 const hardhat = require("hardhat")
-const FILE_PATH = './deployed.json';
+const FILE_PATH = './helpers/facetsContracts.json';
 
 async function deployTokenFacet () {
     let contracts;

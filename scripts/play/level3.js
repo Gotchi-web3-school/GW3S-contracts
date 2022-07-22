@@ -4,7 +4,7 @@
 const hardhat = require("hardhat")
 const { readFile, writeFile } = require('fs').promises;
 const { ethers } = require('hardhat')
-const FILE_PATH = './deployed.json';
+const FILE_PATH = './helpers/facetsContracts.json';
 
 
 async function level1 () {

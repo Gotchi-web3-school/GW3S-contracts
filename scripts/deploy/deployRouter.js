@@ -1,9 +1,9 @@
 /* global ethers */
 /* eslint prefer-const: "off" */
 
-const { deployed } = require("./deployed.js")
+const { deployed } = require("../libraries/deployed.js")
 const hardhat = require("hardhat")
-const FILE_PATH = './deployed.json';
+const FILE_PATH = './helpers/facetsContracts.json';
 const WETH_MUMBAI_ADDRESS = "0xA6FA4fB5f76172d178d61B04b0ecd319C5d1C0aa"
 
 async function deployRouter () {

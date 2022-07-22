@@ -1,34 +1,40 @@
 /* global ethers */
 /* eslint prefer-const: "off" */
 
-const { getSelectors, FacetCutAction } = require('../libraries/diamond.js')
 const hardhat = require("hardhat")
-const { deployRouter } = require("./deployRouter.js")
 const { deployDiamond } = require("./deployDiamond.js")
-const { deployFactoryFacet } = require("./deployFactoryFacet.js")
-const { deployTokenFacet } = require('./deployTokenFacet.js')
-const { deployLevelLoupeFacet } = require("./deployLevelLoupeFacet.js")
-const { deployLevel0Facet } = require("./deployLevel0Facet.js")
-const { deployLevel1Facet } = require("./deployLevel1Facet.js")
-const { deployLevel2Facet } = require("./deployLevel2Facet.js")
-const { deployLevel3Facet } = require("./deployLevel3Facet.js")
-const { deployLevel4Facet } = require("./deployLevel4Facet.js")
-const { deployLevel5Facet } = require("./deployLevel5Facet.js")
-const { deployLevel6Facet } = require("./deployLevel6Facet.js")
-const { deployLevel7Facet } = require("./deployLevel7Facet.js")
-const { deployLevel8Facet } = require("./deployLevel8Facet.js")
-const { deployLevel9Facet } = require("./deployLevel9Facet.js")
-const { deployLevel10Facet } = require("./deployLevel10Facet.js")
-const { deployLevel11Facet } = require("./deployLevel11Facet.js")
-const { deployLevel12Facet } = require("./deployLevel12Facet.js")
-const { deployLevel13Facet } = require("./deployLevel13Facet.js")
+// AMM
+const { deployRouter } = require("./deployRouter.js")
+const { deployFactoryFacet } = require("./facets/deployFactoryFacet.js")
+const { deployTokenFacet } = require('./facets/deployTokenFacet.js')
+//Reward
+const { deployRewardFacet } = require("./facets/deployRewardFacet.js")
+const { deploySvgFacet } = require("./facets/deploySvgFacet.js")
+// Level
+const { deployLevelLoupeFacet } = require("./facets/deployLevelLoupeFacet.js")
+const { deployLevel0Facet } = require("./facets/deployLevel0Facet.js")
+const { deployLevel1Facet } = require("./facets/deployLevel1Facet.js")
+const { deployLevel2Facet } = require("./facets/deployLevel2Facet.js")
+const { deployLevel3Facet } = require("./facets/deployLevel3Facet.js")
+const { deployLevel4Facet } = require("./facets/deployLevel4Facet.js")
+const { deployLevel5Facet } = require("./facets/deployLevel5Facet.js")
+const { deployLevel6Facet } = require("./facets/deployLevel6Facet.js")
+const { deployLevel7Facet } = require("./facets/deployLevel7Facet.js")
+const { deployLevel8Facet } = require("./facets/deployLevel8Facet.js")
+const { deployLevel9Facet } = require("./facets/deployLevel9Facet.js")
+const { deployLevel10Facet } = require("./facets/deployLevel10Facet.js")
+const { deployLevel11Facet } = require("./facets/deployLevel11Facet.js")
+const { deployLevel12Facet } = require("./facets/deployLevel12Facet.js")
+const { deployLevel13Facet } = require("./facets/deployLevel13Facet.js")
 
 async function deployAll () {
     const deploys = [
-        deployRouter,
         deployDiamond,
+        deployRouter,
         deployFactoryFacet,
         deployTokenFacet,
+        deployRewardFacet,
+        deploySvgFacet,
         deployLevelLoupeFacet,
         deployLevel0Facet,
         deployLevel1Facet,

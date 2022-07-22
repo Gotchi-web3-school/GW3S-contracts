@@ -4,12 +4,13 @@
 const hardhat = require("hardhat")
 const { readFile, writeFile } = require('fs').promises;
 const { ethers } = require('hardhat')
-const FILE_PATH = './deployed.json';
+const FILE_PATH = './helpers/facetsContracts.json';
 
 
 async function deployDiamond () {
   const accounts = await ethers.getSigners()
   const contractOwner = accounts[0]
+  let tx, receipt
 
   try {
     contracts = JSON.parse(await readFile(FILE_PATH, "utf-8"))
@@ -26,15 +27,9 @@ async function deployDiamond () {
   const levelLoupeFacet = await ethers.getContractAt('ILevelLoupeFacet', contracts.Diamond.mumbai.address)
   
   console.log("level 0 claimed ?: ", await levelLoupeFacet.hasClaimedLevel(contractOwner.address, 0))
-  await level0Facet.claim_l0()
+  tx = await level0Facet.claim_l0()
+  receipt = await tx.wait()
 
-  const timeout = new Promise(() => {
-    setTimeout(async () => {
-        console.log("level 0 ?: ", await levelLoupeFacet.hasClaimedLevel(contractOwner.address, 0))
-    },1000)
-  }) 
-
-  await timeout
 }
 
 // We recommend this pattern to be able to use async/await everywhere

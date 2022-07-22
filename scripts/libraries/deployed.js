@@ -1,7 +1,7 @@
 const { readFile, writeFile } = require('fs').promises;
 const chalk = require('chalk');
 
-const FILE_PATH = './deployed.json';
+const FILE_PATH = './helpers/facetsContracts.json';
 /*
   This function should be called after a successuf deployment in your scripts.
   It will create/update a file named deployed.json containing deployment informations of your smart contracts.
