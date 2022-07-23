@@ -22,12 +22,15 @@ async function deploySvg () {
   const RewardFacet = await ethers.getContractAt("RewardFacet", contracts.Diamond.mumbai.address)
   const ERC721Reward = await ethers.getContractFactory('ERC721RewardLevel')
 
+
+
+  // Deploy standard level reward
   for(let i = 0; i < levels.length; i++) {
     console.log(`\nDeploying reward for level ${levels[i]}...\n`)
-
+    
     const reward = await ERC721Reward.deploy(`Gotchi web3 school l${levels[i]}`, `GW3Sl${levels[i]}`, svgContracts.common[`level${levels[i]}`].mumbai)
     await reward.deployed()
-
+    
     console.log("Transfer ownership to diamond")
     tx = await reward.transferOwnership(contracts.Diamond.mumbai.address)
     receipt = await tx.wait()
@@ -35,26 +38,28 @@ async function deploySvg () {
     console.log(`Storing reward address for level ${levels[i]}...\n`)
     tx = await RewardFacet.setRewardAddress(reward.address, i, 0)
     receipt = await tx.wait()
-
+    
     rewardContracts.common[`level${levels[i]}`] = {mumbai: reward.address}
   }
-
+  
+  // Deploy secret level reward
   for(let i = 0; i < secretLevels.length; i++) {
     console.log(`\nDeploying reward for secret level ${secretLevels[i]}...\n`)
     const reward = await ERC721Reward.deploy(`Gotchi web3 school l${secretLevels[i]}s`, `GW3Sl${secretLevels[i]}s`, svgContracts.secret[`secretLevel${secretLevels[i]}`].mumbai)
     await reward.deployed()
-
+    
     console.log("Transfer ownership to diamond")
     tx = await reward.transferOwnership(contracts.Diamond.mumbai.address)
     receipt = await tx.wait()
-
+    
     console.log(`Storing reward for secret level ${secretLevels[i]}...\n`)
-    tx = await RewardFacet.setRewardAddress(reward.address, i, 1)
+    tx = await RewardFacet.setRewardAddress(reward.address, secretLevels[i], 1)
     receipt = await tx.wait()
-
+    
     rewardContracts.secret[`secretLevel${secretLevels[i]}`] = {mumbai: reward.address}
   }
-
+  
+  // Deploy hacker level reward
   for(let i = 0; i < hackerLevels.length; i++) {
     console.log(`Deploying reward for hacker level  ${hackerLevels[i]}...\n`)
     const reward = await ERC721Reward.deploy(`Gotchi web3 school l${hackerLevels[i]}h`, `GW3Sl${hackerLevels[i]}h`, svgContracts.hacker[`hackerLevel${hackerLevels[i]}`].mumbai)
