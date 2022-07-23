@@ -22,6 +22,7 @@ contract Token is ERC20, Ownable {
 contract Level6Instance {
     address[8] tokens;
     address public player;
+    address public factory;
     string[] public TOKENS_NAME = ["level6 GHST", "level6 DAI", "level6 DAI", "level6 DAI", "level6 DAI", "level6 DAI", "level6 DAI", "level6 SECRET"];
     string[] public TOKENS_SYMBOL = ["GHST, ""DAI", "DAI", "DAI", "DAI", "DAI", "DAI", "SECRET"];
 
@@ -36,7 +37,7 @@ contract Level6Instance {
         Token(tokens[0]).mint(player_, 10000000000000000000);
         Token(tokens[1]).mint(player_, 1000000000000000);
 
-        address factory = FactoryFacet(msg.sender).deployFactory(player);
+        factory = FactoryFacet(msg.sender).deployFactory(player);
         IRouter(router).addLiquidity(tokens[0], tokens[1], MAX, MAX, MAX, MAX, address(this), block.timestamp, factory);
         IRouter(router).addLiquidity(tokens[0], tokens[2], MAX, MAX, MAX, MAX, address(this), block.timestamp, factory);
         IRouter(router).addLiquidity(tokens[0], tokens[3], MAX, MAX, MAX, MAX, address(this), block.timestamp, factory);

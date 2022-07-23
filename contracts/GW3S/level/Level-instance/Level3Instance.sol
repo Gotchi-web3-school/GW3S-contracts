@@ -5,6 +5,7 @@ pragma solidity ^0.8.15;
 import "@openzeppelin/contracts/access/Ownable.sol";
 import '@openzeppelin/contracts/token/ERC20/ERC20.sol';
 import "../../AMM/interfaces/IRouter.sol";
+import "../../AMM/interfaces/IFactory.sol";
 import "../../AMM/facets/FactoryFacet.sol";
 import '../../../uniswap/v2-core/contracts/libraries/UniswapV2Library.sol';
 
@@ -21,7 +22,8 @@ contract Token is ERC20, Ownable {
 
 contract Level3Instance {
     address public player;
-    address[2] tokens;
+    address[2] public tokens;
+    address public factory;
     string[] public TOKENS_NAME = ["level3 DAI", "level3 GHST"];
     string[] public TOKENS_SYMBOL = ["DAI", "GHST"];
 
@@ -33,10 +35,26 @@ contract Level3Instance {
 
         Token(tokens[0]).mint(address(this), 10000000);
         Token(tokens[1]).mint(address(this), 10000000);
-        Token(tokens[0]).approve(router, 10000000);
-        Token(tokens[1]).approve(router, 10000000);
+        Token(tokens[0]).approve(router, MINT);
+        Token(tokens[1]).approve(router, MINT);
 
-        address factory = FactoryFacet(msg.sender).deployFactory(player);
-        IRouter(router).addLiquidity(tokens[0], tokens[1], 10000000, 10000000, 10000000, 10000000, address(this), block.timestamp, factory);
+        factory = FactoryFacet(msg.sender).deployFactory(player);
+        IRouter(router).addLiquidity(tokens[0], tokens[1], MINT, MINT, MINT, MINT, address(this), block.timestamp, factory);
+    }
+
+    function getPair() public returns(address pair) {
+        bytes32 tmp;
+        address token0 = tokens[0] < tokens[1] ? tokens[0] : tokens[1];
+        address token1 = tokens[0] > tokens[1] ? tokens[0] : tokens[1];
+
+        tmp = keccak256(abi.encodePacked(
+            hex'ff',
+            factory,
+            keccak256(abi.encodePacked(token0, token1)),
+            IFactory(factory).INIT_CODE_HASH()
+        ));
+
+        pair = address(uint160(uint256(tmp)));
+
     }
 } 

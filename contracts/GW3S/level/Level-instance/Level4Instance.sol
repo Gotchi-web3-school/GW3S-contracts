@@ -5,6 +5,7 @@ pragma solidity ^0.8.15;
 import "@openzeppelin/contracts/access/Ownable.sol";
 import '@openzeppelin/contracts/token/ERC20/ERC20.sol';
 import "../../AMM/interfaces/IRouter.sol";
+import "../../AMM/interfaces/IFactory.sol";
 import "../../AMM/facets/FactoryFacet.sol";
 import '../../../uniswap/v2-core/contracts/libraries/UniswapV2Library.sol';
 
@@ -22,6 +23,7 @@ contract Token is ERC20, Ownable {
 contract Level4Instance {
     address public player;
     address[7] tokens;
+    address public factory;
     string[] public TOKENS_NAME = ["level4 GHST", "level4 ETH", "level4 AAVE", "level4 DAI"];
     string[] public TOKENS_SYMBOL = ["GHST", "ETH", "AAVE", "DAI"];
 
@@ -30,13 +32,30 @@ contract Level4Instance {
         for (uint8 i = 0; i < 4; i++) {
             tokens[i] = address(new Token(TOKENS_NAME[i], TOKENS_SYMBOL[i]));
             Token(tokens[i]).mint(address(this), 10000000);
-            Token(tokens[i]).approve(router, 10000000);
+            Token(tokens[i]).approve(router, MAX);
         }
         Token(tokens[0]).mint(player_, 10);
 
-        address factory = FactoryFacet(msg.sender).deployFactory(player);
+        factory = FactoryFacet(msg.sender).deployFactory(player);
         IRouter(router).addLiquidity(tokens[0], tokens[1], MAX, MAX, MAX, MAX, address(this), block.timestamp, factory);
         IRouter(router).addLiquidity(tokens[2], tokens[1], MAX, MAX, MAX, MAX, address(this), block.timestamp, factory);
         IRouter(router).addLiquidity(tokens[4], tokens[2], MAX, MAX, MAX, MAX, address(this), block.timestamp, factory);
     }
+
+    function getPair(address token0, address token1) public returns(address pair) {
+        bytes32 tmp;
+        token0 = tokens[0] < tokens[1] ? tokens[0] : tokens[1];
+        token1 = tokens[0] > tokens[1] ? tokens[0] : tokens[1];
+
+        tmp = keccak256(abi.encodePacked(
+            hex'ff',
+            factory,
+            keccak256(abi.encodePacked(token0, token1)),
+            IFactory(factory).INIT_CODE_HASH()
+        ));
+
+        pair = address(uint160(uint256(tmp)));
+    }
+
+    
 } 
