@@ -10,14 +10,10 @@ import '../../../uniswap/v2-core/contracts/libraries/SafeMath.sol';
 import '../../../uniswap/v2-core/contracts/libraries/UniswapV2Library.sol';
 
 
-contract Router {
+contract RouterFacet {
     using SafeMath for uint;
 
-    address WETH;
-
-    constructor(address _WETH) {
-        WETH = _WETH;
-    }
+    address WETH = 0xA6FA4fB5f76172d178d61B04b0ecd319C5d1C0aa;
 
     receive() external payable {
         assert(msg.sender == WETH); // only accept ETH via fallback from the WETH contract
@@ -238,7 +234,7 @@ contract Router {
         address factory
     ) external virtual  returns (uint[] memory amounts) {
         amounts = UniswapV2Library.getAmountsOut(factory, amountIn, path);
-        require(amounts[amounts.length - 1] >= amountOutMin && deadline >= block.timestamp, 'UniswapV2Router: INSUFFICIENT_OUTPUT_AMOUNT');
+        require(amounts[amounts.length - 1] >= amountOutMin && deadline >= block.timestamp, 'UniswapV2Router: INSUFFICIENT_OUTPUT_AMOUNT or deadline');
         TransferHelper.safeTransferFrom(
             path[0], msg.sender, UniswapV2Library.pairFor(factory, path[0], path[1]), amounts[0]
         );
