@@ -10,8 +10,9 @@ const FILE_PATH = './helpers/facetsContracts.json';
 async function level1 () {
   const accounts = await ethers.getSigners()
   const contractOwner = accounts[0]
+  let tx, receipt;
 
-  console.log(contractOwner.address)
+  console.log("Player: ", contractOwner.address)
 
   try {
     contracts = JSON.parse(await readFile(FILE_PATH, "utf-8"))
@@ -29,17 +30,22 @@ async function level1 () {
   
   console.log("level 1 claimed ?: ", await levelLoupeFacet.hasClaimedLevel(contractOwner.address, 1))
   console.log("level 1 completed ?: ", await levelLoupeFacet.hasCompletedLevel(contractOwner.address, 1))
-  
-  console.log("claiming level 1...")
-  await level1Facet.claim_l1()
 
-  timeout = new Promise(() => {
-    setTimeout(async () => {
-      console.log("level 1 claimed ?: ", await levelLoupeFacet.hasClaimedLevel(contractOwner.address, 1))
-      console.log("level 1 completed ?: ", await levelLoupeFacet.hasCompletedLevel(contractOwner.address, 1))
-    }, 2000)
-  }) 
-  await timeout
+  console.log("\nLevel initiation...")
+  tx = await level1Facet.initLevel1()
+  receipt = await tx.wait() 
+  
+  console.log("\nCompleting level...")
+  tx = await level1Facet.complete_l1()
+  receipt = await tx.wait() 
+
+
+  console.log("\nclaiming level 1...")
+  tx = await level1Facet.claim_l1()
+  receipt = await tx.wait() 
+
+  console.log("\nlevel 1 claimed ?: ", await levelLoupeFacet.hasClaimedLevel(contractOwner.address, 1))
+  console.log("level 1 completed ?: ", await levelLoupeFacet.hasCompletedLevel(contractOwner.address, 1))
 }
 
 // We recommend this pattern to be able to use async/await everywhere
