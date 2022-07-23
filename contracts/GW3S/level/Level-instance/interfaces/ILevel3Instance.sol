@@ -9,4 +9,5 @@ interface ILevel3Instance {
     function TOKENS_NAME(uint) external view returns (string memory);
     function factory() external view returns (address);
     function router() external view returns (address);
+    function getPair() external returns(address pair);
 }
