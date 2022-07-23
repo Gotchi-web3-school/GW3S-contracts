@@ -9,7 +9,10 @@ const FILE_PATH = './helpers/facetsContracts.json';
 
 async function deployLevel3Facet () {
   const accounts = await ethers.getSigners()
-  const contractOwner = accounts[0]
+  const [contractOwner, player2] = accounts
+
+  console.log(player2.address)
+  
 
   try {
     contracts = JSON.parse(await readFile(FILE_PATH, "utf-8"))

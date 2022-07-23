@@ -1,6 +1,6 @@
 /* global ethers */
 /* eslint prefer-const: "off" */
-
+const {readFile} = require('fs').promises
 const { getSelectors, FacetCutAction } = require('../../libraries/diamond.js')
 const { deployed } = require("../../libraries/deployed.js")
 const hardhat = require("hardhat")
@@ -9,13 +9,13 @@ const FILE_PATH = './helpers/facetsContracts.json';
 async function deployLevel6Facet () {
   const accounts = await ethers.getSigners()
   const contractOwner = accounts[0]
+  let contracts
   
   try {
     contracts = JSON.parse(await readFile(FILE_PATH, "utf-8"))
   } catch (e) {
     console.log(e)
   }
-
   // deploy DiamondInit
   // DiamondInit provides a function that is called when the diamond is upgraded to initialize state variables
   // Read about how the diamondCut function works here: https://eips.ethereum.org/EIPS/eip-2575#addingreplacingremoving-functions
@@ -41,7 +41,7 @@ async function deployLevel6Facet () {
 
     cut.push({
       facetAddress: facet.address,
-      action: FacetCutAction.Add,
+      action: FacetCutAction.Replace,
       functionSelectors: getSelectors(facet)
     })
   }

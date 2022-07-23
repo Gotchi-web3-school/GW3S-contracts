@@ -4,7 +4,7 @@
 const hardhat = require("hardhat")
 const { deployDiamond } = require("./deployDiamond.js")
 // AMM
-const { deployRouter } = require("./deployRouter.js")
+const { deployRouterFacet } = require("./facets/deployRouterFacet.js")
 const { deployFactoryFacet } = require("./facets/deployFactoryFacet.js")
 const { deployTokenFacet } = require('./facets/deployTokenFacet.js')
 //Reward
@@ -30,7 +30,7 @@ const { deployLevel13Facet } = require("./facets/deployLevel13Facet.js")
 async function deployAll () {
     const deploys = [
         deployDiamond,
-        deployRouter,
+        deployRouterFacet,
         deployFactoryFacet,
         deployTokenFacet,
         deployRewardFacet,
