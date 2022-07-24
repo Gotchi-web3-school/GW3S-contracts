@@ -22,7 +22,7 @@ contract Level9Instance {
         player = player_;
         diamond = msg.sender;
 
-        tokens[0] = address(new Token(TOKENS_NAME[0], TOKENS_SYMBOL[0]));
+        tokens[0] = address(TokenFacet(diamond).deployToken(TOKENS_NAME[0], TOKENS_SYMBOL[0]));
         Token(tokens[0]).mint(player_, MAX);
         factory = IFactory(msg.sender).deployFactory(player_);
     }
@@ -42,7 +42,7 @@ contract Level9Instance {
         pair = address(uint160(uint256(tmp)));
     }
 
-    function deployToken(string memory name, string memory ticker, uint256 totalSupply) public {
-        tokens[1] = TokenFacet(diamond).deployToken(name, ticker, totalSupply, msg.sender);
+    function deployToken(string memory name, string memory ticker) public {
+        tokens[1] = TokenFacet(diamond).deployToken(name, ticker);
     }
 }

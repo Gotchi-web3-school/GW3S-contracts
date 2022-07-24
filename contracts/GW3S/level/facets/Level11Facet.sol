@@ -19,7 +19,7 @@ contract Level11Facet is Modifiers {
     event DeployedInstance(uint256 indexed level, address indexed player, address instance);
 
     function initLevel11() external returns(address) {
-        Level11Instance instance = new Level11Instance(msg.sender, s.router);
+        Level11Instance instance = new Level11Instance(msg.sender, address(this));
         s.level_completed[msg.sender][11] = false;
         s.level_running[msg.sender] = 11;
         s.level_instance[msg.sender][11] = address(instance);

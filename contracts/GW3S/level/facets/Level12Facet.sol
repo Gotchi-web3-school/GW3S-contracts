@@ -19,7 +19,7 @@ contract Level12Facet is Modifiers {
     event DeployedInstance(uint256 indexed level, address indexed player, address instance);
 
     function initLevel12() external returns(address) {
-        Level12Instance instance = new Level12Instance(msg.sender, s.router);
+        Level12Instance instance = new Level12Instance(msg.sender, address(this));
 
         s.level_completed[msg.sender][12] = false;
         s.level_running[msg.sender] = 12;
@@ -43,8 +43,8 @@ contract Level12Facet is Modifiers {
         address[] memory pairs = ILevel12Instance(s.level_instance[msg.sender][12]).getPairs();
         (uint112 reserve00, uint112 reserve10,) = IPair(pairs[0]).getReserves();
         (uint112 reserve01, uint112 reserve11,) = IPair(pairs[1]).getReserves();
-        uint quote0 = IRouter(s.router).quote(1e18, reserve00, reserve10);
-        uint quote1 = IRouter(s.router).quote(1e18, reserve01, reserve11);
+        uint quote0 = IRouter(address(this)).quote(1e18, reserve00, reserve10);
+        uint quote1 = IRouter(address(this)).quote(1e18, reserve01, reserve11);
 
 
         if(s.level_reward[msg.sender][12] == false) {

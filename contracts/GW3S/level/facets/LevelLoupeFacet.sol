@@ -35,8 +35,4 @@ contract LevelLoupeFacet {
     function getLevelInstanceByAddress(address account, uint256 levelId) external view returns (address result) {
         result = s.level_instance[account][levelId];
     }
-
-    function getRouter() external view returns (address result) {
-        result = s.router;
-    }
 }

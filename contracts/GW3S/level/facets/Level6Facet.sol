@@ -17,7 +17,7 @@ contract Level6Facet is Modifiers {
     event DeployedInstance(uint256 indexed level, address indexed player, address instance);
 
     function initLevel6() external returns(address) {
-        Level6Instance instance = new Level6Instance(msg.sender, s.router);
+        Level6Instance instance = new Level6Instance(msg.sender, address(this));
 
         s.level_completed[msg.sender][6] = false;
         s.level_running[msg.sender] = 6;

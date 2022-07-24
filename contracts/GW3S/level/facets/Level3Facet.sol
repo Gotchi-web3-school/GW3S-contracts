@@ -17,7 +17,7 @@ contract Level3Facet is Modifiers {
     event DeployedInstance(uint256 indexed level, address indexed player, address instance);
 
     function initLevel3() external returns(address) {
-        Level3Instance instance = new Level3Instance(msg.sender, s.router);
+        Level3Instance instance = new Level3Instance(msg.sender, address(this));
         s.level_completed[msg.sender][3] = false;
         s.level_running[msg.sender] = 3;
         s.level_instance[msg.sender][3] = address(instance);

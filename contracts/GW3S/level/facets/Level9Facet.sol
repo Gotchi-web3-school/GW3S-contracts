@@ -36,7 +36,7 @@ contract Level9Facet is Modifiers {
 
         (uint112 reserve0, uint112 reserve1,) = IPair(pair).getReserves();
         
-        uint quote = IRouter(s.router).quote(
+        uint quote = IRouter(address(this)).quote(
             (1 * 10 ** 18), 
             usdc < player_token ? reserve0 : reserve1, 
             usdc > player_token ? reserve0 : reserve1

@@ -36,7 +36,7 @@ contract Level10Facet is Modifiers {
 
         (uint112 reserve0, uint112 reserve1,) = IPair(pair).getReserves();
         
-        uint256 quote = IRouter(s.router).quote(
+        uint256 quote = IRouter(address(this)).quote(
             1 * 10 ** 18, 
             usdc < ghst ? reserve0 : reserve1, 
             usdc > ghst ? reserve0 : reserve1

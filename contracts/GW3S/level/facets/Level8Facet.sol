@@ -19,7 +19,7 @@ contract Level8Facet is Modifiers {
     event DeployedInstance(uint256 indexed level, address indexed player, address instance);
 
     function initLevel8() external returns(address) {
-        Level8Instance instance = new Level8Instance(msg.sender, s.router);
+        Level8Instance instance = new Level8Instance(msg.sender, address(this));
 
         s.level_completed[msg.sender][8] = false;
         s.level_running[msg.sender] = 8;
