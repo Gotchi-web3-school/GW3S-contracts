@@ -47,14 +47,12 @@ async function deployLevel0Facet () {
 
   // upgrade diamond with facets
   console.log('')
-  console.log('Diamond Cut:', cut)
+  //console.log('Diamond Cut:', cut)
   const diamondCut = await ethers.getContractAt('IDiamondCut', contracts.Diamond.mumbai.address)
   let tx
   let receipt
   // call to init function
-  console.log(initLevel0)
   let functionCall = initLevel0.interface.encodeFunctionData('init', [cut[0].facetAddress])
-  console.log(functionCall)
   tx = await diamondCut.diamondCut(cut, initLevel0.address, functionCall)
   console.log('Diamond cut tx: ', tx.hash)
   receipt = await tx.wait()

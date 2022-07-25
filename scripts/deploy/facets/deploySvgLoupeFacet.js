@@ -1,33 +1,37 @@
 /* global ethers */
 /* eslint prefer-const: "off" */
+
 const { readFile } = require("fs").promises
-const { deployed } = require("../../libraries/deployed.js")
 const { getSelectors, FacetCutAction } = require('../../libraries/diamond.js')
+const { deployed } = require("../../libraries/deployed.js")
 const hardhat = require("hardhat")
 const FILE_PATH = './helpers/facetsContracts.json';
 
-async function deployTokenFacet () {
-    let contracts;
-    const cut = []
-    try {
-        contracts = JSON.parse(await readFile(FILE_PATH, "utf-8"))
-    } catch (e) {
-        console.log(e)
-    }
+async function deploySvgLoupeFacet () {
+  try {
+    contracts = JSON.parse(await readFile(FILE_PATH, "utf-8"))
+  } catch (e) {
+    console.log(e)
+  }
 
-  console.log("Deploying TokenFacet...")
-  const TokenFacet = await ethers.getContractFactory("TokenFacet")
-  const facet = await TokenFacet.deploy()
+  const cut = []
+  
+  // Deploying SvgLoupeFacet
+  //--------------------------------------------------------------
+  console.log(`Deploying SvgLoupeFacet...`)
+  const Facet = await ethers.getContractFactory("SvgLoupeFacet")
+  const facet = await Facet.deploy()
   await facet.deployed()
-  console.log("Deployed !")
-
-  deployed("TokenFacet", hardhat.network.name, facet.address)
+  
+  deployed("SvgLoupeFacet", hardhat.network.name, facet.address)
 
   cut.push({
     facetAddress: facet.address,
     action: FacetCutAction.Add,
     functionSelectors: getSelectors(facet)
   })
+  //---------------------------------------------------------
+
 
   // upgrade diamond with facets
   console.log('')
@@ -48,7 +52,7 @@ async function deployTokenFacet () {
 // We recommend this pattern to be able to use async/await everywhere
 // and properly handle errors.
 if (require.main === module) {
-    deployTokenFacet()
+  deploySvgLoupeFacet()
     .then(() => process.exit(0))
     .catch(error => {
       console.error(error)
@@ -56,4 +60,4 @@ if (require.main === module) {
     })
 }
 
-exports.deployTokenFacet = deployTokenFacet
+exports.deploySvgLoupeFacet = deploySvgLoupeFacet
