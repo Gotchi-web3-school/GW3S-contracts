@@ -28,9 +28,9 @@ contract Level5Facet is Modifiers {
 
     function complete_l5(address who) external hasCompleted(5) isRunning(5) {
         address instance = s.level_instance[msg.sender][5];
-        require(who == address(this) || who == Level5Instance(instance).token_(), "Wrong address !");
+        require(who == s.level_instance[msg.sender][5] || who == Level5Instance(instance).token_(), "Wrong address !");
 
-        if (who == address(this)) {
+        if (who == s.level_instance[msg.sender][5]) {
             Level5Instance(instance).setCompleted(1);
         }
         s.level_completed[msg.sender][5] = true;
