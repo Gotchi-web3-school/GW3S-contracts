@@ -10,6 +10,7 @@ const { deployTokenFacet } = require('./facets/deployTokenFacet.js')
 //Reward
 const { deployRewardFacet } = require("./facets/deployRewardFacet.js")
 const { deploySvgFacet } = require("./facets/deploySvgFacet.js")
+const { deploySvgLoupeFacet } = require("./facets/deploySvgLoupeFacet.js")
 // Level
 const { deployLevelLoupeFacet } = require("./facets/deployLevelLoupeFacet.js")
 const { deployLevel0Facet } = require("./facets/deployLevel0Facet.js")
@@ -35,6 +36,7 @@ async function deployAll () {
         deployTokenFacet,
         deployRewardFacet,
         deploySvgFacet,
+        deploySvgLoupeFacet,
         deployLevelLoupeFacet,
         deployLevel0Facet,
         deployLevel1Facet,
