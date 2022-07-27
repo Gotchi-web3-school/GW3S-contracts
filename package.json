@@ -30,6 +30,7 @@
     "standard": "^16.0.3"
   },
   "dependencies": {
+    "@nomiclabs/hardhat-solhint": "^2.0.1",
     "@openzeppelin/contracts": "^4.6.0",
     "@uniswap/lib": "^4.0.1-alpha",
     "@uniswap/v2-core": "^1.0.1"
