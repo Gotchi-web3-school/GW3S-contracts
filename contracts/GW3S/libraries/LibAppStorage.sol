@@ -17,6 +17,7 @@ struct AppStorage {
     // type = enum{LEVEL, HIDDEN, HACKER}
     mapping(uint => mapping(uint => address)) Erc721LevelReward;         // Store ERC721 smart contract by (levelId => type => svgContract)
     mapping(uint256 => address) level_factory;                           // The address of factory by level
+    mapping(uint256 => address[]) level_tokens;                          // The array of tokens by level
 }
 
 struct SvgStorage {
