@@ -3,13 +3,10 @@
 pragma solidity ^0.8.15;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
-import '@openzeppelin/contracts/token/ERC20/ERC20.sol';
+import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "../../AMM/interfaces/IFactory.sol";
 import "../../AMM/interfaces/IRouter.sol";
-import '../../../uniswap/v2-core/contracts/libraries/UniswapV2Library.sol';
-
-address constant WETH = 0xA6FA4fB5f76172d178d61B04b0ecd319C5d1C0aa;
-uint256 constant MAX = 10 * 10 ** 18;
+import "../../../uniswap/v2-core/contracts/libraries/UniswapV2Library.sol";
 
 contract Token is ERC20, Ownable {
     constructor (string memory name, string memory symbol) ERC20(name, symbol) {}
@@ -24,19 +21,19 @@ contract Level8Instance {
     address public player;
     string[] public TOKENS_NAME = ["level8 GHST", "level8 DAI"];
     string[] public TOKENS_SYMBOL = ["GHST", "DAI"];
-    address factory;
+    address public factory;
 
-    constructor(address player_, address router) {
+    constructor(address player_) {
         player = player_;
 
         for (uint8 i = 0; i < TOKENS_NAME.length; i++) {
             tokens[i] = address(new Token(TOKENS_NAME[i], TOKENS_SYMBOL[i]));
             Token(tokens[i]).mint(player_, 100);
             Token(tokens[i]).mint(address(this), 10);
-            Token(tokens[i]).approve(router, MAX);
+            Token(tokens[i]).approve(msg.sender, 10e18);
         }
         factory = IFactory(msg.sender).deployFactory(player_);
-        IRouter(router).addLiquidity(tokens[0], tokens[1], MAX, MAX, MAX, MAX, address(this), block.timestamp, factory);
+        IRouter(msg.sender).addLiquidity(tokens[0], tokens[1], 10e18, 10e18, 10e18, 10e18, address(this), block.timestamp, factory);
     }
 
     function getPair() public returns(address pair) {
