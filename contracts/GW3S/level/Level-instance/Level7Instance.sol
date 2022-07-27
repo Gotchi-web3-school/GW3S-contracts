@@ -3,11 +3,9 @@
 pragma solidity ^0.8.15;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
-import '@openzeppelin/contracts/token/ERC20/ERC20.sol';
+import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "../../AMM/interfaces/IFactory.sol";
-import '../../../uniswap/v2-core/contracts/libraries/UniswapV2Library.sol';
-
-address constant WETH = 0xA6FA4fB5f76172d178d61B04b0ecd319C5d1C0aa;
+import "../../../uniswap/v2-core/contracts/libraries/UniswapV2Library.sol";
 
 contract Token is ERC20, Ownable {
     constructor (string memory name, string memory symbol) ERC20(name, symbol) {}
