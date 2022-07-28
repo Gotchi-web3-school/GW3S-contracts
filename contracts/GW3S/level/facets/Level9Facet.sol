@@ -2,17 +2,18 @@
 
 pragma solidity ^0.8.1;
 
-import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 import "../Level-instance/Level9Instance.sol";
 import "../Level-instance/interfaces/ILevel9Instance.sol";
-import "../../AMM/interfaces/IFactory.sol";
 import "../../AMM/interfaces/IRouter.sol";
 import "../../AMM/interfaces/IPair.sol";
+import "../../AMM/interfaces/IToken.sol";
 import "../../Reward/Interfaces/IERC721RewardLevel.sol";
 import {AppStorage, LibAppStorage} from "../../libraries/LibAppStorage.sol";
 import {Modifiers} from "../../libraries/LibLevel.sol";
 
 contract Level9Facet is Modifiers {
+    using SafeMath for uint256;
 
     event ClaimReward(uint256 indexed level, address indexed player);
     event Completed(uint256 indexed level, address indexed player);
@@ -36,13 +37,14 @@ contract Level9Facet is Modifiers {
 
         (uint112 reserve0, uint112 reserve1,) = IPair(pair).getReserves();
         
-        uint quote = IRouter(address(this)).quote(
-            (1 * 10 ** 18), 
-            usdc < player_token ? reserve0 : reserve1, 
-            usdc > player_token ? reserve0 : reserve1
+        // Quote for 1 token created by player
+        uint256 quote = IRouter(address(this)).quote(
+            1e18, 
+            player_token < usdc ? reserve0 : reserve1, 
+            usdc < player_token ? reserve0 : reserve1
             );
 
-        require((IERC20(player_token).balanceOf(msg.sender) * quote) / (1 * 10 ** 18) >= 1000000 * 10 ** 18, "Not millionaire yet !");
+        require(IToken(player_token).balanceOf(msg.sender).mul(quote).div(1e18) >= 1000000e18, "Not millionaire yet !");
 
         s.level_completed[msg.sender][9] = true;
         emit Completed(0, msg.sender);

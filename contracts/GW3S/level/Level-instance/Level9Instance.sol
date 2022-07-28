@@ -5,9 +5,7 @@ pragma solidity ^0.8.15;
 import "../../AMM/facets/TokenFacet.sol";
 import "../../AMM/interfaces/IFactory.sol";
 import "../../AMM/interfaces/IRouter.sol";
-import '../../../uniswap/v2-core/contracts/libraries/UniswapV2Library.sol';
 
-address constant WETH = 0xA6FA4fB5f76172d178d61B04b0ecd319C5d1C0aa;
 uint256 constant MAX = 25;
 
 contract Level9Instance {
@@ -42,7 +40,7 @@ contract Level9Instance {
         pair = address(uint160(uint256(tmp)));
     }
 
-    function deployToken(string memory name, string memory ticker) public {
-        tokens[1] = TokenFacet(diamond).deployToken(name, ticker);
+    function deployTokenWithFixedSupply(string memory name, string memory ticker, uint256 totalSupply, address to) public {
+        tokens[1] = TokenFacet(diamond).deployTokenWithFixedSupply(name, ticker, totalSupply, to);
     }
 }
