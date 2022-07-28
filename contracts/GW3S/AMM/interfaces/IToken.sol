@@ -3,6 +3,12 @@ pragma solidity ^0.8.15;
  
 interface IToken {
     function deployToken(string memory name, string memory ticker) external returns(address);
+    function deployTokenWithFixedSupply(
+        string memory name, 
+        string memory ticker, 
+        uint256 totalSupply, 
+        address to
+        ) external returns(address);
     function mint(address to, uint256 amount) external;
 
     function name() external view returns (string memory);
