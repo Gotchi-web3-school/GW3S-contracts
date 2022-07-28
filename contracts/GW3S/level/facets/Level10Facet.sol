@@ -37,12 +37,12 @@ contract Level10Facet is Modifiers {
         (uint112 reserve0, uint112 reserve1,) = IPair(pair).getReserves();
         
         uint256 quote = IRouter(address(this)).quote(
-            1 * 10 ** 18, 
-            usdc < ghst ? reserve0 : reserve1, 
-            usdc > ghst ? reserve0 : reserve1
+            1e18, 
+            ghst < usdc ? reserve0 : reserve1, 
+            ghst > usdc ? reserve0 : reserve1
             );
 
-        require(quote >= 1000000000 * (10 ** 18), "Not billionaire yet !");
+        require(quote >= 1000000000e18, "Not billionaire yet !");
 
         s.level_completed[msg.sender][10] = true;
         emit Completed(0, msg.sender);
