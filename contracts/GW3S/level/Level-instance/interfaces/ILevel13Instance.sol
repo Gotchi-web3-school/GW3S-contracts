@@ -14,6 +14,6 @@ interface ILevel13Instance {
     function TOKENS_SYMBOL(uint) external view returns (string memory);
     function TOKENS_NAME(uint) external view returns (string memory);
 
-    function getPair(address factory) external returns(address pair);
+    function getPairs() external returns(address pair1, address pair2);
     function deployFactory(address) external returns(address);
 }
