@@ -50,7 +50,7 @@ contract Level6Facet is Modifiers {
     }
 
     function getFactory() external view returns(address) {
-        return (s.level_factory[6]);
+        return (s.level_factories[6][0]);
     }
 
     function getPair(address token0, address token1) public returns(address pair) {
@@ -60,9 +60,9 @@ contract Level6Facet is Modifiers {
 
         tmp = keccak256(abi.encodePacked(
             hex'ff',
-            s.level_factory[6],
+            s.level_factories[6][0],
             keccak256(abi.encodePacked(tokenA, tokenB)),
-            IFactory(s.level_factory[6]).INIT_CODE_HASH()
+            IFactory(s.level_factories[6][0]).INIT_CODE_HASH()
         ));
 
         pair = address(uint160(uint256(tmp)));
