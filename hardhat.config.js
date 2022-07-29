@@ -31,7 +31,6 @@ const ETHERSCAN_API_KEY = process.env.ETHERSCAN_API_KEY;
 
 
 module.exports = {
-
   settings: {
     optimizer: {
       enabled: true,
@@ -75,6 +74,7 @@ module.exports = {
      // url: `https://polygon-mumbai.g.alchemy.com/v2/${ALCHEMY_PROJECT_ID}`,
       url: `https://polygon-mumbai.infura.io/v3/${INFURA_PROJECT_ID}`,
       accounts: [`0x${DEPLOYER_PRIVATE_KEY}`],
+      gasPrice: 40000000000, // 40 gwei
     },
   },
   etherscan: {
