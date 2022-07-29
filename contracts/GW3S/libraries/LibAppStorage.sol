@@ -16,7 +16,7 @@ struct AppStorage {
     mapping(address => mapping(uint256 => address)) level_instance;      // The current instance of player deployed by the a specific level 
     // type = enum{LEVEL, HIDDEN, HACKER}
     mapping(uint => mapping(uint => address)) Erc721LevelReward;         // Store ERC721 smart contract by (levelId => type => svgContract)
-    mapping(uint256 => address) level_factory;                           // The address of factory by level
+    mapping(uint256 => mapping(uint => address)) level_factories;                          // The address of factory by level
     mapping(uint256 => address[]) level_tokens;                          // The array of tokens by level
 }
 
@@ -27,7 +27,7 @@ struct SvgStorage {
 
 
 library LibAppStorage {
-    bytes32 constant DIAMOND_SVG_STORAGE_POSITION = keccak256("diamond.standard.diamond.svgStorage");
+    bytes32 constant _DIAMOND_SVG_STORAGE_POSITION = keccak256("diamond.standard.diamond.svgStorage");
 
     function diamondStorage() internal pure returns (AppStorage storage ds) {
         assembly {
@@ -36,7 +36,7 @@ library LibAppStorage {
     }
 
     function svgDiamondStorage() internal pure returns (SvgStorage storage ds) {
-        bytes32 position = DIAMOND_SVG_STORAGE_POSITION;
+        bytes32 position = _DIAMOND_SVG_STORAGE_POSITION;
 
         assembly {
             ds.slot := position
