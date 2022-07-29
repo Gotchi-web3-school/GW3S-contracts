@@ -34,7 +34,7 @@ contract InitLevel6 {
         s.level[6].title = "Where is WalDAI ?";
         s.level[6].difficulty = Difficulty.EASY;
 
-        s.level_factory[6] = factory;
+        s.level_factories[6][0] = factory;
         s.level_tokens[6] = tokens;
         // More info here: https://eips.ethereum.org/EIPS/eip-2535#diamond-interface 
     }
