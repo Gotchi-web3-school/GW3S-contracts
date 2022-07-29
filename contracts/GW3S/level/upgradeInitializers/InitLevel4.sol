@@ -27,7 +27,7 @@ contract InitLevel4 {
         s.level[4].title = "All roads lead to Rom..., GHST !";
         s.level[4].difficulty = Difficulty.EASY;
         
-        s.level_factory[4] = FactoryFacet(address(this)).deployFactory(address(this));
+        s.level_factories[4][0] = FactoryFacet(address(this)).deployFactory(address(this));
         // More info here: https://eips.ethereum.org/EIPS/eip-2535#diamond-interface 
     }
 }
