@@ -39,4 +39,8 @@ contract LevelLoupeFacet {
     function getFactoryLevel(uint256 levelId, uint8 pos) external view returns (address result) {
         result = _s.level_factories[levelId][pos];
     }
+
+    function getTokensLevel(uint256 levelId) external view returns (address[] memory result) {
+        result = _s.level_tokens[levelId];
+    }
 }
