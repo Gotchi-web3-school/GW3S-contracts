@@ -16,32 +16,32 @@ contract Level7Facet is Modifiers {
     function initLevel7() external returns(address) {
         Level7Instance instance = new Level7Instance(msg.sender);
 
-        s.level_completed[msg.sender][7] = false;
-        s.level_running[msg.sender] = 7;
-        s.level_instance[msg.sender][7] = address(instance);
+        _s.level_completed[msg.sender][7] = false;
+        _s.level_running[msg.sender] = 7;
+        _s.level_instance[msg.sender][7] = address(instance);
 
         emit DeployedInstance(7, msg.sender, address(instance));
         return address(instance);
     }
 
     function completeL7() external hasCompleted(7) isRunning(7) {
-        address pair = ILevel7Instance(s.level_instance[msg.sender][7]).getPair();
+        address pair = ILevel7Instance(_s.level_instance[msg.sender][7]).getPair();
 
         uint balance = IERC20(pair).balanceOf(msg.sender);
         require(balance > 0, "level not completed yet");
 
-        s.level_completed[msg.sender][7] = true;
+        _s.level_completed[msg.sender][7] = true;
         emit Completed(7, msg.sender);
     }
     
     /// @notice Claim reward.
     function openL7Chest() external returns(address[] memory loot, uint[] memory amount) {
-        require(s.level_completed[msg.sender][7] == true, "openL7Chest: You need to complete the level first");
+        require(_s.level_completed[msg.sender][7] == true, "openL7Chest: You need to complete the level first");
         uint8 i;
 
         if(_s.level_reward[msg.sender][7] == false) {
-            s.level_reward[msg.sender][7] = true;
-            IErc721RewardLevel(s.Erc721LevelReward[7][0]).safeMint(msg.sender);
+            _s.level_reward[msg.sender][7] = true;
+            IErc721RewardLevel(_s.Erc721LevelReward[7][0]).safeMint(msg.sender);
 
             loot[i] = _s.Erc721LevelReward[7][0];
             amount[i++] = 1;
