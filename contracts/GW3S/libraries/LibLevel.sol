@@ -15,7 +15,7 @@ struct Level {
 }
 
 contract Modifiers {
-    AppStorage internal s;
+    AppStorage internal _s;
 
     modifier onlyOwner() {
         LibDiamond.enforceIsContractOwner();
@@ -23,17 +23,17 @@ contract Modifiers {
     }
 
     modifier hasCompleted(uint256 levelId) {
-        require(s.level_completed[msg.sender][levelId] == false, "Level already finished");
+        require(_s.level_completed[msg.sender][levelId] == false, "Level already finished");
         _;
     }
 
     modifier hasClaimed(uint256 levelId) {
-        require(s.level_reward[msg.sender][levelId] == false, "Reward already claimed");
+        require(_s.level_reward[msg.sender][levelId] == false, "Reward already claimed");
         _;
     }
 
     modifier isRunning(uint256 levelId) {
-        require(s.level_running[msg.sender] == levelId, "You are not running this level actually");
+        require(_s.level_running[msg.sender] == levelId, "You are not running this level actually");
         _;
     }
 }
