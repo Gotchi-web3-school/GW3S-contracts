@@ -11,12 +11,7 @@ contract Level1Facet is Modifiers {
     event ClaimReward(uint256 indexed level, address indexed player);
     event Completed(uint256 indexed level, address indexed player);
 
-    function initLevel1() external {
-        s.level_completed[msg.sender][1] = false;
-        s.level_running[msg.sender] = 1;
-    }
-
-    function complete_l1() external hasCompleted(1) isRunning(1) {
+    function complete_l1() external hasCompleted(1) {
         s.level_completed[msg.sender][1] = true;
         emit Completed(0, msg.sender);
     }
