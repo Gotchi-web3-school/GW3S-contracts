@@ -2,8 +2,8 @@
 /* eslint prefer-const: "off" */
 
 const { readFile } = require("fs").promises
-const { getSelectors, FacetCutAction } = require('../../libraries/diamond.js')
-const { deployed } = require("../deploy/deployed.js")
+const { getSelectors, FacetCutAction } = require('../libraries/diamond.js')
+const { deployed } = require("../libraries/deployed.js")
 const hardhat = require("hardhat")
 const FILE_PATH = './helpers/facetsContracts.json';
 
