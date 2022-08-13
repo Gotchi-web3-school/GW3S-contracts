@@ -14,43 +14,45 @@ import {Modifiers} from "../../libraries/LibLevel.sol";
 
 contract Level8Facet is Modifiers {
 
-    event ClaimReward(uint256 indexed level, address indexed player);
-    event Completed(uint256 indexed level, address indexed player);
-    event DeployedInstance(uint256 indexed level, address indexed player, address instance);
-
     function initLevel8() external returns(address) {
         Level8Instance instance = new Level8Instance(msg.sender);
 
-        s.level_completed[msg.sender][8] = false;
-        s.level_running[msg.sender] = 8;
-        s.level_instance[msg.sender][8] = address(instance);
+        _s.level_completed[msg.sender][8] = false;
+        _s.level_running[msg.sender] = 8;
+        _s.level_instance[msg.sender][8] = address(instance);
 
         emit DeployedInstance(8, msg.sender, address(instance));
         return address(instance);
     }
 
-    function complete_l8() external hasCompleted(8) isRunning(8) {
+    function completeL8() external hasCompleted(8) isRunning(8) {
         uint256 quote = _getQuote();
         require(quote >= 38e17 && quote <= 42e17, "The price quote is higher or lower than expected");
 
-        s.level_completed[msg.sender][8] = true;
-        emit Completed(0, msg.sender);
+        _s.level_completed[msg.sender][8] = true;
+        emit Completed(8, msg.sender);
     }
     
     /// @notice Claim reward.
-    function claim_l8() external hasClaimed(8) {
-        require(s.level_completed[msg.sender][8] == true, "Claim_l8: You need to complete the level first");
+    function openL8Chest() external returns(address[] memory loot, uint[] memory amount) {
+        require(_s.level_completed[msg.sender][8] == true, "openL8Chest: You need to complete the level first");
+        uint8 i;
 
-        s.level_reward[msg.sender][8] = true;
-        IErc721RewardLevel(s.Erc721LevelReward[8][0]).safeMint(msg.sender);
+        if(_s.level_reward[msg.sender][8] == false) {
+            _s.level_reward[msg.sender][8] = true;
+            IErc721RewardLevel(_s.Erc721LevelReward[8][0]).safeMint(msg.sender);
 
-        emit ClaimReward(0, msg.sender);
+            loot[i] = _s.Erc721LevelReward[8][0];
+            amount[i++] = 1;
+        }
+
+        emit LootChest(8, msg.sender, loot, amount);
     }
 
     function _getQuote() internal returns(uint256 quote){
-        address ghst = ILevel8Instance(s.level_instance[msg.sender][8]).tokens(0);
-        address dai = ILevel8Instance(s.level_instance[msg.sender][8]).tokens(1);
-        address pair = ILevel8Instance(s.level_instance[msg.sender][8]).getPair();
+        address ghst = ILevel8Instance(_s.level_instance[msg.sender][8]).tokens(0);
+        address dai = ILevel8Instance(_s.level_instance[msg.sender][8]).tokens(1);
+        address pair = ILevel8Instance(_s.level_instance[msg.sender][8]).getPair();
         
         (uint256 reserves0, uint256 reserves1, ) = IPair(pair).getReserves();
         uint256 ghstReserves = ghst < dai ? reserves0 : reserves1;

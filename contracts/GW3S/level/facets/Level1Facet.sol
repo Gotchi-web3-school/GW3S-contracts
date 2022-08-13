@@ -8,20 +8,27 @@ import "../../Reward/Interfaces/IERC721RewardLevel.sol";
 
 contract Level1Facet is Modifiers {
 
-    event ClaimReward(uint256 indexed level, address indexed player);
-    event Completed(uint256 indexed level, address indexed player);
+    function completeL1() external hasCompleted(2) returns (bool) {
+        _s.level_completed[msg.sender][1] = true;
+        emit Completed(1, msg.sender);
 
-    function complete_l1() external hasCompleted(1) {
-        s.level_completed[msg.sender][1] = true;
-        emit Completed(0, msg.sender);
+        return true;
     }
     
     /// @notice Claim reward.
-    function claim_l1() external hasClaimed(1) {
-        require(s.level_completed[msg.sender][1] == true, "Claim_l1: You need to complete the level first");
+    function openL1Chest() external returns(address[] memory loot, uint[] memory amount) {
+        require(_s.level_completed[msg.sender][1] == true, "openL1Chest: You need to complete the level first");
+        uint8 i;
 
-        s.level_reward[msg.sender][1] = true;
-        IErc721RewardLevel(s.Erc721LevelReward[1][0]).safeMint(msg.sender);
-        emit ClaimReward(0, msg.sender);
+        if(_s.level_reward[msg.sender][1] == false) {
+            _s.level_reward[msg.sender][1] = true;
+            IErc721RewardLevel(_s.Erc721LevelReward[1][0]).safeMint(msg.sender);
+
+
+            loot[i] = _s.Erc721LevelReward[1][0];
+            amount[i++] = 1;
+        }
+
+        emit LootChest(1, msg.sender, loot, amount);
     }
 }

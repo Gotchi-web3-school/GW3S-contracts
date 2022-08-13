@@ -14,35 +14,37 @@ import {Modifiers} from "../../libraries/LibLevel.sol";
 
 contract Level11Facet is Modifiers {
 
-    event ClaimReward(uint256 indexed level, address indexed player);
-    event Completed(uint256 indexed level, address indexed player);
-    event DeployedInstance(uint256 indexed level, address indexed player, address instance);
-
     function initLevel11() external returns(address) {
         Level11Instance instance = new Level11Instance(msg.sender, address(this));
-        s.level_completed[msg.sender][11] = false;
-        s.level_running[msg.sender] = 11;
-        s.level_instance[msg.sender][11] = address(instance);
+        _s.level_completed[msg.sender][11] = false;
+        _s.level_running[msg.sender] = 11;
+        _s.level_instance[msg.sender][11] = address(instance);
 
         emit DeployedInstance(11, msg.sender, address(instance));
         return address(instance);
     }
 
-    function complete_l11() external hasCompleted(11) isRunning(11) {
-        require(ILevel11Instance(s.level_instance[msg.sender][11]).success(), "Not suceeded yet");
+    function completeL11() external hasCompleted(11) isRunning(11) {
+        require(ILevel11Instance(_s.level_instance[msg.sender][11]).success(), "Not suceeded yet");
 
-        s.level_completed[msg.sender][11] = true;
-        emit Completed(0, msg.sender);
+        _s.level_completed[msg.sender][11] = true;
+        emit Completed(11, msg.sender);
     }
     
     /// @notice Claim reward.
-    function claim_l11() external hasClaimed(11) {
-        require(s.level_completed[msg.sender][11] == true, "Claim_l11: You need to complete the level first");
+    function openL11Chest() external returns(address[] memory loot, uint[] memory amount) {
+        require(_s.level_completed[msg.sender][11] == true, "openL11Chest: You need to complete the level first");
+        uint8 i;
 
-        s.level_reward[msg.sender][11] = true;
-        IErc721RewardLevel(s.Erc721LevelReward[11][0]).safeMint(msg.sender);
+        if(_s.level_reward[msg.sender][11] == false) {
+            _s.level_reward[msg.sender][11] = true;
+            IErc721RewardLevel(_s.Erc721LevelReward[11][0]).safeMint(msg.sender);
 
-        emit ClaimReward(0, msg.sender);
+            loot[i] = _s.Erc721LevelReward[11][0];
+            amount[i++] = 1;
+        }
+
+        emit LootChest(11, msg.sender, loot, amount);
     }
 
 }

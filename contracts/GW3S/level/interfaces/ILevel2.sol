@@ -2,8 +2,8 @@
 
 pragma solidity 0.8.15;
 
-interface ILevel {
-    function initLevel() external returns(address);
-    function complete() external returns (bool);
-    function claim() external;
+interface ILevel2 {
+    function initLevel2() external returns(address);
+    function completeL2() external returns (bool);
+    function openL2Chest() external returns(address[] memory loot, uint[] memory amount);
 }

@@ -10,47 +10,49 @@ import {Modifiers} from "../../libraries/LibLevel.sol";
 
 contract Level6Facet is Modifiers {
 
-    event ClaimReward(uint256 indexed level, address indexed player);
-    event Completed(uint256 indexed level, address indexed player);
-    event DeployedInstance(uint256 indexed level, address indexed player, address instance);
-
     function initLevel6() external returns(address) {
-        IToken(s.level_tokens[6][0]).mint(msg.sender, 10);
-        IToken(s.level_tokens[6][6]).mint(msg.sender, 1);
+        IToken(_s.level_tokens[6][0]).mint(msg.sender, 10);
+        IToken(_s.level_tokens[6][6]).mint(msg.sender, 1);
         
-        s.level_completed[msg.sender][6] = false;
-        s.level_running[msg.sender] = 6;
-        s.level_instance[msg.sender][6] = address(this);
+        _s.level_completed[msg.sender][6] = false;
+        _s.level_running[msg.sender] = 6;
+        _s.level_instance[msg.sender][6] = address(this);
 
         emit DeployedInstance(6, msg.sender, address(this));
         return address(this);
     }
 
-    function complete_l6() external hasCompleted(6) isRunning(6) {
-        address ghst = s.level_tokens[6][0];
+    function completeL6() external hasCompleted(6) isRunning(6) {
+        address ghst = _s.level_tokens[6][0];
         uint balance = IToken(ghst).balanceOf(msg.sender);
 
         require(balance >= 10e18, "level not completed yet");
-        s.level_completed[msg.sender][6] = true;
-        emit Completed(0, msg.sender);
+        _s.level_completed[msg.sender][6] = true;
+        emit Completed(6, msg.sender);
     }
     
     /// @notice Claim reward.
-    function claim_l6() external hasClaimed(6) {
-        require(s.level_completed[msg.sender][6] == true, "Claim_l6: You need to complete the level first");
+    function openL6Chest() external returns(address[] memory loot, uint[] memory amount) {
+        require(_s.level_completed[msg.sender][6] == true, "openL6Chest: You need to complete the level first");
+        uint8 i;
 
-        s.level_reward[msg.sender][6] = true;
-        IErc721RewardLevel(s.Erc721LevelReward[6][0]).safeMint(msg.sender);
+        if(_s.level_reward[msg.sender][6] == false) {
+            _s.level_reward[msg.sender][6] = true;
+            IErc721RewardLevel(_s.Erc721LevelReward[6][0]).safeMint(msg.sender);
+
+            loot[i] = _s.Erc721LevelReward[6][0];
+            amount[i++] = 1;
+        }
                                                                                           
-        emit ClaimReward(0, msg.sender);
+        emit LootChest(6, msg.sender, loot, amount);
     }
 
     function getTokens() external view returns(address[] memory) {
-        return (s.level_tokens[6]);
+        return (_s.level_tokens[6]);
     }
 
     function getFactory() external view returns(address) {
-        return (s.level_factories[6][0]);
+        return (_s.level_factories[6][0]);
     }
 
     function getPair(address token0, address token1) public returns(address pair) {
@@ -60,9 +62,9 @@ contract Level6Facet is Modifiers {
 
         tmp = keccak256(abi.encodePacked(
             hex'ff',
-            s.level_factories[6][0],
+            _s.level_factories[6][0],
             keccak256(abi.encodePacked(tokenA, tokenB)),
-            IFactory(s.level_factories[6][0]).INIT_CODE_HASH()
+            IFactory(_s.level_factories[6][0]).INIT_CODE_HASH()
         ));
 
         pair = address(uint160(uint256(tmp)));

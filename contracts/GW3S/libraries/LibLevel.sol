@@ -17,6 +17,10 @@ struct Level {
 contract Modifiers {
     AppStorage internal _s;
 
+    event LootChest(uint256 indexed level, address indexed player, address[] indexed loot, uint[] amount);
+    event Completed(uint256 indexed level, address indexed player);
+    event DeployedInstance(uint256 indexed level, address indexed player, address instance);
+
     modifier onlyOwner() {
         LibDiamond.enforceIsContractOwner();
         _;
@@ -24,11 +28,6 @@ contract Modifiers {
 
     modifier hasCompleted(uint256 levelId) {
         require(_s.level_completed[msg.sender][levelId] == false, "Level already finished");
-        _;
-    }
-
-    modifier hasClaimed(uint256 levelId) {
-        require(_s.level_reward[msg.sender][levelId] == false, "Reward already claimed");
         _;
     }
 

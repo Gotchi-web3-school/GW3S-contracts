@@ -14,25 +14,21 @@ import {Modifiers} from "../../libraries/LibLevel.sol";
 
 contract Level10Facet is Modifiers {
 
-    event ClaimReward(uint256 indexed level, address indexed player);
-    event Completed(uint256 indexed level, address indexed player);
-    event DeployedInstance(uint256 indexed level, address indexed player, address instance);
-
     function initLevel10() external returns(address) {
         Level10Instance instance = new Level10Instance(msg.sender);
 
-        s.level_completed[msg.sender][10] = false;
-        s.level_running[msg.sender] = 10;
-        s.level_instance[msg.sender][10] = address(instance);
+        _s.level_completed[msg.sender][10] = false;
+        _s.level_running[msg.sender] = 10;
+        _s.level_instance[msg.sender][10] = address(instance);
 
         emit DeployedInstance(10, msg.sender, address(instance));
         return address(instance);
     }
 
-    function complete_l10() external hasCompleted(10) isRunning(10) {
-        address usdc = ILevel10Instance(s.level_instance[msg.sender][10]).tokens(0);
-        address ghst = ILevel10Instance(s.level_instance[msg.sender][10]).tokens(1);
-        address pair = ILevel10Instance(s.level_instance[msg.sender][10]).getPair();
+    function completeL10() external hasCompleted(10) isRunning(10) {
+        address usdc = ILevel10Instance(_s.level_instance[msg.sender][10]).tokens(0);
+        address ghst = ILevel10Instance(_s.level_instance[msg.sender][10]).tokens(1);
+        address pair = ILevel10Instance(_s.level_instance[msg.sender][10]).getPair();
 
         (uint112 reserve0, uint112 reserve1,) = IPair(pair).getReserves();
         
@@ -44,18 +40,24 @@ contract Level10Facet is Modifiers {
 
         require(quote >= 1000000000e18, "Not billionaire yet !");
 
-        s.level_completed[msg.sender][10] = true;
-        emit Completed(0, msg.sender);
+        _s.level_completed[msg.sender][10] = true;
+        emit Completed(10, msg.sender);
     }
     
     /// @notice Claim reward.
-    function claim_l10() external hasClaimed(10) {
-        require(s.level_completed[msg.sender][10] == true, "Claim_l10: You need to complete the level first");
+    function openL10Chest() external returns(address[] memory loot, uint[] memory amount) {
+        require(_s.level_completed[msg.sender][10] == true, "openL10Chest: You need to complete the level first");
+        uint8 i;
 
-        s.level_reward[msg.sender][10] = true;
-        IErc721RewardLevel(s.Erc721LevelReward[10][0]).safeMint(msg.sender);
+        if(_s.level_reward[msg.sender][10] == false) {
+            _s.level_reward[msg.sender][10] = true;
+            IErc721RewardLevel(_s.Erc721LevelReward[10][0]).safeMint(msg.sender);
 
-        emit ClaimReward(0, msg.sender);
+            loot[i] = _s.Erc721LevelReward[10][0];
+            amount[i++] = 1;
+        }
+
+        emit LootChest(10, msg.sender, loot, amount);
     }
 
 }
