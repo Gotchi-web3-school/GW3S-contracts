@@ -4,11 +4,12 @@ pragma solidity ^0.8.1;
 
 import {LibAppStorage, SvgStorage} from "../../libraries/LibAppStorage.sol";
 import {Level, Difficulty} from "../../libraries/LibLevel.sol";
+import {LibSvg} from "../../libraries/LibSvg.sol";
 
 contract SvgLoupeFacet {
 
-    function getSvgLevelReward(uint256 levelId, uint _type) external view returns (address addr) {
+    function getSvgLevelReward(uint256 levelId, uint _type) external view returns(LibSvg.Svg memory svgs) {
         SvgStorage storage svg = LibAppStorage.svgDiamondStorage();
-        addr = svg.svgLevelReward[levelId][_type];
+        svgs = svg.svgLevelReward[levelId][_type];
     }
 }
