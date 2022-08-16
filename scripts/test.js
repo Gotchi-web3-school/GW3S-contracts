@@ -4,8 +4,7 @@
 const hardhat = require("hardhat")
 const { readFile } = require('fs').promises;
 const { ethers } = require('hardhat');
-const {levels, secretLevels, hackerLevels} = require("../helpers/constants.js");
-const DIAMOND_FILE_PATH = './helpers/facetsContracts.json';
+const SVG_PATH = '../../img/common/card-01/Front.svg';
 
 
 async function test () {
@@ -16,15 +15,13 @@ async function test () {
 
   console.log("Deployer: ", player.address)
 
-  console.log("Deploy test...")
-  const Test = await ethers.getContractFactory("Test")
-  const test = await Test.deploy()
-  await test.deployed()
-  
-  console.log("Store value...")
-  tx = await test.callStatic.store(10)
-  console.log(tx)
-  console.log(receipt.logs)
+  try {
+    svg = await readFile(SVG_PATH, "utf-8")
+  } catch (e) {
+    console.log(e)
+  }
+
+  console.log(ethers.utils.toUtf8Bytes(svg).length)
 }
 
 // We recommend this pattern to be able to use async/await everywhere
