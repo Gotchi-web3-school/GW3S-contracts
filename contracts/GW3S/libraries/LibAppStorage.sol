@@ -3,6 +3,7 @@
 pragma solidity ^0.8.15;
 
 import {LibDiamond} from "../../shared/libraries/LibDiamond.sol";
+import {LibSvg} from "./LibSvg.sol";
 import {Level} from "./LibLevel.sol";
 
 struct AppStorage {
@@ -22,7 +23,7 @@ struct AppStorage {
 
 struct SvgStorage {
     // type = enum{LEVEL, HIDDEN, HACKER}
-    mapping(uint => mapping(uint => address)) svgLevelReward;            // Store svgs by (levelId => type => svgContract)
+    mapping(uint => mapping(uint => LibSvg.Svg)) svgLevelReward;            // Store svgs by (levelId => type => svgContract)
 }
 
 
