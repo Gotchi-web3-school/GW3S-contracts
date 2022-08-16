@@ -9,11 +9,24 @@ import "@openzeppelin/contracts/utils/Counters.sol";
 contract ERC721RewardLevel is ERC721, ERC721Enumerable, Ownable {
     using Counters for Counters.Counter;
 
-    Counters.Counter private _levelIdCounter;
-    address svg;
+    struct Svg {
+        address front;
+        address back;
+    }
 
-    constructor(string memory name, string memory ticker, address svg_) ERC721(name, ticker) {
-        svg = svg_;
+    struct Metadatas {
+        Svg svg;
+        uint256 levelId;
+        string type_;
+        string title;
+        string text;
+    }
+
+    Counters.Counter private _levelIdCounter;
+    Metadatas private _metadatas;
+
+    constructor(string memory name, string memory ticker, Metadatas memory metadatas) ERC721(name, ticker) {
+        _metadatas = metadatas;
     }
 
     function safeMint(address to) public onlyOwner {
@@ -40,9 +53,15 @@ contract ERC721RewardLevel is ERC721, ERC721Enumerable, Ownable {
         return super.supportsInterface(interfaceId);
     }
 
-    function getSvg() public view returns(string memory _svg) {
+    function getSvg() public view returns(string memory _svgFront, string memory _svgBack) {
         require(balanceOf(msg.sender) > 0, "getContent: You don't own the NFT");
-        bytes memory svgByteCode = svg.code;
-        _svg = string(abi.encodePacked('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">', svgByteCode, "</svg>"));
+        bytes memory svgFrontByteCode = _metadatas.svg.front.code;
+        bytes memory svgBackByteCode = _metadatas.svg.back.code;
+        _svgFront = string(abi.encodePacked("<svg xmlns=http://www.w3.org/2000/svg viewBox=0 0 64 64>", svgFrontByteCode, "</svg>"));
+        _svgBack = string(abi.encodePacked("<svg xmlns=http://www.w3.org/2000/svg viewBox=0 0 64 64>", svgBackByteCode, "</svg>"));
+    }
+
+    function getMetadas() public view returns(Metadatas memory metadatas) {
+        return _metadatas;
     }
 }
