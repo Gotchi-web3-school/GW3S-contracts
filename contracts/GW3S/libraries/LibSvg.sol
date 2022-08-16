@@ -9,11 +9,17 @@ library LibSvg {
 
     enum LevelTypes{LEVEL, HIDDEN, HACKER}
 
-    function getSvg(uint256 levelId, uint256 _type) internal view returns (bytes memory svg_) {
+    struct Svg {
+        address front;
+        address back;
+    }
+
+    function getSvg(uint256 levelId, uint256 _type) internal view returns (bytes memory svgFront_, bytes memory svgBack_) {
         SvgStorage storage s = LibAppStorage.svgDiamondStorage();
-        address svgContract = s.svgLevelReward[levelId][_type];
-        assert(svgContract != address(0));
-        svg_ = svgContract.code;
+        Svg memory svgContract = s.svgLevelReward[levelId][_type];
+        assert(svgContract.front != address(0));
+        svgFront_ = svgContract.front.code;
+        svgBack_ = svgContract.back.code;
     }
 
     function storeSvgInContract(string calldata _svg) internal returns (address svgContract) {
@@ -43,11 +49,12 @@ library LibSvg {
         }
     }
 
-    function storeSvg(string calldata _svg, uint256 levelId, uint256 _type) internal returns(address) {
+    function storeSvg(string[] calldata _svg, uint256 levelId, uint256 _type) internal returns(Svg memory svg) {
         SvgStorage storage s = LibAppStorage.svgDiamondStorage();
         emit StoreSvg(levelId, _type);
-        address svgContract = storeSvgInContract(_svg);
-        s.svgLevelReward[levelId][_type] = svgContract;
-        return svgContract;
+        svg.front = storeSvgInContract(_svg[0]);
+        svg.back = storeSvgInContract(_svg[1]);
+        s.svgLevelReward[levelId][_type] = svg;
+        return svg;
     }   
 }
