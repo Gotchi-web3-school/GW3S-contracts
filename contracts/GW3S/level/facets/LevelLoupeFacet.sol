@@ -43,4 +43,8 @@ contract LevelLoupeFacet {
     function getTokensLevel(uint256 levelId) external view returns (address[] memory result) {
         result = _s.level_tokens[levelId];
     }
+
+    function getRewardAddress(uint256 levelId, uint256 type_) external view returns (address result) {
+        result = _s.Erc721LevelReward[levelId][type_];
+    }
 }

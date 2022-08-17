@@ -12,4 +12,5 @@ interface ILevelLoupeFacet {
     function getLevelInstanceByAddress(address account, uint256 levelId) external view returns (address result);
     function getFactoryLevel(uint256 levelId, uint8 pos) external view returns (address result);
     function getTokensLevel(uint256 levelId) external view returns (address[] memory result);
+    function getRewardAddress(uint256 levelId, uint256 type_) external view returns (address result);
 }
