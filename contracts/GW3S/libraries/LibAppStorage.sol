@@ -3,7 +3,7 @@
 pragma solidity ^0.8.15;
 
 import {LibDiamond} from "../../shared/libraries/LibDiamond.sol";
-import {LibSvg} from "./LibSvg.sol";
+import {Svg} from "./LibSvg.sol";
 import {Level} from "./LibLevel.sol";
 
 struct AppStorage {
@@ -17,14 +17,20 @@ struct AppStorage {
     mapping(address => mapping(uint256 => address)) level_instance;      // The current instance of player deployed by the a specific level 
     // type = enum{LEVEL, HIDDEN, HACKER}
     mapping(uint => mapping(uint => address)) Erc721LevelReward;         // Store ERC721 smart contract by (levelId => type => svgContract)
-    mapping(uint256 => mapping(uint8 => address)) level_factories;        // The address of factory by level
+    mapping(uint256 => mapping(uint8 => address)) level_factories;       // The address of factory by level
     mapping(uint256 => address[]) level_tokens;                          // The array of tokens by level
 }
 
 struct SvgStorage {
     // type = enum{LEVEL, HIDDEN, HACKER}
-    mapping(uint => mapping(uint => LibSvg.Svg)) svgLevelReward;            // Store svgs by (levelId => type => svgContract)
+    mapping(uint => mapping(uint => Svg)) svgLevelReward;            // Store svgs by (levelId => type => svgContract)
+    mapping(uint => mapping(uint => Svg)) svgHuntReward;            // Store svgs by (levelId => type => svgContract)
 }
+
+// struct RewardStorage {
+//     mapping(uint => mapping(uint => address)) levelReward;         // Store ERC721 smart contract by (levelId => type => svgContract)
+//     mapping(uint => mapping(uint => address)) huntReward;         // Store ERC721 smart contract by (levelId => type => svgContract)
+// }
 
 
 library LibAppStorage {
