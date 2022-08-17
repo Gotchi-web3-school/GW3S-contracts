@@ -49,7 +49,7 @@ contract Level12Facet is Modifiers {
 
         if(_s.level_reward[msg.sender][12] == false) {
             _s.level_reward[msg.sender][12] = true;
-            IErc721RewardLevel(_s.Erc721LevelReward[12][0]).safeMint(msg.sender);
+            IERC721RewardLevel(_s.Erc721LevelReward[12][0]).safeMint(msg.sender);
 
             loot[i] = _s.Erc721LevelReward[12][0];
             amount[i++] = 1;
@@ -60,7 +60,7 @@ contract Level12Facet is Modifiers {
             quote0 <= quote1.mul(11e17).div(1e18)) 
         {
             _s.secret_reward[msg.sender][12] = true;
-            IErc721RewardLevel(_s.Erc721LevelReward[12][1]).safeMint(msg.sender);
+            IERC721RewardLevel(_s.Erc721LevelReward[12][1]).safeMint(msg.sender);
 
             loot[i] = _s.Erc721LevelReward[12][1];
             amount[i++] = 1;

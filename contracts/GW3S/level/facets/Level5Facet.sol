@@ -44,7 +44,7 @@ contract Level5Facet is Modifiers {
 
         if (_s.level_reward[msg.sender][5] == false && completed == 0) {
             _s.level_reward[msg.sender][5] = true;
-            IErc721RewardLevel(_s.Erc721LevelReward[5][0]).safeMint(msg.sender);
+            IERC721RewardLevel(_s.Erc721LevelReward[5][0]).safeMint(msg.sender);
 
             loot[i] = _s.Erc721LevelReward[5][0];
             amount[i++] = 1;
@@ -52,14 +52,14 @@ contract Level5Facet is Modifiers {
 
         if (_s.secret_reward[msg.sender][5] == false && completed == 1) {
             _s.secret_reward[msg.sender][5] = true;
-            IErc721RewardLevel(_s.Erc721LevelReward[5][1]).safeMint(msg.sender);
+            IERC721RewardLevel(_s.Erc721LevelReward[5][1]).safeMint(msg.sender);
 
             loot[i] = _s.Erc721LevelReward[5][1];
             amount[i++] = 1;
         }
         if (_s.hacker_reward[msg.sender][5] == false && IERC20(token).balanceOf(msg.sender) >= 10) {
             _s.hacker_reward[msg.sender][5] = true;
-            IErc721RewardLevel(_s.Erc721LevelReward[5][2]).safeMint(msg.sender);
+            IERC721RewardLevel(_s.Erc721LevelReward[5][2]).safeMint(msg.sender);
 
             loot[i] = _s.Erc721LevelReward[5][2];
             amount[i++] = 1;

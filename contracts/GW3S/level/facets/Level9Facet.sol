@@ -53,7 +53,7 @@ contract Level9Facet is Modifiers {
 
         if(_s.level_reward[msg.sender][9] == false) {
             _s.level_reward[msg.sender][9] = true;
-            IErc721RewardLevel(_s.Erc721LevelReward[9][0]).safeMint(msg.sender);
+            IERC721RewardLevel(_s.Erc721LevelReward[9][0]).safeMint(msg.sender);
 
             loot[i] = _s.Erc721LevelReward[9][0];
             amount[i++] = 1;

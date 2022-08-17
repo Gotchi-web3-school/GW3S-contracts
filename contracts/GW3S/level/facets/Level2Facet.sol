@@ -39,7 +39,7 @@ contract Level2Facet is Modifiers {
         // Give level reward to player. 
         if(_s.level_reward[msg.sender][2] == false) {
             _s.level_reward[msg.sender][2] = true;
-            IErc721RewardLevel(_s.Erc721LevelReward[2][0]).safeMint(msg.sender);
+            IERC721RewardLevel(_s.Erc721LevelReward[2][0]).safeMint(msg.sender);
 
             loot[i] = _s.Erc721LevelReward[2][0];
             amount[i++] = 1;
@@ -48,7 +48,7 @@ contract Level2Facet is Modifiers {
         // Give secret reward to player if condition is filled.
         if(_s.hacker_reward[msg.sender][2] == false && _secretLevel()) {
             _s.hacker_reward[msg.sender][2] = true;
-            IErc721RewardLevel(_s.Erc721LevelReward[2][1]).safeMint(msg.sender);
+            IERC721RewardLevel(_s.Erc721LevelReward[2][1]).safeMint(msg.sender);
 
             loot[i] = _s.Erc721LevelReward[2][1];
             amount[i++] = 1;
