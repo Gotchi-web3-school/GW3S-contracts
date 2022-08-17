@@ -1,10 +1,24 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.15; 
  
-interface IErc721RewardLevel {
+interface IERC721RewardLevel {
+    struct Svg {
+        address front;
+        address back;
+    }
+
+    struct Metadatas {
+        Svg svg;
+        uint256 levelId;
+        string type_;
+        string title;
+        string text;
+    }
+
     function safeMint(address to) external;
     function supportsInterface(bytes4 interfaceId) external;
-    function getSvg() external view returns(string memory _svg);
+    function getSvg() external view returns(string memory _svgFront, string memory _svgBack);
+    function getMetadas() external view returns(Metadatas memory metadatas);
 
     function balanceOf(address owner) external view  returns (uint256);
     function ownerOf(uint256 tokenId) external view  returns (address);

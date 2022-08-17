@@ -11,6 +11,6 @@ library LibLevelReward {
       AppStorage storage s = LibAppStorage.diamondStorage();
       address svgContract = s.Erc721LevelReward[levelId][_type];
 
-      IErc721RewardLevel(svgContract).safeMint(player);
+      IERC721RewardLevel(svgContract).safeMint(player);
    }
 }

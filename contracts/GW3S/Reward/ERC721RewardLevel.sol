@@ -25,8 +25,22 @@ contract ERC721RewardLevel is ERC721, ERC721Enumerable, Ownable {
     Counters.Counter private _levelIdCounter;
     Metadatas private _metadatas;
 
-    constructor(string memory name, string memory ticker, Metadatas memory metadatas) ERC721(name, ticker) {
-        _metadatas = metadatas;
+    constructor(
+        string memory name, 
+        string memory ticker, 
+        address front,
+        address back,
+        uint256 levelId,
+        string memory type_,
+        string memory title,
+        string memory text
+        ) ERC721(name, ticker) {
+        _metadatas.svg.front = front; 
+        _metadatas.svg.back = back; 
+        _metadatas.levelId = levelId; 
+        _metadatas.type_ = type_; 
+        _metadatas.title = title; 
+        _metadatas.text = text; 
     }
 
     function safeMint(address to) public onlyOwner {
@@ -57,8 +71,8 @@ contract ERC721RewardLevel is ERC721, ERC721Enumerable, Ownable {
         require(balanceOf(msg.sender) > 0, "getContent: You don't own the NFT");
         bytes memory svgFrontByteCode = _metadatas.svg.front.code;
         bytes memory svgBackByteCode = _metadatas.svg.back.code;
-        _svgFront = string(abi.encodePacked("<svg xmlns=http://www.w3.org/2000/svg viewBox=0 0 64 64>", svgFrontByteCode, "</svg>"));
-        _svgBack = string(abi.encodePacked("<svg xmlns=http://www.w3.org/2000/svg viewBox=0 0 64 64>", svgBackByteCode, "</svg>"));
+        _svgFront = string(abi.encodePacked(svgFrontByteCode));
+        _svgBack = string(abi.encodePacked(svgBackByteCode));
     }
 
     function getMetadas() public view returns(Metadatas memory metadatas) {
