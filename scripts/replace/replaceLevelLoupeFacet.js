@@ -2,7 +2,7 @@
 /* eslint prefer-const: "off" */
 
 const { readFile } = require("fs").promises
-const { getSelector, FacetCutAction } = require('../libraries/diamond.js')
+const { getSelector, FacetCutAction, getSelectors } = require('../libraries/diamond.js')
 const { deployed } = require("../libraries/deployed.js")
 const hardhat = require("hardhat")
 const FILE_PATH = './helpers/facetsContracts.json';
@@ -29,10 +29,7 @@ async function deployLevelLoupeFacet () {
   cut.push({
       facetAddress: facet.address,
       action: FacetCutAction.Add,
-      functionSelectors: [
-        getSelector("function getFactoryLevel(uint256 levelId, uint8 pos) external view returns (address result)"),
-        getSelector("function getTokensLevel(uint256 levelId) external view returns (address[] memory result)"),
-    ]
+      functionSelectors: [getSelector("function getRewardAddress(uint256 levelId, uint256 type_) external view returns (address result)")]
     })
   //--------------------------------------------------------------
 

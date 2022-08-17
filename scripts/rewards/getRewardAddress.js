@@ -20,12 +20,14 @@ async function test () {
     console.log(e)
   }
 
-
   console.log("balance: ", ethers.utils.formatEther(await player.getBalance()), "MATIC")
-  const SvgFacet = await ethers.getContractAt("SvgFacet", contracts.Diamond.mumbai.address)
-  const SvgLoupeFacet = await ethers.getContractAt("SvgLoupeFacet", contracts.Diamond.mumbai.address)
+  const LevelLoupeFacet = await ethers.getContractAt("LevelLoupeFacet", contracts.Diamond.mumbai.address)
   
-  console.log(await SvgLoupeFacet.getSvgLevelReward(0, 0))
+  const constract = await LevelLoupeFacet.getRewardAddress(1, 0)
+  const IERC721RewardLevel = await ethers.getContractAt("IERC721RewardLevel", constract)
+
+  console.log(await IERC721RewardLevel.getMetadas())
+
 }
 
 // We recommend this pattern to be able to use async/await everywhere

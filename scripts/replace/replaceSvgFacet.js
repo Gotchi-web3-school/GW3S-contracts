@@ -26,17 +26,17 @@ async function replaceSvgFacet() {
   ]
   const cut = []
   for (const FacetName of FacetNames) {
-    console.log(`Deploying ${FacetName}...`)
-    const Facet = await ethers.getContractFactory(FacetName)
-    const facet = await Facet.deploy()
-    await facet.deployed()
+    // console.log(`Deploying ${FacetName}...`)
+    // const Facet = await ethers.getContractFactory(FacetName)
+    // const facet = await Facet.deploy()
+    // await facet.deployed()
     
-    deployed(FacetName, hardhat.network.name, facet.address)
+    // deployed(FacetName, hardhat.network.name, facet.address)
 
     cut.push({
-      facetAddress: facet.address,
-      action: FacetCutAction.Replace,
-      functionSelectors: [getSelector("function getLevelRewardSvg(uint256 _levelId, uint256 _type) public view returns (string memory front, string memory back)")]
+      facetAddress: "0x0000000000000000000000000000000000000000",
+      action: FacetCutAction.Remove,
+      functionSelectors: [getSelector("function getSvgLevelReward(uint256 levelId, uint256 _type) external view returns(struct)")]
     })
   }
 
