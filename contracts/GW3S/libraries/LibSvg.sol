@@ -3,16 +3,18 @@ pragma solidity 0.8.15;
 
 import {LibAppStorage, SvgStorage} from "./LibAppStorage.sol";
 
+enum LevelTypes{LEVEL, HIDDEN, HACKER}
+
+struct Svg {
+    address front;
+    address back;
+}
+
 library LibSvg {
     event StoreSvg(uint256 levelId, uint256 _type);
     event UpdateSvg(uint256 levelId, uint256 _type);
 
-    enum LevelTypes{LEVEL, HIDDEN, HACKER}
 
-    struct Svg {
-        address front;
-        address back;
-    }
 
     function getSvg(uint256 levelId, uint256 _type) internal view returns (bytes memory svgFront_, bytes memory svgBack_) {
         SvgStorage storage s = LibAppStorage.svgDiamondStorage();
