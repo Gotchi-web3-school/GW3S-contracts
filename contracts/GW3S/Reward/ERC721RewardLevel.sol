@@ -23,7 +23,7 @@ contract ERC721RewardLevel is ERC721, ERC721Enumerable, Ownable {
     }
 
     Counters.Counter private _levelIdCounter;
-    Metadatas private _metadatas;
+    Metadatas public metadatas;
 
     constructor(
         string memory name, 
@@ -35,18 +35,18 @@ contract ERC721RewardLevel is ERC721, ERC721Enumerable, Ownable {
         string memory title,
         string memory text
         ) ERC721(name, ticker) {
-        _metadatas.svg.front = front; 
-        _metadatas.svg.back = back; 
-        _metadatas.levelId = levelId; 
-        _metadatas.type_ = type_; 
-        _metadatas.title = title; 
-        _metadatas.text = text; 
+        metadatas.svg.front = front; 
+        metadatas.svg.back = back; 
+        metadatas.levelId = levelId; 
+        metadatas.type_ = type_; 
+        metadatas.title = title; 
+        metadatas.text = text; 
     }
 
     function safeMint(address to) public onlyOwner {
         uint256 tokenId = _levelIdCounter.current();
-        _levelIdCounter.increment();
         _safeMint(to, tokenId);
+        _levelIdCounter.increment();
     }
 
     // The following functions are overrides required by Solidity.
@@ -69,13 +69,24 @@ contract ERC721RewardLevel is ERC721, ERC721Enumerable, Ownable {
 
     function getSvg() public view returns(string memory _svgFront, string memory _svgBack) {
         require(balanceOf(msg.sender) > 0, "getContent: You don't own the NFT");
-        bytes memory svgFrontByteCode = _metadatas.svg.front.code;
-        bytes memory svgBackByteCode = _metadatas.svg.back.code;
+        bytes memory svgFrontByteCode = metadatas.svg.front.code;
+        bytes memory svgBackByteCode = metadatas.svg.back.code;
         _svgFront = string(abi.encodePacked(svgFrontByteCode));
         _svgBack = string(abi.encodePacked(svgBackByteCode));
     }
 
-    function getMetadas() public view returns(Metadatas memory metadatas) {
-        return _metadatas;
+    function getMetadas() public view returns(
+        address front,
+        address back,
+        uint256 levelId,
+        string memory type_,
+        string memory title,
+        string memory text) {
+        front = metadatas.svg.front; 
+        back = metadatas.svg.back; 
+        levelId = metadatas.levelId; 
+        type_ = metadatas.type_; 
+        title = metadatas.title; 
+        text = metadatas.text; 
     }
 }
