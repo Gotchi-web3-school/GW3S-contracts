@@ -8,7 +8,7 @@ import "../../Reward/Interfaces/IERC721RewardLevel.sol";
 
 contract Level1Facet is Modifiers {
 
-    function completeL1() external hasCompleted(2) returns (bool) {
+    function completeL1() external hasCompleted(1) returns (bool) {
         _s.level_completed[msg.sender][1] = true;
         emit Completed(1, msg.sender);
 
@@ -16,19 +16,20 @@ contract Level1Facet is Modifiers {
     }
     
     /// @notice Claim reward.
-    function openL1Chest() external returns(address[] memory loot, uint[] memory amount) {
+    function openL1Chest() external returns(address[] memory, uint[] memory) {
         require(_s.level_completed[msg.sender][1] == true, "openL1Chest: You need to complete the level first");
-        uint8 i;
+        address[] memory loots = new address[](1); 
+        uint256[] memory amounts = new uint256[](1); 
 
         if(_s.level_reward[msg.sender][1] == false) {
             _s.level_reward[msg.sender][1] = true;
             IERC721RewardLevel(_s.Erc721LevelReward[1][0]).safeMint(msg.sender);
 
-
-            loot[i] = _s.Erc721LevelReward[1][0];
-            amount[i++] = 1;
+            loots[0] = _s.Erc721LevelReward[1][0];
+            amounts[0] = 1;
         }
 
-        emit LootChest(1, msg.sender, loot, amount);
+        emit LootChest(1, msg.sender, loots, amounts);
+        return (loots, amounts);
     }
 }

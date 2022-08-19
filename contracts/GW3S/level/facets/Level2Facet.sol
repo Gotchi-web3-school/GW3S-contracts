@@ -32,29 +32,32 @@ contract Level2Facet is Modifiers {
     }
     
     /// @notice Claim reward.
-    function openL2Chest() external returns(address[] memory loot, uint[] memory amount) {
+    function openL2Chest() external returns(address[] memory, uint256[] memory) {
         require(_s.level_completed[msg.sender][2] == true, "openL2Chest: You need to complete the level first");
         uint8 i;
+        address[] memory loots = new address[](2); 
+        uint256[] memory amounts = new uint256[](2); 
 
         // Give level reward to player. 
         if(_s.level_reward[msg.sender][2] == false) {
             _s.level_reward[msg.sender][2] = true;
             IERC721RewardLevel(_s.Erc721LevelReward[2][0]).safeMint(msg.sender);
 
-            loot[i] = _s.Erc721LevelReward[2][0];
-            amount[i++] = 1;
+            loots[i] = _s.Erc721LevelReward[2][0];
+            amounts[i++] = 1;
         }
 
         // Give secret reward to player if condition is filled.
-        if(_s.hacker_reward[msg.sender][2] == false && _secretLevel()) {
-            _s.hacker_reward[msg.sender][2] = true;
+        if(_s.secret_reward[msg.sender][2] == false && _secretLevel()) {
+            _s.secret_reward[msg.sender][2] = true;
             IERC721RewardLevel(_s.Erc721LevelReward[2][1]).safeMint(msg.sender);
 
-            loot[i] = _s.Erc721LevelReward[2][1];
-            amount[i++] = 1;
+            loots[i] = _s.Erc721LevelReward[2][1];
+            amounts[i] = 1;
         }
         
-        emit LootChest(2, msg.sender, loot, amount);
+        emit LootChest(2, msg.sender, loots, amounts);
+        return(loots, amounts);
     }
 
     /// @notice Check if player has filled the secret level conditions

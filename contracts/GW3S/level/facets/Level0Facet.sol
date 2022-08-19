@@ -9,17 +9,19 @@ import {Modifiers} from "../../libraries/LibLevel.sol";
 contract Level0Facet is Modifiers {
 
     /// @notice Claim reward.
-    function openL0Chest() external returns(address[] memory loot, uint[] memory amount) {
-        uint8 i;
+    function openL0Chest() external returns(address[] memory, uint[] memory) {
+        address[] memory loots = new address[](1); 
+        uint256[] memory amounts = new uint256[](1); 
 
         if(_s.level_reward[msg.sender][0] == false) {
             _s.level_reward[msg.sender][0] = true;
             IERC721RewardLevel(_s.Erc721LevelReward[0][0]).safeMint(msg.sender);
 
-            loot[i] = _s.Erc721LevelReward[0][0];
-            amount[i++] = 1;
+            loots[0] = _s.Erc721LevelReward[0][0];
+            amounts[0] = 1;
         }
 
-        emit LootChest(0, msg.sender, loot, amount);
+        emit LootChest(0, msg.sender, loots, amounts);
+        return (loots, amounts);
     }
 } 
