@@ -2,7 +2,7 @@
 /* eslint prefer-const: "off" */
 
 const { readFile } = require("fs").promises
-const { getSelectors, FacetCutAction } = require('../libraries/diamond.js')
+const { getSelectors, getSelector, FacetCutAction } = require('../libraries/diamond.js')
 const { deployed } = require("../libraries/deployed.js")
 const hardhat = require("hardhat")
 const FILE_PATH = './helpers/facetsContracts.json';
@@ -39,7 +39,7 @@ async function deployDiamond () {
     cut.push({
       facetAddress: facet.address,
       action: FacetCutAction.Replace,
-      functionSelectors: getSelectors(facet)
+      functionSelectors: [getSelector("function openL1Chest() external returns(address[] memory, uint[] memory)")]
     })
   }
 

@@ -23,10 +23,13 @@ async function test () {
   console.log("balance: ", ethers.utils.formatEther(await player.getBalance()), "MATIC")
   const LevelLoupeFacet = await ethers.getContractAt("LevelLoupeFacet", contracts.Diamond.mumbai.address)
   
-  const constract = await LevelLoupeFacet.getRewardAddress(1, 0)
+  const constract = await LevelLoupeFacet.getRewardAddress(2, 0)
+  console.log("Contract address", constract)
+  const nft = await ethers.getContractAt("IERC721RewardLevel", constract)
+  console.log("owner: ", await nft.owner())
   const IERC721RewardLevel = await ethers.getContractAt("IERC721RewardLevel", constract)
 
-  console.log(await IERC721RewardLevel.getMetadas())
+  console.log("Metadatas\n", await IERC721RewardLevel.getMetadas())
 
 }
 

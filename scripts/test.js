@@ -4,7 +4,7 @@
 const hardhat = require("hardhat")
 const { readFile } = require('fs').promises;
 const { ethers } = require('hardhat');
-const SVG_PATH = '../../img/common/card-01/Front.svg';
+const FILE_PATH = './helpers/facetsContracts.json';
 
 
 async function test () {
@@ -12,16 +12,28 @@ async function test () {
   const provider = ethers.getDefaultProvider("https://polygon-mainnet.infura.io/v3/d63ccb145caa4670b4db18d68fffdf22")
   const player = accounts[0]
   let tx, receipt
-
-  console.log("Deployer: ", player.address)
-
+  let loading = false
+  
   try {
-    svg = await readFile(SVG_PATH, "utf-8")
+    contracts = JSON.parse(await readFile(FILE_PATH, "utf-8"))
   } catch (e) {
     console.log(e)
   }
 
-  console.log(ethers.utils.toUtf8Bytes(svg).length)
+  console.log("Deployer: ", player.address)
+  console.log("balance: ", ethers.utils.formatEther(await player.getBalance()), "MATIC")
+  const Level0Facet = await ethers.getContractAt("Level0Facet", contracts.Diamond.mumbai.address)
+
+  loading = true
+  tx = await Level0Facet.openL0Chest()
+  let playing = playSound()
+  let playingnot = notPlaySound()
+  receipt = await tx.wait()
+  loading = false
+  await playing
+  await playingnot
+
+  console.log("finished")
 }
 
 // We recommend this pattern to be able to use async/await everywhere

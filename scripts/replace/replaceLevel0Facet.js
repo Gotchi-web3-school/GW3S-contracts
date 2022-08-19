@@ -2,8 +2,8 @@
 /* eslint prefer-const: "off" */
 
 const { readFile } = require("fs").promises
-const { getSelectors, FacetCutAction } = require('../../libraries/diamond.js')
-const { deployed } = require("../deploy/deployed.js")
+const { getSelectors, getSelector, FacetCutAction } = require('../libraries/diamond.js')
+const { deployed } = require("../libraries/deployed.js")
 const hardhat = require("hardhat")
 const FILE_PATH = './helpers/facetsContracts.json';
 
@@ -20,8 +20,6 @@ async function deployDiamond () {
   // deploy DiamondInit
   // DiamondInit provides a function that is called when the diamond is upgraded to initialize state variables
   // Read about how the diamondCut function works here: https://eips.ethereum.org/EIPS/eip-2535#addingreplacingremoving-functions
-  console.log("attach InitLevel0...")
-  const initLevel0 = await ethers.getContractAt('InitLevel0', contracts.InitLevel0.mumbai.address)
 
   // deploy facets
   const FacetNames = [
@@ -39,7 +37,7 @@ async function deployDiamond () {
     cut.push({
       facetAddress: facet.address,
       action: FacetCutAction.Replace,
-      functionSelectors: getSelectors(facet)
+      functionSelectors: [getSelector("function openL0Chest() external returns(address[] memory, uint[] memory)")]
     })
   }
 
@@ -50,9 +48,7 @@ async function deployDiamond () {
   let tx
   let receipt
   // call to init function
-  let functionCall = initLevel0.interface.encodeFunctionData('init', [cut[0].facetAddress])
-  console.log(functionCall)
-  tx = await diamondCut.diamondCut(cut, initLevel0.address, functionCall)
+  tx = await diamondCut.diamondCut(cut,  "0x0000000000000000000000000000000000000000", [])
   console.log('Diamond cut tx: ', tx.hash)
   receipt = await tx.wait()
   if (!receipt.status) {

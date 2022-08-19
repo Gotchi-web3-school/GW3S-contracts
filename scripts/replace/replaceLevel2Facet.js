@@ -2,7 +2,7 @@
 /* eslint prefer-const: "off" */
 
 const { readFile } = require("fs").promises
-const { getSelectors, FacetCutAction } = require('../libraries/diamond.js')
+const { getSelectors, getSelector, FacetCutAction } = require('../libraries/diamond.js')
 const { deployed } = require("../libraries/deployed.js")
 const hardhat = require("hardhat")
 const FILE_PATH = './helpers/facetsContracts.json';
@@ -43,12 +43,12 @@ async function replaceLevel2Facet () {
     cut.push({
       facetAddress: facet.address,
       action: FacetCutAction.Replace,
-      functionSelectors: getSelectors(facet)
+      functionSelectors: [getSelector("function openL2Chest() external returns(address[] memory loots, uint[] memory amounts)")]
     })
   }
 
   // upgrade diamond with facets
-  console.log('')
+  console.log(cut)
   const diamondCut = await ethers.getContractAt('IDiamondCut', contracts.Diamond.mumbai.address)
   let tx
   let receipt

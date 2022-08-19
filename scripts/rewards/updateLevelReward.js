@@ -13,6 +13,7 @@ async function test () {
   const player = accounts[0]
   let tx, receipt
 
+  // Put the level card Reward ERC721 you want to change in ids
   const ids = [0, 1, 2]
   const types = [0, 1, 2]
 
@@ -41,10 +42,11 @@ async function test () {
       metadatas[id].svg.front = svgContracts.front
       metadatas[id].svg.back = svgContracts.back
       
+      // Deploy the new NFT reward
       console.log(`Deploying reward ${ids[id]}.0...`)
       const rewardLevel = await ERC721RewardLevel.deploy(
         `Gotchi web3 school l${id}`, 
-        `GW3S${id}l`, 
+        `GW3Sl${id}`, 
         metadatas[id].svg.front,
         metadatas[id].svg.back,
         metadatas[id].levelId,
@@ -54,12 +56,14 @@ async function test () {
         )
       await rewardLevel.deployed()
       console.log("deployed !\n")
-
+      
+      // Change the old NFT reward by new one on th Diamond school
       console.log("Store the Reward contract address in the diamond RewardFacet...")
       tx = await RewardFacet.updateRewardLevel(rewardLevel.address, id, 0)
       await tx.wait()
       console.log("Address stored sucessfully !\n")
-  
+      
+      // Transfert the ownership to the diamond
       console.log("Transfer ownership to the diamond...")
       tx = await rewardLevel.transferOwnership(contracts.Diamond.mumbai.address)
       await tx.wait()
