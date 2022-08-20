@@ -36,9 +36,11 @@ contract Level12Facet is Modifiers {
     }
     
     /// @notice Claim reward.
-    function openL12Chest() external returns(address[] memory loot, uint[] memory amount) {
+    function openL12Chest() external returns(address[] memory, uint[] memory) {
         require(_s.level_completed[msg.sender][12] == true, "openL12Chest: You need to complete the level first");
         uint8 i;
+        address[] memory loots = new address[](2); 
+        uint256[] memory amounts = new uint256[](2); 
 
         (address pair1, address pair2) = ILevel12Instance(_s.level_instance[msg.sender][12]).getPairs();
         (uint112 reserve00, uint112 reserve10,) = IPair(pair1).getReserves();
@@ -51,8 +53,8 @@ contract Level12Facet is Modifiers {
             _s.level_reward[msg.sender][12] = true;
             IERC721RewardLevel(_s.Erc721LevelReward[12][0]).safeMint(msg.sender);
 
-            loot[i] = _s.Erc721LevelReward[12][0];
-            amount[i++] = 1;
+            loots[i] = _s.Erc721LevelReward[12][0];
+            amounts[i++] = 1;
         }
         
         if  (_s.secret_reward[msg.sender][12] == false && 
@@ -62,11 +64,12 @@ contract Level12Facet is Modifiers {
             _s.secret_reward[msg.sender][12] = true;
             IERC721RewardLevel(_s.Erc721LevelReward[12][1]).safeMint(msg.sender);
 
-            loot[i] = _s.Erc721LevelReward[12][1];
-            amount[i++] = 1;
+            loots[i] = _s.Erc721LevelReward[12][1];
+            amounts[i] = 1;
         }
 
-        emit LootChest(12, msg.sender, loot, amount);
+        emit LootChest(12, msg.sender, loots, amounts);
+        return (loots, amounts);
     }
 
 }

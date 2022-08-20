@@ -52,19 +52,21 @@ contract Level13Facet is Modifiers {
     }
     
     /// @notice Claim reward.
-    function openL13Chest() external returns(address[] memory loot, uint[] memory amount) {
+    function openL13Chest() external returns(address[] memory, uint[] memory) {
         require(_s.level_completed[msg.sender][13] == true, "openL13Chest: You need to complete the level first");
-        uint8 i;
+        address[] memory loots = new address[](2); 
+        uint256[] memory amounts = new uint256[](2); 
 
         if(_s.level_reward[msg.sender][13] == false)  {
             _s.level_reward[msg.sender][13] = true;
             IERC721RewardLevel(_s.Erc721LevelReward[13][0]).safeMint(msg.sender);
 
-            loot[i] = _s.Erc721LevelReward[13][0];
-            amount[i++] = 1;
+            loots[0] = _s.Erc721LevelReward[13][0];
+            amounts[0] = 1;
         }
 
-        emit LootChest(13, msg.sender, loot, amount);
+        emit LootChest(13, msg.sender, loots, amounts);
+        return (loots, amounts);
     }
 
 }

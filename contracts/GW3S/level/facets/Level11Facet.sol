@@ -32,19 +32,21 @@ contract Level11Facet is Modifiers {
     }
     
     /// @notice Claim reward.
-    function openL11Chest() external returns(address[] memory loot, uint[] memory amount) {
+    function openL11Chest() external returns(address[] memory, uint[] memory) {
         require(_s.level_completed[msg.sender][11] == true, "openL11Chest: You need to complete the level first");
-        uint8 i;
+        address[] memory loots = new address[](2); 
+        uint256[] memory amounts = new uint256[](2); 
 
         if(_s.level_reward[msg.sender][11] == false) {
             _s.level_reward[msg.sender][11] = true;
             IERC721RewardLevel(_s.Erc721LevelReward[11][0]).safeMint(msg.sender);
 
-            loot[i] = _s.Erc721LevelReward[11][0];
-            amount[i++] = 1;
+            loots[0] = _s.Erc721LevelReward[11][0];
+            amounts[0] = 1;
         }
 
-        emit LootChest(11, msg.sender, loot, amount);
+        emit LootChest(11, msg.sender, loots, amounts);
+        return (loots, amounts);
     }
 
 }
