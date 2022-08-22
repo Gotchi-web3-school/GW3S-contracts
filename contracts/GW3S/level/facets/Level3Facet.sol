@@ -13,7 +13,7 @@ import {Modifiers} from "../../libraries/LibLevel.sol";
 contract Level3Facet is Modifiers {
 
     function initLevel3() external returns(address) {
-        Level3Instance instance = new Level3Instance(msg.sender, address(this));
+        Level3Instance instance = new Level3Instance(msg.sender, address(this), _s.level_factories[3][0]);
         _s.level_completed[msg.sender][3] = false;
         _s.level_running[msg.sender] = 3;
         _s.level_instance[msg.sender][3] = address(instance);
