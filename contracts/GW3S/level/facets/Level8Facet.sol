@@ -43,8 +43,8 @@ contract Level8Facet is Modifiers {
             _s.level_reward[msg.sender][8] = true;
             IERC721RewardLevel(_s.Erc721LevelReward[8][0]).safeMint(msg.sender);
 
-            loot[0] = _s.Erc721LevelReward[8][0];
-            amount[0] = 1;
+            loots[0] = _s.Erc721LevelReward[8][0];
+            amounts[0] = 1;
         }
 
         emit LootChest(8, msg.sender, loots, amounts);

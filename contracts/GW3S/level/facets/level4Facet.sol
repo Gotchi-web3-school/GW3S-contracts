@@ -49,5 +49,6 @@ contract Level4Facet is Modifiers {
         }
 
         emit LootChest(4, msg.sender, loots, amounts);
+        return(loots, amounts);
     }
 }

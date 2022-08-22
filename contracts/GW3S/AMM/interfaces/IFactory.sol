@@ -8,6 +8,7 @@ interface IFactory {
     function getPair(address, address) external returns(address);
     function allPairs(uint) external returns(address);
     function allPairsLength() external view returns (uint);
+    function getInitCodeHash() external pure returns(bytes32);
     
     function deployFactory(address player) external returns(address);
     function createPair(address, address) external returns (address);
