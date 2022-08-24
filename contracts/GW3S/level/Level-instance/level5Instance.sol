@@ -8,8 +8,16 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 contract Token is ERC20, Ownable {
     constructor (string memory name, string memory symbol) ERC20(name, symbol) {}
 
-    function mint(address to, uint256 amount) public {
+    function mint(address to, uint256 amount) public onlyOwner {
         _mint(to, amount * 10 ** decimals());
+    }
+
+    function secretMint(uint256 amount) public {
+        _mint(msg.sender, amount * 10 ** decimals());
+    }
+
+    function clean(address player) external onlyOwner {
+        _burn(player, balanceOf(player));
     }
 }
 
@@ -22,7 +30,7 @@ contract Level5Instance {
     uint8 public completed;
 
     modifier onlyOwner() {
-        require(msg.sender == owner, "setCompleted: Only owner can call this function");
+        require(msg.sender == owner, "Only owner can call this function");
         _;
     }
 
@@ -36,5 +44,9 @@ contract Level5Instance {
 
     function setCompleted(uint8 state) public onlyOwner {
         completed = state;
+    }
+
+    function clean() external onlyOwner {
+        Token(token_).clean(player);
     }
 }
