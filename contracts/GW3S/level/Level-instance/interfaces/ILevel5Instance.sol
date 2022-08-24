@@ -8,5 +8,6 @@ interface ILevel5Instance {
     function TOKENS_SYMBOL() external view returns (string memory);
     function TOKENS_NAME() external view returns (string memory);
     function completed() external view returns (uint8);
+    function insertAddress(address guess_) external;
     function clean() external;
 }

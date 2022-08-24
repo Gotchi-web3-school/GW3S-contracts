@@ -22,11 +22,12 @@ contract Level5Facet is Modifiers {
         return address(this);
     }
 
-    function completeL5(address who) external hasCompleted(5) isRunning(5) {
+    function completeL5() external hasCompleted(5) isRunning(5) {
         address instance = _s.level_instance[msg.sender][5];
-        require(who == _s.level_instance[msg.sender][5] || who == Level5Instance(instance).token_(), "Wrong address !");
+        address guess = Level5Instance(instance).guess();
+        require(guess == _s.level_instance[msg.sender][5] || guess == Level5Instance(instance).token_(), "Wrong address !");
 
-        if (who == _s.level_instance[msg.sender][5]) {
+        if (guess == _s.level_instance[msg.sender][5]) {
             Level5Instance(instance).setCompleted(1);
         }
         _s.level_completed[msg.sender][5] = true;
