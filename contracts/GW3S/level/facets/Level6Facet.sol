@@ -11,8 +11,8 @@ import {Modifiers} from "../../libraries/LibLevel.sol";
 contract Level6Facet is Modifiers {
 
     function initLevel6() external returns(address) {
-        IToken(_s.level_tokens[6][0]).mint(msg.sender, 10);
-        IToken(_s.level_tokens[6][6]).mint(msg.sender, 1);
+        IToken(_s.level_tokens[6][0]).mint(msg.sender, 10e18);
+        IToken(_s.level_tokens[6][6]).mint(msg.sender, 1e15);
         
         _s.level_completed[msg.sender][6] = false;
         _s.level_running[msg.sender] = 6;
@@ -23,10 +23,10 @@ contract Level6Facet is Modifiers {
     }
 
     function completeL6() external hasCompleted(6) isRunning(6) {
-        address ghst = _s.level_tokens[6][0];
-        uint balance = IToken(ghst).balanceOf(msg.sender);
+        address dai = _s.level_tokens[6][6];
+        uint balance = IToken(dai).balanceOf(msg.sender);
 
-        require(balance >= 10e18, "level not completed yet");
+        require(balance >= 1e18, "level not completed yet");
         _s.level_completed[msg.sender][6] = true;
         emit Completed(6, msg.sender);
     }

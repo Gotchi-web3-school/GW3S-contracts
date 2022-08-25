@@ -15,6 +15,7 @@ import "../../AMM/facets/FactoryFacet.sol";
 import "../../AMM/interfaces/IToken.sol";
 import "../../AMM/interfaces/IRouter.sol";
 import "../../AMM/interfaces/IFactory.sol";
+import "../../../uniswap/v2-periphery/contracts/interfaces/IUniswapV2Router01.sol";
 
 uint constant MAX = 100000000000 * 10 ** 18;
 // It is expected that this contract is customized if you want to deploy your diamond
@@ -25,17 +26,22 @@ contract InitLevel6 {
 
     AppStorage internal s;
 
-    function init(address addr_, address[] memory tokens, address factory) external {
-        // TOKENS_NAME = ["level6 GHST", "level6 DAI", "level6 DAI", "level6 DAI", "level6 DAI", "level6 DAI", "level6 DAI"];
-        // TOKENS_SYMBOL = ["GHST, ""DAI", "DAI", "DAI", "DAI", "DAI", "DAI"];
+    function init(address[] memory tokens) external {
 
-        s.level[6].addr = addr_;
-        s.level[6].id = 6;
-        s.level[6].title = "Where is WalDAI ?";
-        s.level[6].difficulty = Difficulty.EASY;
+        // s.level[6].addr = addr_;
+        // s.level[6].id = 6;
+        // s.level[6].title = "Where is WalDAI ?";
+        // s.level[6].difficulty = Difficulty.EASY;
 
-        s.level_factories[6][0] = factory;
-        s.level_tokens[6] = tokens;
+       
+        //s.level_factories[6][0] = factory;
+        s.level_tokens[6][0] = tokens[0];
+        s.level_tokens[6][1] = tokens[1];
+        s.level_tokens[6][2] = tokens[2];
+        s.level_tokens[6][3] = tokens[3];
+        s.level_tokens[6][4] = tokens[4];
+        s.level_tokens[6][5] = tokens[5];
+        s.level_tokens[6][6] = tokens[6];
         // More info here: https://eips.ethereum.org/EIPS/eip-2535#diamond-interface 
     }
 }

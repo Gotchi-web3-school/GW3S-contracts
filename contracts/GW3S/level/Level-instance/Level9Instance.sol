@@ -6,7 +6,6 @@ import "../../AMM/facets/TokenFacet.sol";
 import "../../AMM/interfaces/IFactory.sol";
 import "../../AMM/interfaces/IRouter.sol";
 
-uint256 constant MAX = 25;
 
 contract Level9Instance {
     address[2] public tokens;
@@ -16,13 +15,13 @@ contract Level9Instance {
     string[] public TOKENS_NAME = ["level9 USDC"];
     string[] public TOKENS_SYMBOL = ["USDC"];
 
-    constructor(address player_) {
+    constructor(address player_, address factory_) {
         player = player_;
+        factory = factory_;
         diamond = msg.sender;
 
         tokens[0] = address(TokenFacet(diamond).deployToken(TOKENS_NAME[0], TOKENS_SYMBOL[0]));
-        Token(tokens[0]).mint(player_, MAX);
-        factory = IFactory(msg.sender).deployFactory(player_);
+        Token(tokens[0]).mint(player_, 25e18);
     }
 
     function getPair() public returns(address pair) {

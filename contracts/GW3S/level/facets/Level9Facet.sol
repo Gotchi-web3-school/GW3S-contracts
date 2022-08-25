@@ -16,7 +16,7 @@ contract Level9Facet is Modifiers {
     using SafeMath for uint256;
 
     function initLevel9() external returns(address) {
-        Level9Instance instance = new Level9Instance(msg.sender);
+        Level9Instance instance = new Level9Instance(msg.sender, _s.level_factories[9][0]);
 
         _s.level_completed[msg.sender][9] = false;
         _s.level_running[msg.sender] = 9;

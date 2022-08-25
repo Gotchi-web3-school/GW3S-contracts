@@ -22,14 +22,14 @@ contract Level7Instance {
     string[] public TOKENS_NAME = ["level7 GHST", "level7 DAI"];
     string[] public TOKENS_SYMBOL = ["GHST", "DAI"];
 
-    constructor(address player_) {
+    constructor(address player_, address factory_) {
         player = player_;
 
         for (uint8 i = 0; i < TOKENS_NAME.length; i++) {
             tokens[i] = address(new Token(TOKENS_NAME[i], TOKENS_SYMBOL[i]));
             Token(tokens[i]).mint(player_, 100);
         }
-        factory = IFactory(msg.sender).deployFactory(player_);
+        factory = factory_;
     }
 
     function getPair() public returns(address pair) {

@@ -27,7 +27,7 @@ contract InitLevel3 {
         s.level[3].title = "Swap";
         s.level[3].difficulty = Difficulty.EASY;
 
-         s.level_factories[3][0] = FactoryFacet(address(this)).deployFactory(address(this));
+        s.level_factories[3][0] = FactoryFacet(address(this)).deployFactory(address(this));
         // More info here: https://eips.ethereum.org/EIPS/eip-2535#diamond-interface 
     }
 }

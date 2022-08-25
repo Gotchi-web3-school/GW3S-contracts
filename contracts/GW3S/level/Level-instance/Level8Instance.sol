@@ -23,8 +23,9 @@ contract Level8Instance {
     string[] public TOKENS_SYMBOL = ["GHST", "DAI"];
     address public factory;
 
-    constructor(address player_) {
+    constructor(address player_, address factory_) {
         player = player_;
+        factory = factory_;
 
         for (uint8 i = 0; i < TOKENS_NAME.length; i++) {
             tokens[i] = address(new Token(TOKENS_NAME[i], TOKENS_SYMBOL[i]));
@@ -32,7 +33,6 @@ contract Level8Instance {
             Token(tokens[i]).mint(address(this), 10);
             Token(tokens[i]).approve(msg.sender, 10e18);
         }
-        factory = IFactory(msg.sender).deployFactory(player_);
         IRouter(msg.sender).addLiquidity(tokens[0], tokens[1], 10e18, 10e18, 10e18, 10e18, address(this), block.timestamp, factory);
     }
 
