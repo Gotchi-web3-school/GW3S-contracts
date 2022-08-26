@@ -20,20 +20,20 @@ contract Token is ERC20, Ownable {
 contract Level10Instance {
     address[2] public tokens;
     address public player;
+    address public factory;
     string[] public TOKENS_NAME = ["level10 USDC", "level10 GHST"];
     string[] public TOKENS_SYMBOL = ["USDC", "GHST"];
-    address public factory;
 
     event Deployed(string indexed name, string indexed ticker, uint256 indexed supply);
 
-    constructor(address player_) {
+    constructor(address player_, address factory_) {
         player = player_;
+        factory = factory_;
 
-     for (uint8 i = 0; i < TOKENS_NAME.length; i++) {
+        for (uint8 i = 0; i < TOKENS_NAME.length; i++) {
             tokens[i] = address(new Token(TOKENS_NAME[i], TOKENS_SYMBOL[i]));
             Token(tokens[i]).mint(player_, 1);
         }
-        factory = IFactory(msg.sender).deployFactory(player_);
     }
 
     function getPair() public returns(address pair) {

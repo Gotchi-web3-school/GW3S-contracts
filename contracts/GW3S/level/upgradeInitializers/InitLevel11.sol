@@ -11,6 +11,7 @@ pragma solidity ^0.8.15;
 
 import {LibAppStorage, AppStorage} from "../../libraries/LibAppStorage.sol";
 import {Level, Difficulty} from "../../libraries/LibLevel.sol";
+import "../../AMM/facets/FactoryFacet.sol";
 
 // It is expected that this contract is customized if you want to deploy your diamond
 // with data from a deployment script. Use the init function to initialize state variables
@@ -25,6 +26,8 @@ contract InitLevel11 {
         s.level[11].id = 11;
         s.level[11].title = "Price impact 2";
         s.level[11].difficulty = Difficulty.EASY;
+
+        s.level_factories[11][0] = FactoryFacet(address(this)).deployFactory(address(this));
         // More info here: https://eips.ethereum.org/EIPS/eip-2535#diamond-interface 
     }
 }

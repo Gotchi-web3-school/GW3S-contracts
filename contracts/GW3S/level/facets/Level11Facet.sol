@@ -15,7 +15,7 @@ import {Modifiers} from "../../libraries/LibLevel.sol";
 contract Level11Facet is Modifiers {
 
     function initLevel11() external returns(address) {
-        Level11Instance instance = new Level11Instance(msg.sender, address(this));
+        Level11Instance instance = new Level11Instance(msg.sender, address(this), _s.level_factories[11][0]);
         _s.level_completed[msg.sender][11] = false;
         _s.level_running[msg.sender] = 11;
         _s.level_instance[msg.sender][11] = address(instance);

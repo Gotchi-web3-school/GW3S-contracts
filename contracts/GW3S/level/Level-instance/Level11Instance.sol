@@ -25,16 +25,17 @@ contract Level11Instance {
 
     event Deployed(string indexed name, string indexed ticker, uint256 indexed supply);
 
-    constructor(address player_, address diamond_) {
+     constructor(address player_, address diamond_, address factory_) {
         player = player_;
         diamond = diamond_;
+        factory = factory_;
+
         for (uint8 i = 0; i < TOKENS_NAME.length; i++) {
             tokens[i] = address(new Token(TOKENS_NAME[i], TOKENS_SYMBOL[i], address(this)));
-            Token(tokens[i]).mint(player_, MAX);
-            Token(tokens[i]).mint(address(this), 1);
+            Token(tokens[i]).mint(player_, 100000000e18);
+            Token(tokens[i]).mint(address(this), 1e18);
             Token(tokens[i]).approve(diamond_, 1e18);
         }
-        factory = IFactory(msg.sender).deployFactory(player_);
         IRouter(diamond_).addLiquidity(tokens[0], tokens[1], 1e18, 1e18, 1e18, 1e18, address(this), block.timestamp, factory);
     }
 
