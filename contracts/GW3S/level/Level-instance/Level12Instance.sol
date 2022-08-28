@@ -6,7 +6,6 @@ import "../../AMM/interfaces/IToken.sol";
 import "../../AMM/interfaces/IRouter.sol";
 import "../../AMM/interfaces/IFactory.sol";
 
-uint constant MAX = 1e6 * 1e18; // 1 billion
 
 contract Level12Instance {
     address public player;
@@ -21,16 +20,16 @@ contract Level12Instance {
         factories[1] = factory2;
 
         tokens[0] = address(IToken(msg.sender).deployToken(TOKENS_NAME[0], TOKENS_SYMBOL[0]));
-        IToken(tokens[0]).mint(player_, 100);
-        IToken(tokens[0]).mint(address(this), 1e6);
-        IToken(tokens[0]).approve(msg.sender, MAX);
+        IToken(tokens[0]).mint(player_, 100e18);
+        IToken(tokens[0]).mint(address(this), 1000000e18);
+        IToken(tokens[0]).approve(msg.sender, 1000000e18);
 
         tokens[1] = address(IToken(msg.sender).deployToken(TOKENS_NAME[1], TOKENS_SYMBOL[1]));
-        IToken(tokens[1]).mint(address(this), 1e6);
-        IToken(tokens[1]).approve(msg.sender, MAX);
+        IToken(tokens[1]).mint(address(this), 1000000e18);
+        IToken(tokens[1]).approve(msg.sender, 1000000e18);
 
-        IRouter(msg.sender).addLiquidity(tokens[0], tokens[1], 10000 * 1e18, 25000 * 1e18, 10000 * 1e18, 25000 * 1e18, address(this), block.timestamp, factories[0]);
-        IRouter(msg.sender).addLiquidity(tokens[0], tokens[1], 10000 * 1e18, 10000 * 1e18, 10000 * 1e18, 10000 * 1e18, address(this), block.timestamp, factories[1]);
+        IRouter(msg.sender).addLiquidity(tokens[0], tokens[1], 10000e18, 25000e18, 10000e18, 25000e18, address(this), block.timestamp, factories[0]);
+        IRouter(msg.sender).addLiquidity(tokens[0], tokens[1], 10000e18, 10000e18, 10000e18, 10000e18, address(this), block.timestamp, factories[1]);
     }
 
     function getPairs() public returns(address pair1, address pair2) {
