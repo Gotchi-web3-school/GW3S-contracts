@@ -31,6 +31,10 @@ contract SvgFacet is Modifiers {
    |             Write Functions        |
    |__________________________________*/
 
+   function deploySvg(string calldata _svg) external onlyOwner returns(address contracts) {
+        return LibSvg.storeSvgInContract(_svg);
+   }
+
     ///@notice Allow an item manager to store a new  svg
     ///@param _svg the new svg string
     ///@param levelId the level identifier of the token to query
