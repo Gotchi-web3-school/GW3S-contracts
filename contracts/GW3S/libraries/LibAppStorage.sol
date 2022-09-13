@@ -34,7 +34,9 @@ struct SvgStorage {
 
 
 library LibAppStorage {
+    bytes32 constant _DIAMOND_ROUTER_STORAGE_POSITION = keccak256("diamond.standard.diamond.routerStorage");
     bytes32 constant _DIAMOND_SVG_STORAGE_POSITION = keccak256("diamond.standard.diamond.svgStorage");
+    address constant _WETH = 0x9c3C9283D3e44854697Cd22D3Faa240Cfb032889;
 
     function diamondStorage() internal pure returns (AppStorage storage ds) {
         assembly {
