@@ -10,6 +10,7 @@ const FILE_PATH = './helpers/facetsContracts.json';
 async function deployDiamond () {
   const accounts = await ethers.getSigners()
   const contractOwner = accounts[0]
+  let tx, receipt
 
   try {
     contracts = JSON.parse(await readFile(FILE_PATH, "utf-8"))
@@ -20,12 +21,14 @@ async function deployDiamond () {
   // deploy DiamondInit
   // DiamondInit provides a function that is called when the diamond is upgraded to initialize state variables
   // Read about how the diamondCut function works here: https://eips.ethereum.org/EIPS/eip-2535#addingreplacingremoving-functions
-  console.log("attach InitLevel1...")
-  const initLevel1 = await ethers.getContractAt('InitLevel3', contracts.InitLevel1.mumbai.address)
+
+  // console.log("deploy InitLevel11...")
+  // const InitLevel11 = await ethers.getContractFactory('InitLevel11')
+  // const init = await InitLevel11.deploy()
 
   // deploy facets
   const FacetNames = [
-    'Level1Facet',
+    'Level9Facet',
   ]
   const cut = []
   for (const FacetName of FacetNames) {
@@ -34,12 +37,12 @@ async function deployDiamond () {
     const facet = await Facet.deploy()
     await facet.deployed()
     
-    deployed("Level1Facet", hardhat.network.name, facet.address)
+    deployed("Level9Facet", hardhat.network.name, facet.address)
 
     cut.push({
       facetAddress: facet.address,
       action: FacetCutAction.Replace,
-      functionSelectors: [getSelector("function openL1Chest() external returns(address[] memory, uint[] memory)")]
+      functionSelectors: getSelectors(facet)
     })
   }
 
@@ -47,11 +50,9 @@ async function deployDiamond () {
   console.log('')
   console.log('Diamond Cut:', cut)
   const diamondCut = await ethers.getContractAt('IDiamondCut', contracts.Diamond.mumbai.address)
-  let tx
-  let receipt
-  // call to init function
-  let functionCall = initLevel1.interface.encodeFunctionData('init', [cut[0].facetAddress])
-  tx = await diamondCut.diamondCut(cut, initLevel1.address, functionCall)
+  //let functionCall = init.interface.encodeFunctionData('init', [cut[0].facetAddress])
+  //tx = await diamondCut.diamondCut(cut, init.address, functionCall)
+  tx = await diamondCut.diamondCut(cut, "0x0000000000000000000000000000000000000000", [])
   console.log('Diamond cut tx: ', tx.hash)
   receipt = await tx.wait()
   if (!receipt.status) {

@@ -1,0 +1,15 @@
+{
+  "common": {
+    "level0": { "mumbai": "0x0cfFEfb4E619222dC0BDeE9A0F9238b5C798A3f3" },
+    "level1": { "mumbai": "0x88e7c747322735f9115cB44B8b41106146337349" },
+    "level2": { "mumbai": "0x4Af7e4141AFC0c5D7Cb42ba9aD001F9B8c069e93" },
+    "level3": { "mumbai": "0xc4AEDEC9326a3be7A1DcA468E74974491cC2B54b" },
+    "level4": { "mumbai": "0x737621003371CA941F576aDf0876fF0C7E1e95B7" },
+    "level5": { "mumbai": "0x733DfE0F5306C3DB6b1440D60ECB19C220d04B66" },
+    "level6": { "mumbai": "0x41a414CF4f79548183652C5EBE9DbE8Db8F35AA4" },
+    "level7": { "mumbai": "0x9086A2BC52a12cF7761b93BBF4189A395A8292e5" },
+    "level8": { "mumbai": "0xE611F164B8D4E5Bec19BA00354C7Ff511914845B" },
+    "level9": { "mumbai": "0x4dC71AA34DdCb9eCf0783E63b74Bf7Db1A759Caa" },
+    "level10": { "mumbai": "0xAfB169f27252Cbcd2D0Cf28f79abAEfF9c3Ce79F" }
+  }
+}

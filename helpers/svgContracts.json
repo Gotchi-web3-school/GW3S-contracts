@@ -1,26 +1,101 @@
 {
-    "common" : {
-        "level0": { "mumbai": "0xFa4Cff65B7266722d120658e95F7B37Be508b96a" },
-        "level1": { "mumbai": "0x023CdAFD254707e619f1f1C5746F3d270d321595" },
-        "level2": { "mumbai": "0xc568D4d1C1b7733cb880abfAE5e2925140010346" },
-        "level3": { "mumbai": "0x700eF28675e33CAA098d6CBD1aCc5Fee6f725B51" },
-        "level4": { "mumbai": "0x334962E0D75594E653cFfF7C106799Fe7AA83E80" },
-        "level5": { "mumbai": "0xD138C6137f9b1fC2ebc552279f25F39e40b3d74b" },
-        "level6": { "mumbai": "0x41B82bFB6ca501Bc6be3d7a4B81158143E63b463" },
-        "level7": { "mumbai": "0xe849460329A9669F532d80da1203C0EfCd367e6B" },
-        "level8": { "mumbai": "0x276B0a599Caf5284164F4Fc8C6711386168B2AeF" },
-        "level9": { "mumbai": "0x8CAC0cbeEe8aB87ee0CD99C5A98B4eb73782D04E" },
-        "level10": { "mumbai": "0xf9E2248E889009a1da8522973570C2897ddc4F7e" },
-        "level11": { "mumbai": "0x26E09d50c84a0185c47Fc36d9b958831Bc4Db557" },
-        "level12": { "mumbai": "0x63A74ed478Ae8dBCb660E61BB66cf4EAcfABe090" },
-        "level13": { "mumbai": "0x5A46d849091B5AD232ab3bfc8B49E2D83605EAFB" }
-    },
-    "secret": {
-        "secretLevel2": { "mumbai": "0xbDed86cf2F797fc0FFe08113B557B87B9fd6996f" },
-        "secretLevel5": { "mumbai": "0x03AE82527c64d670110140fec03CC53B89f865AD" },
-        "secretLevel12": { "mumbai": "0x52CB8Fe649964a4c81ECb36C135268aD3352bcaF" }
-    },
-    "hacker": {
-        "hackerLevel5": { "mumbai": "0xB84B23B87cCb3687FE7Da7a2EBd37eeFc88E30f8" }
+  "events": {
+    "GMI": {
+      "artistSummit#1": {
+        "polygon": {
+          "front": "0x3bC871313BD161aA9834f5A43d625c87cB381244",
+          "back": "0x203DbF25DB4d0857654d41436F68897aD8560Daf",
+          "left": "0xa4c9a6Fdf153775229a7aBe5756E1e8519C0c912",
+          "right": "0xbA842863635D1c0979d1DE451ED5eB40241233CC"
+        },
+        "mumbai": {
+          "front": "0xC83b1f5b2145406DaF7AAFFE53ad1Cb8e82bAEB7",
+          "back": "0xEDbd2Fa151Fe3248dFc21CF1F7E181b460a53D8B",
+          "left": "0xD9BADcA32Bc58c1D83673D2492028a1BA0df19a9",
+          "right": "0x340A84D4b8EE96b22Ac49379C11dB4a68C9BA046"
+        }
+      }
     }
+  },
+  "common": {
+    "leftSide": { "mumbai": "0x629140D237Afd97ee733cD9638869354F0412331"},
+    "rightSide": { "mumbai": "0x3d5e5Af886C947CDC1637BaDaD40F80Bf8973906"},
+    "level0": {
+      "mumbai": {
+        "front": "0x6A4b31558c3A103EDEF74fE773Fd5935964f71EC",
+        "back": "0x909CD284182167E21C09162f482F814e1Ca9Ad9f"
+      }
+    },
+    "level1": {
+      "mumbai": {
+        "front": "0xF0214EDfBE43ff8E2420558E91D14887Cbf80F98",
+        "back": "0x26a077EafD1ce79d7B8630D2B43C82E1Ccc4602f"
+      }
+    },
+    "level2": {
+      "mumbai": {
+        "front": "0x4f1bBfeA50b3BFbDa710642643AFB870772b45BD",
+        "back": "0xC06BCB03567EF4096F78b249974C8e9BF723C728"
+      }
+    },
+    "level3": {
+      "mumbai": {
+        "front": "0x1C4C3Bb8c5DdfD2016695D60d8f60e78B056D7fb",
+        "back": "0xB2AE61d076aF50C902D4Dc88A6C866BfBc92a5c3"
+      }
+    },
+    "level4": {
+      "mumbai": {
+        "front": "0xdbACfd4375c06345cFf4d0153cA20f64B3B6D026",
+        "back": "0xfeD9276eB8E680A6c3D9549499c9330dB2d48D91"
+      }
+    },
+    "level5": {
+      "mumbai": {
+        "front": "0x0C67Ec35C59e70416cFAc2cAe1Afe5d1E1AE5126",
+        "back": "0x273032a0b85A2e94685C6c215C498FAC41FB3751"
+      }
+    },
+    "level6": {
+      "mumbai": {
+        "front": "0x8eCD23330989e1F9AE3b2554bDac9111dAa7bb1B",
+        "back": "0x5DF1DF806952505254E22b8724BE13e841ca2Ed4"
+      }
+    },
+    "level7": {
+      "mumbai": {
+        "front": "0x3AdE914e5Ae6D04E9de67235eFCDE5688164f7d4",
+        "back": "0xae1f5Cf31f334Ae5D556a25CBAE70944bd4C9103"
+      }
+    },
+    "level8": {
+      "mumbai": {
+        "front": "0x90692d7aEAe84aA71dE1f0566c9D0aac662D5021",
+        "back": "0xF1dBf93a9DEe5DB638feB5B9c0B6247823d5D704"
+      }
+    },
+    "level9": {
+      "mumbai": {
+        "front": "0x80edb6b1133D19e7f1b11c618E886b97488ab80E",
+        "back": "0x3b4Bd66a6FBFF4E2A866e2284D3974CDDCCb1c08"
+      }
+    },
+    "level10": {
+      "mumbai": {
+        "front": "0x27478f9BCE3a07ca70C5E6Ead917394464129B6F",
+        "back": "0xaF3234254F4e83D03ba9F8d42c49084d3cC46B2f"
+      }
+    },
+    "level11": { "mumbai": "0x26E09d50c84a0185c47Fc36d9b958831Bc4Db557" },
+    "level12": { "mumbai": "0x63A74ed478Ae8dBCb660E61BB66cf4EAcfABe090" },
+    "level13": { "mumbai": "0x5A46d849091B5AD232ab3bfc8B49E2D83605EAFB" }
+  },
+  "secret": {
+    "secretLevel2": { "mumbai": "0xbDed86cf2F797fc0FFe08113B557B87B9fd6996f" },
+    "secretLevel5": { "mumbai": "0x03AE82527c64d670110140fec03CC53B89f865AD" },
+    "secretLevel12": { "mumbai": "0x52CB8Fe649964a4c81ECb36C135268aD3352bcaF" }
+  },
+  "hacker": {
+    "hackerLevel5": { "mumbai": "0xB84B23B87cCb3687FE7Da7a2EBd37eeFc88E30f8" }
+  }
 }

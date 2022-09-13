@@ -13,25 +13,28 @@ async function test () {
   const player = accounts[0]
   let tx, receipt
   let loading = false
+
+  console.log()
+  // try {
+  //   contracts = JSON.parse(await readFile(FILE_PATH, "utf-8"))
+  // } catch (e) {
+  //   console.log(e)
+  // }
+
+  // console.log("Deployer: ", player.address)
+  // console.log("balance: ", ethers.utils.formatEther(await player.getBalance()), "MATIC")
+
+  // const LevelLoupeFacet = await ethers.getContractAt("LevelLoupeFacet", contracts.Diamond.mumbai.address)
+  // const Level12Facet = await ethers.getContractAt("Level12Facet", contracts.Diamond.mumbai.address)
+  // instance = await LevelLoupeFacet.getLevelInstanceByAddress("0x6fA1e885743fc06c3f04ec3fc179769795FC93AB", 12)
+  // console.log("instance", instance)
+  // factory = await LevelLoupeFacet.getFactoryLevel(12, 0)
+  // factory1 = await LevelLoupeFacet.getFactoryLevel(12, 1)
+  // console.log("factory :", factory)
+  // console.log("factory1 :", factory1)
+  // tx = await Level12Facet.initLevel12()
   
-  try {
-    contracts = JSON.parse(await readFile(FILE_PATH, "utf-8"))
-  } catch (e) {
-    console.log(e)
-  }
 
-  console.log("Deployer: ", player.address)
-  console.log("balance: ", ethers.utils.formatEther(await player.getBalance()), "MATIC")
-  const Level0Facet = await ethers.getContractAt("Level0Facet", contracts.Diamond.mumbai.address)
-
-  loading = true
-  tx = await Level0Facet.openL0Chest()
-  let playing = playSound()
-  let playingnot = notPlaySound()
-  receipt = await tx.wait()
-  loading = false
-  await playing
-  await playingnot
 
   console.log("finished")
 }

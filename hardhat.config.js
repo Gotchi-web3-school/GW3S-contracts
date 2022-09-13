@@ -55,24 +55,30 @@ module.exports = {
       initialBaseFeePerGas: 0,
     },
     ropsten: {
-      url: `https://ropsten.infura.io/v3/${ALCHEMY_PROJECT_ID}`,
+      url: `https://ropsten.infura.io/v3/${INFURA_PROJECT_ID}`,
       accounts: [`0x${DEPLOYER_PRIVATE_KEY}`],
     },
     kovan: {
-      url: `https://kovan.infura.io/v3/${ALCHEMY_PROJECT_ID}`,
+      url: `https://kovan.infura.io/v3/${INFURA_PROJECT_ID}`,
       accounts: [`0x${DEPLOYER_PRIVATE_KEY}`],
     },
     rinkeby: {
-      url: `https://rinkeby.infura.io/v3/${ALCHEMY_PROJECT_ID}`,
+      url: `https://rinkeby.infura.io/v3/${INFURA_PROJECT_ID}`,
       accounts: [`0x${DEPLOYER_PRIVATE_KEY}`],
     },
     goerli: {
-      url: `https://goerli.infura.io/v3/${ALCHEMY_PROJECT_ID}`,
+      url: `https://goerli.infura.io/v3/${INFURA_PROJECT_ID}`,
       accounts: [`0x${DEPLOYER_PRIVATE_KEY}`],
     },
     mumbai: {
      // url: `https://polygon-mumbai.g.alchemy.com/v2/${ALCHEMY_PROJECT_ID}`,
       url: `https://polygon-mumbai.infura.io/v3/${INFURA_PROJECT_ID}`,
+      accounts: [`0x${DEPLOYER_PRIVATE_KEY}`],
+      gasPrice: 40000000000, // 40 gwei
+    },
+    polygon: {
+     // url: `https://polygon-mainnet.g.alchemy.com/v2/${ALCHEMY_PROJECT_ID}`,
+      url: `https://polygon-mainnet.infura.io/v3/${INFURA_PROJECT_ID}`,
       accounts: [`0x${DEPLOYER_PRIVATE_KEY}`],
       gasPrice: 40000000000, // 40 gwei
     },

@@ -47,8 +47,9 @@ async function replaceAllLevel () {
 
     cut.push({
       facetAddress: facet.address,
-      action: FacetCutAction.Add,
-      functionSelectors: [getSelector(`function completeL${i}() external returns (bool)`), getSelector(`function openL${i}Chest() external returns(address[] memory loot, uint[] memory amount)`)]
+      action: FacetCutAction.Replace,
+      functionSelectors: getSelectors(facet)
+      //functionSelectors: [getSelector(`function completeL${i}() external returns (bool)`), getSelector(`function openL${i}Chest() external returns(address[] memory loot, uint[] memory amount)`)]
     })
     i++
   }

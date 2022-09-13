@@ -2,10 +2,11 @@
 /* eslint prefer-const: "off" */
 
 const { readFile } = require("fs").promises
-const { getSelectors, getSelector, FacetCutAction } = require('../libraries/diamond.js')
+const { getSelectors, FacetCutAction } = require('../libraries/diamond.js')
 const { deployed } = require("../libraries/deployed.js")
 const hardhat = require("hardhat")
 const FILE_PATH = './helpers/facetsContracts.json';
+const WETH_MUMBAI_ADDRESS = "0xA6FA4fB5f76172d178d61B04b0ecd319C5d1C0aa"
 
 async function deployDiamond () {
   const accounts = await ethers.getSigners()
@@ -17,15 +18,9 @@ async function deployDiamond () {
     console.log(e)
   }
 
-  // deploy DiamondInit
-  // DiamondInit provides a function that is called when the diamond is upgraded to initialize state variables
-  // Read about how the diamondCut function works here: https://eips.ethereum.org/EIPS/eip-2535#addingreplacingremoving-functions
-  console.log("attach InitLevel1...")
-  const initLevel1 = await ethers.getContractAt('InitLevel3', contracts.InitLevel1.mumbai.address)
-
   // deploy facets
   const FacetNames = [
-    'Level1Facet',
+    'TokenFacet',
   ]
   const cut = []
   for (const FacetName of FacetNames) {
@@ -34,12 +29,12 @@ async function deployDiamond () {
     const facet = await Facet.deploy()
     await facet.deployed()
     
-    deployed("Level1Facet", hardhat.network.name, facet.address)
+    deployed("RouterFacet", hardhat.network.name, facet.address)
 
     cut.push({
       facetAddress: facet.address,
       action: FacetCutAction.Replace,
-      functionSelectors: [getSelector("function openL1Chest() external returns(address[] memory, uint[] memory)")]
+      functionSelectors: getSelectors(facet)
     })
   }
 
@@ -50,8 +45,9 @@ async function deployDiamond () {
   let tx
   let receipt
   // call to init function
-  let functionCall = initLevel1.interface.encodeFunctionData('init', [cut[0].facetAddress])
-  tx = await diamondCut.diamondCut(cut, initLevel1.address, functionCall)
+  //let functionCall = initAMMFacet.interface.encodeFunctionData('init', [WETH_MUMBAI_ADDRESS, cut[0].facetAddress])
+  //console.log(functionCall)
+  tx = await diamondCut.diamondCut(cut, "0x0000000000000000000000000000000000000000", [])
   console.log('Diamond cut tx: ', tx.hash)
   receipt = await tx.wait()
   if (!receipt.status) {

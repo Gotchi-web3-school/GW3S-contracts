@@ -5,8 +5,8 @@ const hardhat = require("hardhat")
 const { readFile } = require('fs').promises;
 const { ethers } = require('hardhat');
 const FILE_PATH = './helpers/facetsContracts.json';
-const FRONT_PATH = '../../img/common/card-02/Front.svg';
-const BACK_PATH = '../../img/common/card-02/Back.svg';
+const FRONT_PATH = '../../img/common/card-03/Front.svg';
+const BACK_PATH = '../../img/common/card-03/Back.svg';
 
 
 async function test () {
@@ -29,8 +29,8 @@ async function test () {
   console.log("balance: ", ethers.utils.formatEther(await player.getBalance()), "MATIC")
   const svgFacet = await ethers.getContractAt("SvgFacet", contracts.Diamond.mumbai.address)
 
-  console.log(`Storing svg level 2...`)
-  tx = await svgFacet.updateSvg([front, back], 2, 0)
+  console.log(`Storing svg level 3...`)
+  tx = await svgFacet.updateSvg([front, back], 3, 0)
   receipt = await tx.wait()
   console.log("stored !")
 
