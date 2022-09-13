@@ -17,8 +17,9 @@ interface IERC721RewardLevel {
 
     function safeMint(address to) external;
     function supportsInterface(bytes4 interfaceId) external;
+    function setSvg(address front, address back, address left, address right) external;
     function getSvg() external view returns(string memory _svgFront, string memory _svgBack);
-    function getMetadas() external view returns(Metadatas memory metadatas);
+    function getMetadatas() external view returns(Metadatas memory metadatas);
 
     function balanceOf(address owner) external view  returns (uint256);
     function ownerOf(uint256 tokenId) external view  returns (address);
