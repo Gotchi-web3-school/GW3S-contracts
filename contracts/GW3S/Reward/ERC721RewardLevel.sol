@@ -12,6 +12,8 @@ contract ERC721RewardLevel is ERC721, ERC721Enumerable, Ownable {
     struct Svg {
         address front;
         address back;
+        address left;
+        address right;
     }
 
     struct Metadatas {
@@ -28,15 +30,11 @@ contract ERC721RewardLevel is ERC721, ERC721Enumerable, Ownable {
     constructor(
         string memory name, 
         string memory ticker, 
-        address front,
-        address back,
         uint256 levelId,
         string memory type_,
         string memory title,
         string memory text
         ) ERC721(name, ticker) {
-        metadatas.svg.front = front; 
-        metadatas.svg.back = back; 
         metadatas.levelId = levelId; 
         metadatas.type_ = type_; 
         metadatas.title = title; 
@@ -67,23 +65,44 @@ contract ERC721RewardLevel is ERC721, ERC721Enumerable, Ownable {
         return super.supportsInterface(interfaceId);
     }
 
-    function getSvg() public view returns(string memory _svgFront, string memory _svgBack) {
-        require(balanceOf(msg.sender) > 0, "getContent: You don't own the NFT");
-        bytes memory svgFrontByteCode = metadatas.svg.front.code;
-        bytes memory svgBackByteCode = metadatas.svg.back.code;
-        _svgFront = string(abi.encodePacked(svgFrontByteCode));
-        _svgBack = string(abi.encodePacked(svgBackByteCode));
+    function setSvg(address front, address back, address left, address right) public {
+        require(
+            metadatas.svg.front == address(0) &&
+            metadatas.svg.back == address(0) && 
+            metadatas.svg.left == address(0) &&
+            metadatas.svg.right == address(0), "setSvg: svgs already set"
+        );
+
+        metadatas.svg.front = front;
+        metadatas.svg.back = back;
+        metadatas.svg.left = left;
+        metadatas.svg.right = right;
     }
 
-    function getMetadas() public view returns(
+    function getSvg() public view returns(string memory _svgFront, string memory _svgBack, string memory _svgLeft, string memory _svgRight) {
+        bytes memory svgFrontByteCode = metadatas.svg.front.code;
+        bytes memory svgBackByteCode = metadatas.svg.back.code;
+        bytes memory svgLeftByteCode = metadatas.svg.left.code;
+        bytes memory svgRightByteCode = metadatas.svg.right.code;
+        _svgFront = string(abi.encodePacked(svgFrontByteCode));
+        _svgBack = string(abi.encodePacked(svgBackByteCode));
+        _svgLeft = string(abi.encodePacked(svgLeftByteCode));
+        _svgRight = string(abi.encodePacked(svgRightByteCode));
+    }
+
+    function getMetadatas() public view returns(
         address front,
         address back,
+        address left,
+        address right,
         uint256 levelId,
         string memory type_,
         string memory title,
         string memory text) {
         front = metadatas.svg.front; 
-        back = metadatas.svg.back; 
+        back = metadatas.svg.back;
+        left = metadatas.svg.left;
+        right = metadatas.svg.right;
         levelId = metadatas.levelId; 
         type_ = metadatas.type_; 
         title = metadatas.title; 
