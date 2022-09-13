@@ -15,7 +15,7 @@ contract Level6Instance {
         player = player_;
         tokens = tokens_;
         
-        IToken(tokens[0]).mint(player_, 10);
-        IToken(tokens[6]).mint(player_, 1);
+        IToken(tokens[0]).mint(player_, 10e18);
+        IToken(tokens[6]).mint(player_, 1e18);
     }
 } 

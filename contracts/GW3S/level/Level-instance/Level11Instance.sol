@@ -55,8 +55,8 @@ contract Level11Instance {
     }
 
     function swap(uint amountIn, uint amountOutMin, address[] calldata path) public returns(bool) {
-        IToken(tokens[1]).transferFrom(msg.sender, address(this), amountIn);
-        IToken(tokens[1]).approve(diamond, amountIn);
+        IToken(path[0]).transferFrom(msg.sender, address(this), amountIn);
+        IToken(path[0]).approve(diamond, amountIn);
 
         // get actual quote
         uint256 prevQuote = getQuote();

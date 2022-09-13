@@ -39,7 +39,8 @@ contract Level9Instance {
         pair = address(uint160(uint256(tmp)));
     }
 
-    function deployTokenWithFixedSupply(string memory name, string memory ticker, uint256 totalSupply, address to) public {
+    function deployTokenWithFixedSupply(string memory name, string memory ticker, uint256 totalSupply, address to) public returns(address) {
         tokens[1] = TokenFacet(diamond).deployTokenWithFixedSupply(name, ticker, totalSupply, to);
+        return (tokens[1]);
     }
 }

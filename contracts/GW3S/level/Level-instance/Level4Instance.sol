@@ -7,7 +7,7 @@ import "../../AMM/interfaces/IRouter.sol";
 import "../../AMM/interfaces/IFactory.sol";
 import "../../AMM/facets/FactoryFacet.sol";
 
-uint constant MAX = 10000000 * 10 ** 18;
+uint constant MAX = 10000000e18;
 
 contract Level4Instance {
     address public player;
@@ -20,11 +20,11 @@ contract Level4Instance {
 
         for (uint8 i = 0; i < 4; i++) {
             tokens[i] = IToken(msg.sender).deployToken(TOKENS_NAME[i], TOKENS_SYMBOL[i]);
-            IToken(tokens[i]).mint(address(this), 20000000);
-            IToken(tokens[i]).approve(msg.sender, MAX * 2);
+            IToken(tokens[i]).mint(address(this), 20000000e18);
+            IToken(tokens[i]).approve(msg.sender, 20000000e18);
         }
 
-        IToken(tokens[3]).mint(player_, 10);
+        IToken(tokens[3]).mint(player_, 10e18);
 
         IRouter(msg.sender).addLiquidity(tokens[0], tokens[1], MAX, MAX, MAX, MAX, address(this), block.timestamp, factory);
         IRouter(msg.sender).addLiquidity(tokens[2], tokens[1], MAX, MAX, MAX, MAX, address(this), block.timestamp, factory);
